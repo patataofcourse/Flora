@@ -24,7 +24,7 @@ def unpack(file, outfile):
         if p_type == 0:
             if cmd == None:
                 raise Exception("uh what")
-            elif cmd == 0x1b:
+            elif cmd == 0x1b: #TODO: automate hex <-> words
                 cmd = "engine"
             elif cmd == 0x1f:
                 cmd = "img_win"
@@ -78,8 +78,28 @@ def pack(file, outfile):
     out = b'\x00\x00'
 
     for line in file:
+        if line.startswith("#") or line == "":
+            continue
+        
         line, strings = remove_strings(line)
-        print(line, strings)
-        out += b'\x00\x00'
+        line = line.split(" ")
+        
+        cmd = line[0]
+        if cmd == "engine": #TODO: automate hex <-> words
+            cmd = "0x1b"
+        elif cmd == "img_win":
+            cmd = "0x1f"
+        
+        try:
+            cmd = bytearray.fromhex(cmd[2:])
+        except ValueError:
+            raise Exception(f"Invalid command {cmd}")
+        cmd.reverse()
+        if len(cmd) < 2:
+            cmd += b"\x00"
+        out += cmd
 
-pack(input(), input())
+        out += b'\x00\x00'
+    print(out)
+
+pack("q3_param.gdo", "q3_param.gds")

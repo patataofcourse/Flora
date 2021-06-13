@@ -74,8 +74,7 @@ def pack(file, outfile):
     file = open(file).read().split("\n")
     outfile = open(outfile, "wb")
 
-    length = 0
-    out = b'\x00\x00'
+    out = bytearray(b'\x00\x00')
 
     for line in file:
         if line.startswith("#") or line == "":
@@ -99,7 +98,17 @@ def pack(file, outfile):
             cmd += b"\x00"
         out += cmd
 
+        for param in line[1:]:
+            if param.isdigit():
+                print(1, param)
+            elif param.startswith("0x"):
+                print(2, param)
+            elif param.startswith('"') and param.endswith('"'):
+                print(3, param, strings[int(param[1:-1])])
+            else:
+                raise Exception(f"Invalid parameter - {param}")
         out += b'\x00\x00'
+    out[-2] = 0xc
     print(out)
 
 pack("q3_param.gdo", "q3_param.gds")

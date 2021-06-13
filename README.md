@@ -8,4 +8,5 @@
 * GDS script extracting and repacking to a custom format
 
 ### Credits
-* Tinke for giving a base for some of the file formats
+* [pleonex/Tinke](https://github.com/pleonex/Tinke) for giving a base for some of the file formats
+* [thatrandomstranger/LaytonEditor](https://github.com/thatrandomstranger/LaytonEditor/) for stuff regarding the ARC (ani/bg) files

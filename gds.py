@@ -1,4 +1,5 @@
 import binascii
+from things import remove_strings
 from version import v
 
 def unpack(file, outfile):
@@ -74,13 +75,11 @@ def pack(file, outfile):
     outfile = open(outfile, "wb")
 
     length = 0
-    out = b''
+    out = b'\x00\x00'
 
     for line in file:
-        line = line.split(" ")
+        line, strings = remove_strings(line)
+        print(line, strings)
         out += b'\x00\x00'
 
-
-for f in range(163):
-    print(f)
-    unpack(f"CV_out/data/qscript/q{f}_param.gds", f"CV_out/data/script/qscript/q{f}_param.gdo")
+pack(input(), input())

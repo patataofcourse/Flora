@@ -115,6 +115,9 @@ def create(input, output):
     img = Image.open(input)
     output = open(output, "wb")
 
+    if img.mode != "P":
+        raise Exception("The image needs a palette!")
+
     palette = list(img.palette.getdata()[1])
     pal = []
     color = []
@@ -125,7 +128,9 @@ def create(input, output):
             color = []
         else:
             color.append(col)
-    print(pal)
+
+    if len(pal) > 256:
+        raise Exception("Palette can't have more than 256 colors!")
 
     output.write(len(pal).to_bytes(4,"little"))
     for color in pal:

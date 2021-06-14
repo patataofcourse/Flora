@@ -16,4 +16,5 @@ def arc():
 arc.add_command(formats.bg.cli, "bg")
 
 if __name__ == "__main__":
+    print(f"Flora v{v} by patataofcourse")
     cli()

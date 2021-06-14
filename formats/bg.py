@@ -31,12 +31,12 @@ def extract(input, output):
 
     data = data[4+c:]
 
-    while len(p_colors) < 256:
-        p_colors.append([255,255,255])
-    outcolors = b''
-    for c in range(256):
-        outcolors += bytes(p_colors[c])
-    Image.frombytes("RGB",[16,16],outcolors).save("palette.png")
+    # while len(p_colors) < 256:
+    #     p_colors.append([255,255,255])
+    # outcolors = b''
+    # for c in range(256):
+    #     outcolors += bytes(p_colors[c])
+    # Image.frombytes("RGB",[16,16],outcolors).save("palette.png")
 
     num_tiles = int.from_bytes(data[:4], "little")
     tiles = []
@@ -48,6 +48,23 @@ def extract(input, output):
             for pixel in data[pos:pos+8]:
                 curr_row.append(pixel)
             curr_tile.append(curr_row)
+        tiles.append(curr_tile)
+
+    outtiles = [[], [], [], [], [], [], [], []]
+    for tile in tiles:
+        for n in range(8):
+            outtiles[n] += tile[n]
+    o = []
+    for h in outtiles:
+        o+=h
+    p = []
+    for h in p_colors:
+        p+=h
+    o = bytes(o)
+    print(len(o), num_tiles, 64*num_tiles)
+    img = Image.frombytes("P",(8*num_tiles,8),o)
+    img.putpalette(p)
+    img.save("o.png")
 
 @cli.command()
 def create():

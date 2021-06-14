@@ -1,5 +1,5 @@
 import binascii
-from things import remove_strings
+from func import remove_strings
 from version import v
 
 def unpack(file, outfile):

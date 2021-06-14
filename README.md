@@ -12,4 +12,8 @@
 * click (`pip install click`)
 
 ### Credits
-* [pleonex/Tinke](https://github.com/pleonex/Tinke) for giving a base for some of the file formats (GDS, BG)
+* [magical/nlzss] (DS LZSS compression algorithm)
+
+### Special thanks to:
+* [pleonex](https://github.com/pleonex/) for his tool [Tinke](https://github.com/pleonex/Tinke), which gave a base for documentation
+* Villa for dealing with my bullshit (srry) and cheering me on!

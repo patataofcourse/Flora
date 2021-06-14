@@ -30,14 +30,6 @@ def extract(input, output):
         c += 2
 
     data = data[4+c:]
-
-    # while len(p_colors) < 256:
-    #     p_colors.append([255,255,255])
-    # outcolors = b''
-    # for c in range(256):
-    #     outcolors += bytes(p_colors[c])
-    # Image.frombytes("RGB",[16,16],outcolors).save("palette.png")
-
     num_tiles = int.from_bytes(data[:4], "little")
     tiles = []
     for tile in range(num_tiles):
@@ -50,21 +42,68 @@ def extract(input, output):
             curr_tile.append(curr_row)
         tiles.append(curr_tile)
 
-    outtiles = [[], [], [], [], [], [], [], []]
-    for tile in tiles:
-        for n in range(8):
-            outtiles[n] += tile[n]
-    o = []
-    for h in outtiles:
-        o+=h
+    # outtiles = [[], [], [], [], [], [], [], []]
+    # for tile in tiles:
+    #     for n in range(8):
+    #         outtiles[n] += tile[n]
+    # o = []
+    # for h in outtiles:
+    #     o+=h
+    # p = []
+    # for h in p_colors:
+    #     p+=h
+    # o = bytes(o)
+    # print(len(o), num_tiles, 64*num_tiles)
+    # img = Image.frombytes("P",(8*num_tiles,8),o)
+    # img.putpalette(p)
+    # img.save("o.png")
+
+    data = data[4+0x40*num_tiles:]
+    width = int.from_bytes(data[:2], "little")
+    height = int.from_bytes(data[2:4], "little")
+    c = 0
+    map = []
+    while True:
+        if c >= width * height:
+            break
+        tile = int.from_bytes(data[4+c*2:6+c*2], "little")
+        flip_x = bool(tile>>11 & 1)
+        flip_y = bool(tile>>10 & 1)
+        tile_num = tile & 0x7ff
+        if c == 35: print(tile, tile_num, tiles[tile_num])
+        map.append((tile_num, flip_x, flip_y))
+        c += 1
+    
+    c = 0
+    out = []
+    rows = [[],[],[],[],[],[],[],[]]
+    for t in map:
+        tile = tiles[t[0]]
+        if t[2]:
+            tile.reverse() #Flip Y
+        if t[1]:
+            for row in tile:
+                row.reverse() #Flip X
+
+        d = 0
+        for row in rows:
+            rows[d] += tile[d]
+            d += 1
+        
+        c += 1
+
+        if c % width == 0:
+            for row in rows:
+                out += row
+            rows = [[],[],[],[],[],[],[],[]]
     p = []
     for h in p_colors:
         p+=h
-    o = bytes(o)
-    print(len(o), num_tiles, 64*num_tiles)
-    img = Image.frombytes("P",(8*num_tiles,8),o)
+    out = bytes(out)
+    print(len(out))
+    img = Image.frombytes("P",(width*8, height*8),out)
     img.putpalette(p)
-    img.save("o.png")
+    img.save(output)
 
 @cli.command()
 def create():

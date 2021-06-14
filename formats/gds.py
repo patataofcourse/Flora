@@ -1,6 +1,12 @@
 import binascii
+import click
+
 from func import remove_strings
 from version import v
+
+@click.group(help="GDS file converter",options_metavar='')
+def cli():
+    pass
 
 def unpack(file, outfile):
     file = open(file, "rb").read()
@@ -114,5 +120,3 @@ def pack(file, outfile):
     outfile.write(len(out).to_bytes(4, "little"))
     outfile.write(out)
     outfile.close()
-
-pack("q1_param.gdo", "q1_param2.gds")

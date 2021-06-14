@@ -35,9 +35,18 @@ def extract(input, output):
     for c in range(256):
         outcolors += bytes(p_colors[c])
     Image.frombytes("RGB",[16,16],outcolors).save("palette.png")
-    return #TODO: export the other stuff
+    #return #TODO: export the other stuff
+
     data = data[4+c:]
     num_tiles = int.from_bytes(data[:4], "little")
+    tiles = []
+    for tile in range(num_tiles):
+        curr_tile = []
+        for row in range(8):
+            curr_row = []
+            for pixel in data[4+tile*0x40+row*8:4+tile*0x40+row*8+8]:
+                curr_row.append(pixel)
+            curr_tile.append(curr_row)
 
 @cli.command()
 def create():

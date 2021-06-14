@@ -100,15 +100,20 @@ def pack(file, outfile):
 
         for param in line[1:]:
             if param.isdigit():
-                print(1, param)
+                out += b"\x01\x00" + int(param).to_bytes(4, "little")
             elif param.startswith("0x"):
                 print(2, param)
             elif param.startswith('"') and param.endswith('"'):
-                print(3, param, strings[int(param[1:-1])])
+                param = strings[int(param[1:-1])]
+                out += b"\x03\x00" + (len(param) + 1).to_bytes(2, "little") + param.encode("ASCII") + b"\x00"
+                #print(3, param, strings[int(param[1:-1])])
             else:
                 raise Exception(f"Invalid parameter - {param}")
         out += b'\x00\x00'
     out[-2] = 0xc
-    print(out)
+    
+    outfile.write(len(out).to_bytes(4, "little"))
+    outfile.write(out)
+    outfile.close()
 
 pack("q3_param.gdo", "q3_param.gds")

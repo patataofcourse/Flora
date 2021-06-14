@@ -11,7 +11,8 @@ def cli():
 @click.argument("input")
 @click.argument("output")
 def extract(input, output):
-    pass
+    input = open(input, "rb").read()
+    output = open(output, "w")
 
 @cli.command()
 def create():

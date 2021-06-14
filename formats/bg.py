@@ -42,22 +42,6 @@ def extract(input, output):
             curr_tile.append(curr_row)
         tiles.append(curr_tile)
 
-    # outtiles = [[], [], [], [], [], [], [], []]
-    # for tile in tiles:
-    #     for n in range(8):
-    #         outtiles[n] += tile[n]
-    # o = []
-    # for h in outtiles:
-    #     o+=h
-    # p = []
-    # for h in p_colors:
-    #     p+=h
-    # o = bytes(o)
-    # print(len(o), num_tiles, 64*num_tiles)
-    # img = Image.frombytes("P",(8*num_tiles,8),o)
-    # img.putpalette(p)
-    # img.save("o.png")
-
     data = data[4+0x40*num_tiles:]
     width = int.from_bytes(data[:2], "little")
     height = int.from_bytes(data[2:4], "little")
@@ -70,7 +54,6 @@ def extract(input, output):
         flip_x = bool(tile>>11 & 1)
         flip_y = bool(tile>>10 & 1)
         tile_num = tile & 0x7ff
-        if c == 35: print(tile, tile_num, tiles[tile_num])
         map.append((tile_num, flip_x, flip_y))
         c += 1
     
@@ -100,7 +83,6 @@ def extract(input, output):
     for h in p_colors:
         p+=h
     out = bytes(out)
-    print(len(out))
     img = Image.frombytes("P",(width*8, height*8),out)
     img.putpalette(p)
     img.save(output)

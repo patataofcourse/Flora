@@ -105,6 +105,34 @@ def extract(input, output):
     img.putpalette(p)
     img.save(output)
 
-@cli.command()
-def create():
-    pass
+@cli.command(
+                name = "create",
+                help = "Makes a texture ARC file from a PNG"
+            )
+@click.argument("input")
+@click.argument("output")
+def create(input, output):
+    img = Image.open(input)
+    output = open(output, "wb")
+
+    palette = list(img.palette.getdata()[1])
+    pal = []
+    color = []
+    for c in range(len(palette)):
+        col = palette[c] // 8
+        if c % 3 == 2:
+            pal.append(color+[col])
+            color = []
+        else:
+            color.append(col)
+    print(pal)
+
+    output.write(len(pal).to_bytes(4,"little"))
+    for color in pal:
+        val = 0
+        val += color[2]<<10
+        val += color[1]<<5
+        val += color[0]
+        output.write(val.to_bytes(2, "little"))
+
+    output.close()

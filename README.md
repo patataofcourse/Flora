@@ -5,7 +5,7 @@
 * Professor Layton and the Curious Village: EU
 
 ### Current utilities
-* GDS script extracting and repacking to a custom format - Parameter types 1-3 only
+* GDS script extracting and repacking to a custom readable format - Parameter types 1-3 only
 
 ### Requirements
 * Python 3

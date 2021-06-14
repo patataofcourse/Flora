@@ -29,7 +29,7 @@ def extract(input, output):
         p_colors.append([r, g, b])
         c += 2
 
-    data = data[4+2*c:]
+    data = data[4+c:]
 
     while len(p_colors) < 256:
         p_colors.append([255,255,255])

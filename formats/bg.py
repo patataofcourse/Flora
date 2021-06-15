@@ -162,6 +162,7 @@ def create(input, output):
         out += tile.to_bytes(2, "little") #TODO: this is without axis-flipping yet
 
     compress(out, output)
+    output.close()
     f = open(of, "rb").read()
     fw = open(of, "wb")
     fw.write(b"\x02\x00\x00\x00")

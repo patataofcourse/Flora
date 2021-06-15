@@ -95,7 +95,11 @@ def extract(input, output):
 @click.argument("output")
 def create(input, output):
     img = Image.open(input)
+    of = output
     output = open(output, "wb")
+    width, height = img.size
+
+    out = b''
 
     if img.mode != "P":
         raise Exception("The image needs a palette!")
@@ -114,12 +118,52 @@ def create(input, output):
     if len(pal) > 256:
         raise Exception("Palette can't have more than 256 colors!")
 
-    output.write(len(pal).to_bytes(4,"little"))
+    out += len(pal).to_bytes(4,"little")
     for color in pal:
         val = 0
         val += color[2]<<10
         val += color[1]<<5
         val += color[0]
-        output.write(val.to_bytes(2, "little"))
+        out += val.to_bytes(2, "little")
+    
+    raw = list(img.getdata())
+    rows = [raw[x:x + width] for x in range(0, len(raw), width)]
+    tiles = []
+    map = []
+    for y in range(height//8):
+        for x in range(width//8):
+            tile = []
+            for tile_y in range(8):
+                row = rows[y*8+tile_y][x*8:x*8+7]
+                tile += row
 
-    output.close()
+            is_in_tiles = False
+            for t in tiles: #TODO: checking flipping axis
+                if t == tile:
+                    is_in_tiles = True
+                    map.append(tiles.index(t))
+                
+            if not is_in_tiles:
+                tiles.append(tile)
+                map.append(max(map)+1 if map != [] else 0)
+    
+    tiles_out = b''
+    for tile in tiles:
+        tiles_out += bytes(tile)
+    
+    if len(tiles) >= 2**10:
+        raise Exception("Image too complex and can't be imported")
+    
+    out += len(tiles).to_bytes(4, "little")
+    out += tiles_out
+    
+    out += len(map).to_bytes(4, "little")
+    for tile in map:
+        out += tile.to_bytes(2, "little") #TODO: this is without axis-flipping yet
+
+    compress(out, output)
+    f = open(of, "rb").read()
+    fw = open(of, "wb")
+    fw.write(b"\x02\x00\x00\x00")
+    fw.write(f)
+    fw.close()

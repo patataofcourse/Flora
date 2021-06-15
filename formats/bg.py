@@ -83,6 +83,8 @@ def extract(input, output):
     for h in p_colors:
         p+=h
     out = bytes(out)
+    print(width, height)
+    quit()
     img = Image.frombytes("P",(width*8, height*8),out)
     img.putpalette(p)
     img.save(output)
@@ -157,7 +159,8 @@ def create(input, output):
     out += len(tiles).to_bytes(4, "little")
     out += tiles_out
     
-    out += len(map).to_bytes(4, "little")
+    out += (width//8).to_bytes(2, "little")
+    out += (height//8).to_bytes(2, "little")
     for tile in map:
         out += tile.to_bytes(2, "little") #TODO: this is without axis-flipping yet
 

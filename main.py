@@ -8,12 +8,7 @@ def cli():
     pass
 
 cli.add_command(formats.gds.cli, "gds")
-
-@cli.group(name="arc", help="Texture/animation file converter", )
-def arc():
-    pass
-
-arc.add_command(formats.bg.cli, "bg")
+cli.add_command(formats.bg.cli, "bg")
 
 if __name__ == "__main__":
     print(f"Flora v{v} by patataofcourse")

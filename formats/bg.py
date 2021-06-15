@@ -1,6 +1,5 @@
 import click
-from nlzss.lzss3 import decompress
-from nlzss.compress import compress
+from ndspy import lz10
 import os
 from PIL import Image
 
@@ -17,7 +16,7 @@ def cli():
 def extract(input, output):
     input = open(input, "rb").read()
 
-    data = decompress(input[4:])
+    data = lz10.decompress(input[4:])
     p_len = int.from_bytes(data[0:4], "little")
     c = 0
     p_colors = []
@@ -162,10 +161,7 @@ def create(input, output):
     for tile in map:
         out += tile.to_bytes(2, "little") #TODO: this is without axis-flipping yet
 
-    compress(out, output)
+    out = lz10.compress(out)
+    output.write(b"\x02\x00\x00\x00")
+    output.write(out)
     output.close()
-    f = open(of, "rb").read()
-    fw = open(of, "wb")
-    fw.write(b"\x02\x00\x00\x00")
-    fw.write(f)
-    fw.close()

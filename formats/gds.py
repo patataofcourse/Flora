@@ -4,7 +4,7 @@ import click
 from func import remove_strings
 from version import v
 
-@click.group(help="GDS file converter",options_metavar='')
+@click.group(help="Script-like format used to store information",options_metavar='')
 def cli():
     pass
 

@@ -136,7 +136,7 @@ def create(input, output):
         for x in range(width//8):
             tile = []
             for tile_y in range(8):
-                row = rows[y*8+tile_y][x*8:x*8+7]
+                row = rows[y*8+tile_y][x*8:x*8+8]
                 tile += row
 
             is_in_tiles = False

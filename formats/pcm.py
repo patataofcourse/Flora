@@ -1,7 +1,7 @@
 import click
 from ndspy import lz10
 
-@click.group(help="Archive/pack format used to store text",options_metavar='')
+@click.group(help="Archive/pack format, used to store text files.",options_metavar='')
 def cli():
     pass
 
@@ -45,7 +45,7 @@ PCM.from_files = from_files
 
 @cli.command(
                 name = "extract",
-                help = "Extracts the contents of a PCM file into a directory"
+                help = "Extracts the contents of a PCM file into a directory."
             )
 @click.argument("input")
 @click.argument("output")
@@ -60,7 +60,7 @@ def extract(input, output, file):
 
 @cli.command(
                 name = "create",
-                help = "Creates a PCM file from the contents of a directory"
+                help = "Creates a PCM file from the contents of a directory."
             )
 @click.argument("input")
 @click.argument("output")
@@ -69,7 +69,7 @@ def create(input, output):
 
 @cli.command(
                 name = "replace",
-                help = "Replaces specific files inside a PCM"
+                help = "Replaces specific files inside a PCM."
             )
 @click.argument("in_file")
 @click.argument("in_dir")

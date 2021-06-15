@@ -4,13 +4,13 @@ import click
 from func import remove_strings
 from version import v
 
-@click.group(help="Script-like format used to store information",options_metavar='')
+@click.group(help="Script-like format, also used to store puzzle parameters.",options_metavar='')
 def cli():
     pass
 
 @cli.command(
                 name="unpack",
-                help="converts a GDS script to a readable format",
+                help="Converts a GDS script to a readable format.",
                 no_args_is_help = True
             )
 @click.argument("input")
@@ -85,7 +85,7 @@ def unpack(input, output):
 
 @cli.command(
                 name="pack",
-                help="creates a GDS file from a readable script",
+                help="Creates a GDS file from a readable script.",
                 no_args_is_help = True
             )
 @click.argument("input")

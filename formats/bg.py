@@ -3,13 +3,13 @@ from ndspy import lz10
 import os
 from PIL import Image
 
-@click.group(help="'Background'/texture format",options_metavar='')
+@click.group(help="'Background'/texture format.",options_metavar='')
 def cli():
     pass
 
 @cli.command(
                 name = "extract",
-                help="Converts a texture ARC file into a PNG"
+                help="Converts a texture ARC file into a PNG."
             )
 @click.argument("input")
 @click.argument("output")

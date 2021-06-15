@@ -83,8 +83,6 @@ def extract(input, output):
     for h in p_colors:
         p+=h
     out = bytes(out)
-    print(width, height)
-    quit()
     img = Image.frombytes("P",(width*8, height*8),out)
     img.putpalette(p)
     img.save(output)

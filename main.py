@@ -12,5 +12,5 @@ cli.add_command(formats.bg.cli, "bg")
 cli.add_command(formats.pcm.cli, "pcm")
 
 if __name__ == "__main__":
-    print(f"Flora v{v} by patataofcourse")
-    cli()
+    print(f"Flora v{v} by patataofcourse\n")
+    cli() #TODO: managing exceptions, -v

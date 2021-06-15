@@ -45,11 +45,13 @@ PCM.from_files = from_files
 
 @cli.command(
                 name = "extract",
-                help = "Extracts the contents of a PCM file into a directory."
+                help = "Extracts the contents of a PCM file into a directory.",
+                no_args_is_help = True,
+                options_metavar = "[options]"
             )
 @click.argument("input")
 @click.argument("output")
-@click.option("-f", "--file", prompt="FILENAME", multiple=True, help="If used, extracts only the file(s) specified. Can be used multiple times, one per file.")
+@click.option("--file", "-f", metavar="FILENAME", multiple=True, help="If used, extracts only the file(s) specified. Can be used multiple times, one per file.")
 def extract(input, output, file):
     input = open(input, "rb").read()
     output = open(output, "wb")
@@ -60,7 +62,8 @@ def extract(input, output, file):
 
 @cli.command(
                 name = "create",
-                help = "Creates a PCM file from the contents of a directory."
+                help = "Creates a PCM file from the contents of a directory.",
+                no_args_is_help = True
             )
 @click.argument("input")
 @click.argument("output")
@@ -69,7 +72,8 @@ def create(input, output):
 
 @cli.command(
                 name = "replace",
-                help = "Replaces specific files inside a PCM."
+                help = "Replaces specific files inside a PCM.",
+                no_args_is_help = True
             )
 @click.argument("in_file")
 @click.argument("in_dir")

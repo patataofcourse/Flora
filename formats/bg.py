@@ -9,7 +9,8 @@ def cli():
 
 @cli.command(
                 name = "extract",
-                help="Converts a texture ARC file into a PNG."
+                help="Converts a texture ARC file into a PNG.",
+                no_args_is_help = True
             )
 @click.argument("input")
 @click.argument("output")
@@ -88,7 +89,8 @@ def extract(input, output):
 
 @cli.command(
                 name = "create",
-                help = "Makes a texture ARC file from a PNG"
+                help = "Makes a texture ARC file from a PNG",
+                no_args_is_help = True
             )
 @click.argument("input")
 @click.argument("output")

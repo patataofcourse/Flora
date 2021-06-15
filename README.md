@@ -15,6 +15,7 @@
 * [click](https://pypi.org/project/click/)
 * [pillow](https://pypi.org/project/pillow/)
 * [ndspy](https://pypi.org/project/ndspy/)
+
 To install all modules, use `pip install click pillow ndspy` / `py -m pip install click pillow ndspy`
 
 ### Special thanks to:

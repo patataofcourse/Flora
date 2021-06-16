@@ -1,4 +1,4 @@
-# Flora
+# <img src="flora.png" width=28> Flora
 ## A modding tool for Professor Layton games
 
 ### Supported games

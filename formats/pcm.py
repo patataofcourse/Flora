@@ -7,7 +7,9 @@ def cli():
     pass
 
 class PCM:
-    def __init__(self, file):
+    def __init__(self, file, names=None):
+        if names != None:
+            file = self.from_files(file, names)
         h_size = int.from_bytes(file[:4], "little")
         self.header = {
             "header_size": h_size,
@@ -51,17 +53,52 @@ class PCM:
                 print(f"Warning: file {f_head['name']} seems to have improper padding.")
             self.offsets[f_head["name"]] = offset
             offset += f_head["file_size"]
+    
     def open(self, offset):
         h_size = int.from_bytes(self.file[offset:offset+4], "little")
         data_size = int.from_bytes(self.file[offset+12:offset+16], "little")
         return self.file[offset + h_size: offset + h_size + data_size]
     def __getitem__(self, x):
         return self.open(self.offsets[x])
+    
+    def from_files(self, files, names):
+        self.header = {
+            "header_size": 0x10,
+            "file_size": 0,
+            "num_files": len(files),
+            "magic": b"LPCK"
+        }
+        body = b''
+        c = 0
+        for file in files:
+            name = names[c]
+            if len(name) > 16:
+                raise Exception("File names longer than 16 characters (including extension) are not supported.")
+            padding = 16 - (len(file)%16)
+            if padding == 16:
+                padding = 0
+            header = {
+                "header_size": 0x20,
+                "file_size": 0x20 + len(file) + padding,
+                "reserved": 0,
+                "data_size": len(file),
+                "name": name.encode("ASCII") + b"\x00" * (16 - len(name))
+            }
+            body += header['header_size'].to_bytes(4, "little")
+            body += header['file_size'].to_bytes(4, "little")
+            body += header['reserved'].to_bytes(4, "little")
+            body += header['data_size'].to_bytes(4, "little")
+            body += header['name']
+            body += file + b"\x00" * padding
+            c += 1
+        head = b''
+        head += 0x10.to_bytes(4, "little")
+        head += (0x10 + len(body)).to_bytes(4, "little")
+        head += len(files).to_bytes(4, "little")
+        head += b"LPCK"
+        out = head + body
+        return out
 
-def from_files(files, names):
-    pass
-
-PCM.from_files = from_files
 
 @cli.command(
                 name = "extract",
@@ -87,7 +124,7 @@ def extract(input, output, file):
             continue
         fw = open(f"{output}/{f}", "wb")
         fw.write(pcm[f])
-        fw.close
+        fw.close()
 
 @cli.command(
                 name = "create",
@@ -97,7 +134,20 @@ def extract(input, output, file):
 @click.argument("input")
 @click.argument("output")
 def create(input, output):
-    pass
+    if not os.path.isdir(input):
+        raise Exception("Directory does not exist!")
+    output = open(output, "wb")
+    
+    files = []
+    names = []
+    for f in list(os.walk("./"+input))[0][2]:
+        names.append(f)
+        files.append(open(f"{input}/{f}", "rb").read())
+    pcm = PCM(files, names)
+
+    out = lz10.compress(pcm.file)
+    output.write(out)
+    output.close()
 
 @cli.command(
                 name = "replace",

@@ -74,12 +74,16 @@ PCM.from_files = from_files
 @click.option("--file", "-f", metavar="FILENAME", multiple=True, help="If used, extracts only the file(s) specified. Can be used multiple times, one per file.")
 def extract(input, output, file):
     input = open(input, "rb").read()
-    os.mkdir(output)
+    try:
+        os.mkdir(output)
+    except FileExistsError:
+        print(f"Directory {output} already exists! Delete it, then try again.")
+        quit()
 
     input = lz10.decompress(input)
     pcm = PCM(input)
     for f in pcm.offsets:
-        if file != [] and f not in file:
+        if file != () and f not in file:
             continue
         fw = open(f"{output}/{f}", "wb")
         fw.write(pcm[f])

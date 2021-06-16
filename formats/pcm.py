@@ -27,19 +27,20 @@ class PCM:
                 quit()
 
         self.file = file[:self.header['file_size']]
-        
+        self.calc_offsets()
+    def calc_offsets(self):
         offset = self.header["header_size"]
         self.offsets = {}
         while offset < self.header["file_size"]:
-            h_size_ = int.from_bytes(self.file[offset:offset+4],"little")
+            h_size = int.from_bytes(self.file[offset:offset+4],"little")
             f_head = {
-                "header_size": h_size_,
+                "header_size": h_size,
                 "file_size": int.from_bytes(self.file[offset+4:offset+8], "little"),
                 "reserved": int.from_bytes(self.file[offset+8:offset+12], "little"),
                 "data_size": int.from_bytes(self.file[offset+12:offset+16], "little"),
-                "name": self.file[offset+16:offset+h_size_].decode("ascii").strip("\x00")
+                "name": self.file[offset+16:offset+h_size].decode("ascii").strip("\x00")
             }
-            if h_size_ != 0x20:
+            if h_size != 0x20:
                 ans = input(f"File {f_head['name']} seems to use nonstandard attributes (header_size={h_size_})\nDo you wish to continue reading the file? (y/N)")
                 if ans.lower() != "y":
                     print("Aborting.")
@@ -53,7 +54,7 @@ class PCM:
                 print(f"Warning: file {f_head['name']} seems to have improper padding.")
             self.offsets[f_head["name"]] = offset
             offset += f_head["file_size"]
-    
+
     def open(self, offset):
         h_size = int.from_bytes(self.file[offset:offset+4], "little")
         data_size = int.from_bytes(self.file[offset+12:offset+16], "little")
@@ -99,6 +100,30 @@ class PCM:
         out = head + body
         return out
 
+    def replace(self, name, content):
+        offset = self[name]
+        end = offset + int.from_bytes(self.file[offset+4:offset+8])
+        
+        file = b""
+        padding = 16 - (len(content)%16)
+        if padding == 16:
+            padding = 0
+        header = {
+            "header_size": 0x20,
+            "file_size": 0x20 + len(content) + padding,
+            "reserved": 0,
+            "data_size": len(content),
+            "name": 
+        }
+        file += header['header_size'].to_bytes(4, "little")
+        file += header['file_size'].to_bytes(4, "little")
+        file += header['reserved'].to_bytes(4, "little")
+        file += header['data_size'].to_bytes(4, "little")
+        file += header['name']
+        file += content + b"\x00" * padding
+
+        self.file = self.file[:offset] + file + self.file[end:]
+        self.calc_offsets()
 
 @cli.command(
                 name = "extract",

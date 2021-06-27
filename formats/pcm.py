@@ -41,7 +41,7 @@ class PCM:
                 "name": self.file[offset+16:offset+h_size].decode("ascii").strip("\x00")
             }
             if h_size != 0x20:
-                ans = input(f"File {f_head['name']} seems to use nonstandard attributes (header_size={h_size_})\nDo you wish to continue reading the file? (y/N)")
+                ans = input(f"File {f_head['name']} seems to use nonstandard attributes (header_size={h_size})\nDo you wish to continue reading the file? (y/N)")
                 if ans.lower() != "y":
                     print("Aborting.")
                     quit()
@@ -101,8 +101,10 @@ class PCM:
         return out
 
     def replace(self, name, content):
-        offset = self[name]
-        end = offset + int.from_bytes(self.file[offset+4:offset+8])
+        offset = self.offsets.get(name, None)
+        if offset == None:
+            raise Exception(f"File {name} doesn't exist inside PCM!")
+        end = offset + int.from_bytes(self.file[offset+4:offset+8], "little")
         
         file = b""
         padding = 16 - (len(content)%16)
@@ -113,7 +115,7 @@ class PCM:
             "file_size": 0x20 + len(content) + padding,
             "reserved": 0,
             "data_size": len(content),
-            "name": 
+            "name": name.encode("ASCII") + b"\x00" * (16 - len(name))
         }
         file += header['header_size'].to_bytes(4, "little")
         file += header['file_size'].to_bytes(4, "little")
@@ -123,6 +125,9 @@ class PCM:
         file += content + b"\x00" * padding
 
         self.file = self.file[:offset] + file + self.file[end:]
+        b = open("a", "wb")
+        b.write(self.file)
+        b.close()
         self.calc_offsets()
 
 @cli.command(
@@ -178,9 +183,22 @@ def create(input, output):
                 name = "replace",
                 help = "Replaces specific files inside a PCM.",
                 no_args_is_help = True
-            )
-@click.argument("in_file")
-@click.argument("in_dir")
-@click.argument("output")
+            )#TODO: check if help in arguments is a thing
+@click.argument("in_file")#, help="The PCM file to replace files of.")
+@click.argument("in_dir")#, help="The directory from which to get the replaced files.")
+@click.argument("output")#, help="Location for the output PCM file.")
 def replace(in_file, in_dir, output):
-    pass
+    in_file = open(in_file, "rb").read()
+    if not os.path.isdir(in_dir):
+        raise Exception("Directory does not exist!")
+    output = open(output, "wb")
+
+    in_file = lz10.decompress(in_file)
+    pcm = PCM(in_file)
+
+    for f in list(os.walk("./"+in_dir))[0][2]:
+        pcm.replace(f, open(f"{in_dir}/{f}", "rb").read())
+        
+    out = lz10.compress(pcm.file)
+    output.write(out)
+    output.close()

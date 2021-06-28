@@ -125,9 +125,10 @@ class PCM:
         file += content + b"\x00" * padding
 
         self.file = self.file[:offset] + file + self.file[end:]
-        b = open("a", "wb")
-        b.write(self.file)
-        b.close()
+        filelen = len(self.file)
+        self.file = self.file[:4] + filelen.to_bytes(4, "little") + self.file[8:]
+        self.header['file_size'] = filelen
+
         self.calc_offsets()
 
 @cli.command(

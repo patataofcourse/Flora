@@ -41,8 +41,8 @@ def unpack(input, output):
             #     cmd = "engine"
             # elif cmd == 0x1f:
             #     cmd = "img_win"
-            # else:
-            #     cmd = hex(cmd)
+            else:
+                cmd = hex(cmd)
             cmds.append((cmd, params))
             cmd = None
             params = []

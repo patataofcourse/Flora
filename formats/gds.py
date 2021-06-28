@@ -37,12 +37,12 @@ def unpack(input, output):
         if p_type == 0:
             if cmd == None:
                 raise Exception("uh what")
-            elif cmd == 0x1b: #TODO: automate hex <-> words
-                cmd = "engine"
-            elif cmd == 0x1f:
-                cmd = "img_win"
-            else:
-                cmd = hex(cmd)
+            # elif cmd == 0x1b: #TODO: automate hex <-> words
+            #     cmd = "engine"
+            # elif cmd == 0x1f:
+            #     cmd = "img_win"
+            # else:
+            #     cmd = hex(cmd)
             cmds.append((cmd, params))
             cmd = None
             params = []

@@ -110,7 +110,7 @@ def pack(input, output):
             cmd = "0x1f"
         
         try:
-            cmd = bytearray.fromhex(cmd[2:])
+            cmd = bytearray.fromhex(("0" if len(cmd)%2 == 1 else "") + cmd[2:])
         except ValueError:
             raise Exception(f"Invalid command {cmd}")
         cmd.reverse()

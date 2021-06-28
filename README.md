@@ -11,6 +11,9 @@
     + Currently, the PNG's color mode must be set to indexed. This will be changed in future versions.
     + The image must have at most 256 different colors. This is a limitation of the format.
 * Extracting the contents of a PCM file into a folder, and building a PCM file from the contents of a folder.
+* Replacing certain files inside a PCM file.
+
+For a full roadmap of the features that will be added to Flora in the near future, check out [Roadmap.md](Roadmap.md)
 
 ### Usage
 Flora is a CLI tool, which means that it must be ran from a command line (cmd/bash).<br>

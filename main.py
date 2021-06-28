@@ -10,6 +10,7 @@ def cli():
 cli.add_command(formats.gds.cli, "gds")
 cli.add_command(formats.bg.cli, "bg")
 cli.add_command(formats.pcm.cli, "pcm")
+cli.add_command(formats.puzzle.cli, "puzzle")
 
 if __name__ == "__main__":
     print(f"Flora v{v} by patataofcourse\n")

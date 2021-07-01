@@ -11,6 +11,12 @@ puzzles = json.load(open(f"{dir_path}/data/puzzles.json"))
 def cli():
     pass
 
+def load_file(rom, out_dir, file, og_path, out_path="."):
+    print(f"Extracting {file}...")
+    f = open(f"{out_dir}/{out_path}/{file}", "wb")
+    f.write(rom.getFileByName(f"data/{og_path}/{file}")) #maybe "data" is not an essential part?
+    f.close()
+
 @cli.command(
                 name="extract",
                 help="Extracts all the files related to a certain puzzle from the ROM into a specific directory",
@@ -82,7 +88,7 @@ Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
 
         #extract files dependant on language
         if id.endswith("P"):
-            print("ROM is PAL - loading game as multi-region.")
+            print("ROM is PAL - loading game as multilanguage.")
             langs = ('de', 'en', 'es', 'fr', 'it')
             try:
                 for lang in langs:
@@ -92,17 +98,32 @@ Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
                     os.mkdir(out_dir+ "/script/" + lang)
             except FileExistsError:
                 pass
-        else:
-            pass
+            
+            bg_lang = False
+            jiten_lang = False
 
-        #extract all files that don't depend on language (the grand total of 2 :P)
-        print(f"Extracting q{puzzle}_param.gds...")
-        qparam = open(f"{out_dir}/script/q{puzzle}_param.gds", "wb")
-        qparam.write(romfile.getFileByName(f"data/script/qscript/q{puzzle}_param.gds"))
-        qparam.close()
-        print(f"Extracting pscript.gds...")
-        pscript = open(f"{out_dir}/script/pscript.gds", "wb")
-        pscript.write(romfile.getFileByName("data/script/pcarot/pscript.gds"))
-        pscript.close()
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
+            except ValueError:
+                bg_lang = True
+                print(f"File q{puzzle}_bg.arc not found - to be looked in language folders")
+            
+            for lang in langs:
+                if bg_lang:
+                    load_file(romfile, out_dir, f"{lang}/q{puzzle}_bg.arc", "bg", "bg")
+                load_file(romfile, out_dir, f"{lang}/{pcm_file}", "qtext", "qtext")
+                load_file(romfile, out_dir, f"{lang}/qscript.gds", "script/qinfo", "script")
+                load_file(romfile, out_dir, f"{lang}/qtitle.gds", "script/puzzletitle", "script")
+
+        else:
+            load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
+            load_file(romfile, out_dir, pcm_file, "qtext", "qtext")
+            load_file(romfile, out_dir, f"qscript.gds", "script/qinfo", "script")
+            load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle", "script")
+
+        #extract all files that don't depend on language (the grand total of 3 :P)
+        load_file(romfile, out_dir, f"jiten_q{puzzle}.arc", "bg", "bg")
+        load_file(romfile, out_dir, f"q{puzzle}_param.gds", "script/qscript", "script")
+        load_file(romfile, out_dir, f"pscript.gds", "script/pcarot", "script")
 
         print("\nDone!")

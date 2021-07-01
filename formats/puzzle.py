@@ -1,8 +1,10 @@
 import click
 import json
 from ndspy import rom
+import os
 
-import titles
+dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
+titles = json.loads(open(f"{dir_path}/data/titles.json").read())
 
 @click.group(help="Simplify puzzle editing: extract or import the files related to a certain puzzle.",options_metavar='')
 def cli():
@@ -23,20 +25,20 @@ def extract(romfile, puzzle, out_dir, long):
     print("ROM loaded!")
     
     id = romfile.idCode.decode("ASCII")
-    if id not in titles.roms:
+    if id not in titles["roms"]:
         print(f"Game supplied ({id}) is not a Professor Layton DS game!")
         quit()
     title = ""
     if long:
-        title = titles.roms_long[id]
+        title = titles["roms_long"][id]
     else:
-        title = titles.roms[id]
+        title = titles["roms"][id]
     print(f"Game: {title}")
     
-    if id not in titles.supported_roms:
+    if id not in titles["supported_roms"]:
         print("Currently, this game is not supported by Flora!")
         quit()
-    elif "" not in titles.tested_roms:
+    elif id not in titles["tested_roms"]:
         print("Warning: this game has not been tested properly with Flora, so errors may arise.")
         ans = input("Continue? (y/N) ")
         if ans.lower() != "y":

@@ -19,6 +19,9 @@ Go to Flora's main directory and use `python main.py` to see all available comma
 ### Objectives
 Currently, Flora development is focused on simplifiying puzzle editing, making it possibly a one-step process. After that goal is achieved, Flora 1.0 will be released, and focus will shift to a different goal (notably, editing the actual main game).
 
+### Game titles
+European titles (Pandora's Box / Lost Future / Spectre's Call) will take precedence over American titles (Diabolical Box / Unwound Future / Last Specter) due to the first being the title for all EU versions, only translated to their respective languages (and, not gonna lie, a lil' bit of spite). Exception: the US region versions of said games.
+
 ### Requirements
 * Python 3
 * [click](https://pypi.org/project/click/)

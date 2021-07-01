@@ -25,4 +25,4 @@ def extract(romfile, puzzle, out_dir, lang):
     romfile, id, title = rom.load(romfile, lang)
     puzzle = puzzles.get(puzzle)
     if puzzle == None:
-        raise Exception("Puzzle provided is not valid!")
+        raise Exception("Puzzle provided is not valid! See the readme for a list of valid puzzles.")

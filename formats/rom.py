@@ -12,8 +12,7 @@ def load(romfile, long=False):
     
     id = romfile.idCode.decode("ASCII")
     if id not in titles["roms"]:
-        print(f"Game supplied ({id}) is not a Professor Layton DS game!")
-        quit()
+        raise Exception(f"Game supplied ({id}) is not a Professor Layton DS game!")
     title = ""
     if long:
         title = titles["roms_long"][id]
@@ -22,8 +21,7 @@ def load(romfile, long=False):
     print(f"Game: {title}")
     
     if id not in titles["supported_roms"]:
-        print("Currently, this game is not supported by Flora!")
-        quit()
+        raise Exception("Currently, this game is not supported by Flora!")
     elif id not in titles["tested_roms"]:
         print("\nWarning: this game has not been tested properly with Flora, so errors may arise.")
         ans = input("Continue? (y/N) ")

@@ -2,6 +2,8 @@ import click
 import json
 from ndspy import rom
 
+import titles
+
 @click.group(help="Simplify puzzle editing: extract or import the files related to a certain puzzle.",options_metavar='')
 def cli():
     pass

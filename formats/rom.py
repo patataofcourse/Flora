@@ -1,4 +1,9 @@
+import json
 from ndspy import rom
+import os
+
+dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
+titles = json.load(open(f"{dir_path}/data/titles.json"))
 
 def load(romfile, long=False):
     print("Loading ROM...")
@@ -24,4 +29,5 @@ def load(romfile, long=False):
         ans = input("Continue? (y/N) ")
         if ans.lower() != "y":
             quit()
+    #TODO: check checksum, to see if it's a modified file or not
     return romfile, id, title

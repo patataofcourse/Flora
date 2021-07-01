@@ -20,7 +20,7 @@ Go to Flora's main directory and use `python main.py` to see all available comma
 Currently, Flora development is focused on simplifiying puzzle editing, making it possibly a one-step process. After that goal is achieved, Flora 1.0 will be released, and focus will shift to a different goal (notably, editing the actual main game).
 
 ### Game titles
-European titles (Pandora's Box / Lost Future / Spectre's Call) will take precedence over American titles (Diabolical Box / Unwound Future / Last Specter) due to the first being the title for all EU versions, only translated to their respective languages (and, not gonna lie, a lil' bit of spite). Exception: the US region versions of said games.
+British/Australian titles (Pandora's Box / Lost Future / Spectre's Call) will take precedence over American titles (Diabolical Box / Unwound Future / Last Specter) due to the first being the title for all EU versions, only translated to their respective languages (and, not gonna lie, a lil' bit of spite). Exception: the US region versions of said games.
 
 ### Requirements
 * Python 3
@@ -28,8 +28,8 @@ European titles (Pandora's Box / Lost Future / Spectre's Call) will take precede
 * [pillow](https://pypi.org/project/pillow/)
 * [ndspy](https://pypi.org/project/ndspy/)
 
-To install all modules, use:  `pip install click pillow ndspy` &nbsp;/ &nbsp;`py -m pip install click pillow ndspy`
+To install all modules, use: `pip install click pillow ndspy` &nbsp;/ &nbsp;`py -m pip install click pillow ndspy`
 
 ### Special thanks to:
 * [pleonex](https://github.com/pleonex/) for his tool [Tinke](https://github.com/pleonex/Tinke), which gave me a base for file formats
-* Villa for dealing with my bullshit (srry) and cheering me on!
+* Duel for dealing with my bullshit (srry) and cheering me on!

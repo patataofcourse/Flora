@@ -106,7 +106,8 @@ f'''The files you want from the PCM file are:
     - h_{puzzle}_2.txt
     - h_{puzzle}_3.txt
     - f_{puzzle}.txt
-    - c_{puzzle}.txt'''
+    - c_{puzzle}.txt
+'''
             )
 
         elif id.endswith("E"):
@@ -147,7 +148,7 @@ f'''The files you want from the PCM file are:
             load_file(romfile, out_dir, f"qscript.gds", "script/qinfo", "script")
             load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle", "script")
         
-        else: #"K"
+        elif id.endswith("K"):
             try:
                 load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
             except ValueError:
@@ -164,11 +165,29 @@ f'''The files you want from the PCM file are:
                     load_file(romfile, out_dir, f"q{puzzle}a_bg.arc", "bg/ko", "bg")
                 except ValueError:
                     print(f"File q{puzzle}a_bg.arc not found in /ko folder")
+            load_file(romfile, out_dir, pcm_file, "qtext/ko", "qtext")
+            load_file(romfile, out_dir, f"qscript.gds", "script/qinfo/ko", "script")
+            load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle/ko", "script")
+
+            readme.write(
+f'''The files you want from the PCM file are:
+    - t_{puzzle}.txt
+    - q_{puzzle}.txt
+    - h_{puzzle}_1.txt
+    - h_{puzzle}_2.txt
+    - h_{puzzle}_3.txt
+    - f_{puzzle}.txt
+    - c_{puzzle}.txt
+'''
+            )
+        else:
+            raise Exception(f"Unknown region for game 'A5F': {id[-1]}")
 
         readme.write (
 f'''Inside the qtitle.gds script, look for the line that starts with: 0xba {puzzle}
 Inside the pscript.gds script, look for the line that starts with: 0xc3 {puzzle}
-Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}'''
+Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
+'''
         )
         readme.close()
 

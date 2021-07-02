@@ -111,6 +111,8 @@ f'''The files you want from the PCM file are:
             )
 
         elif id.endswith("E"):
+            if puzzle == 163:
+                raise Exception("Puzzle not available in US version!")
             try:
                 load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
             except ValueError:
@@ -130,6 +132,8 @@ f'''The files you want from the PCM file are:
             load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle/en", "script")
         
         elif id.endswith("J"):
+            if puzzle == 163:
+                raise Exception("Puzzle not available on JP version!")
             try:
                 load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
             except ValueError:

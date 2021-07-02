@@ -25,7 +25,7 @@ British/Australian titles (Pandora's Box / Lost Future / Spectre's Call) will ta
 ### Puzzles:
 To use the puzzle command, you should use either the number of the puzzle (1) if it's a standard puzzle, or the weekly puzzle's US/EU/KO number preceded by 'W' (W16). You can also extract the match puzzle tutorial (from puzzle #10) using "match_tutorial" and, in the EU and KO versions, the unused puzzle using "1_unused".
 
-Some unused variants of puzzles can't be extracted yet through Flora, however, this will be fixed in a future update.
+Some unused variants of puzzles can't be extracted yet through Flora, as well as some Japanese-exclusive weekly puzzles, however, this will be fixed in a future update.
 
 ### Requirements
 * Python 3

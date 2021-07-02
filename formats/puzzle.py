@@ -13,8 +13,9 @@ def cli():
 
 def load_file(rom, out_dir, file, og_path, out_path="."):
     print(f"Extracting {file}...")
+    contents = rom.getFileByName(f"data/{og_path}/{file}")  #maybe "data" is not an essential part?
     f = open(f"{out_dir}/{out_path}/{file}", "wb")
-    f.write(rom.getFileByName(f"data/{og_path}/{file}")) #maybe "data" is not an essential part?
+    f.write(contents)
     f.close()
 
 @cli.command(
@@ -99,18 +100,32 @@ Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
             except FileExistsError:
                 pass
             
-            bg_lang = False
-            jiten_lang = False
+            bg_lang = True
+            bga_lang = True
 
             try:
                 load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
             except ValueError:
-                bg_lang = True
                 print(f"File q{puzzle}_bg.arc not found - to be looked in language folders")
             
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}a_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}a_bg.arc not found - to be looked in language folders")
+
             for lang in langs:
                 if bg_lang:
-                    load_file(romfile, out_dir, f"{lang}/q{puzzle}_bg.arc", "bg", "bg")
+                    try:
+                        load_file(romfile, out_dir, f"{lang}/q{puzzle}_bg.arc", "bg", "bg")
+                    except ValueError:
+                        print(f"File q{puzzle}_bg.arc not found in language folders.")
+                        bg_lang = False
+                if bga_lang:
+                    try:
+                        load_file(romfile, out_dir, f"{lang}/q{puzzle}a_bg.arc", "bg", "bg")
+                    except ValueError:
+                        print(f"File q{puzzle}a_bg.arc not found in language folders.")
+                        bga_lang = False
                 load_file(romfile, out_dir, f"{lang}/{pcm_file}", "qtext", "qtext")
                 load_file(romfile, out_dir, f"{lang}/qscript.gds", "script/qinfo", "script")
                 load_file(romfile, out_dir, f"{lang}/qtitle.gds", "script/puzzletitle", "script")

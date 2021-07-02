@@ -40,26 +40,11 @@ def extract(romfile, puzzle, out_dir, lang):
     if id.startswith("A5F"): #Curious Village
         #TODO: get files called from the script?
 
+        readme = open(f"{out_dir}/readme.txt", "a")
+
         puzzle = puzzles["A5F"].get(puzzle)
         if puzzle == None:
             raise Exception("Puzzle provided is not valid! See the readme for a list of valid puzzles.")
-        
-        #directory structure:
-        #  puzzle_dir
-        #    readme.txt
-        #    bg
-        #      region folders if needed
-        #      q??_bg.arc
-        #      jiten_q??.arc
-        #    qtext
-        #      region folders if needed
-        #      q???.pcm
-        #    script
-        #      region folders if needed
-        #      pscript.gds
-        #      q??_param.gds
-        #      qscript.gds
-        #      qtitle.gds
 
         pcm_file = 'q000.pcm' if puzzle < 50 else ('q050.pcm' if puzzle < 100 else 'q100.pcm')
         try:
@@ -113,7 +98,6 @@ def extract(romfile, puzzle, out_dir, lang):
                 load_file(romfile, out_dir, f"{lang}/qscript.gds", "script/qinfo", "script")
                 load_file(romfile, out_dir, f"{lang}/qtitle.gds", "script/puzzletitle", "script")
             
-            readme = open(f"{out_dir}/readme.txt", "w")
             readme.write(
 f'''The files you want from the PCM file are:
     - t_{puzzle}.txt
@@ -122,16 +106,18 @@ f'''The files you want from the PCM file are:
     - h_{puzzle}_2.txt
     - h_{puzzle}_3.txt
     - f_{puzzle}.txt
-    - c_{puzzle}.txt
-Inside the qtitle.gds script, look for the line that starts with: 0xba {puzzle}
-Inside the pscript.gds script, look for the line that starts with: 0xc3 {puzzle}
-Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
-'''
+    - c_{puzzle}.txt'''
             )
-            readme.close()
 
         elif id.endswith("E"):
-            load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}_bg.arc not found")
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}a_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}a_bg.arc not found")
             load_file(romfile, out_dir, f"t_{puzzle}.txt", "qtext/en", "qtext")
             load_file(romfile, out_dir, f"q_{puzzle}.txt", "qtext/en", "qtext")
             load_file(romfile, out_dir, f"h_{puzzle}_1.txt", "qtext/en", "qtext")
@@ -141,18 +127,50 @@ Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
             load_file(romfile, out_dir, f"c_{puzzle}.txt", "qtext/en", "qtext")
             load_file(romfile, out_dir, f"qscript.gds", "script/qinfo/en", "script")
             load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle/en", "script")
+        
+        elif id.endswith("J"):
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}_bg.arc not found")
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}a_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}a_bg.arc not found")
+            load_file(romfile, out_dir, f"t_{puzzle}.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"q_{puzzle}.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"h_{puzzle}_1.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"h_{puzzle}_2.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"h_{puzzle}_3.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"f_{puzzle}.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"c_{puzzle}.txt", "qtext", "qtext")
+            load_file(romfile, out_dir, f"qscript.gds", "script/qinfo", "script")
+            load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle", "script")
+        
+        else: #"K"
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}_bg.arc not found - looking in /ko folder")
+                try:
+                    load_file(romfile, out_dir, f"q{puzzle}_bg.arc", "bg/ko", "bg")
+                except ValueError:
+                    print(f"File q{puzzle}_bg.arc not found in /ko folder")
+            try:
+                load_file(romfile, out_dir, f"q{puzzle}a_bg.arc", "bg", "bg")
+            except ValueError:
+                print(f"File q{puzzle}a_bg.arc not found - looking in /ko folder")
+                try:
+                    load_file(romfile, out_dir, f"q{puzzle}a_bg.arc", "bg/ko", "bg")
+                except ValueError:
+                    print(f"File q{puzzle}a_bg.arc not found in /ko folder")
 
-            readme = open(f"{out_dir}/readme.txt", "w")
-            readme.write(
-f'''
-Inside the qtitle.gds script, look for the line that starts with: 0xba {puzzle}
+        readme.write (
+f'''Inside the qtitle.gds script, look for the line that starts with: 0xba {puzzle}
 Inside the pscript.gds script, look for the line that starts with: 0xc3 {puzzle}
-Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
-'''
-            )
-            readme.close()
-        else:
-            raise NotImplementedError()
+Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}'''
+        )
+        readme.close()
 
         #extract all files that don't depend on language (the grand total of 3 :P)
         load_file(romfile, out_dir, f"jiten_q{puzzle}.arc", "bg", "bg")

@@ -2,7 +2,7 @@
 ## A modding tool for Professor Layton games
 
 ### Supported games
-* Professor Layton and the Curious Village (only tested in the EU version)
+* Professor Layton and the Curious Village (all versions: JP, JP Friendly Version, US, EU/AUS, KO)
 
 ### Current utilities
 * GDS script extracting and repacking to a custom readable format.
@@ -21,6 +21,11 @@ Currently, Flora development is focused on simplifiying puzzle editing, making i
 
 ### Game titles
 British/Australian titles (Pandora's Box / Lost Future / Spectre's Call) will take precedence over American titles (Diabolical Box / Unwound Future / Last Specter) due to the first being the title for all EU versions, only translated to their respective languages (and, not gonna lie, a lil' bit of spite). Exception: the US region versions of said games.
+
+### Puzzles:
+To use the puzzle command, you should use either the number of the puzzle (1) if it's a standard puzzle, or the weekly puzzle's US/EU/KO number preceded by 'W' (W16). You can also extract the match puzzle tutorial (from puzzle #10) using "match_tutorial" and, in the EU and KO versions, the unused puzzle using "1_unused".
+
+Some unused variants of puzzles can't be extracted yet through Flora, however, this will be fixed in a future update.
 
 ### Requirements
 * Python 3

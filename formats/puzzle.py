@@ -7,9 +7,9 @@ from formats import rom
 dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
 puzzles = json.load(open(f"{dir_path}/data/puzzles.json"))
 
-@click.group(help="Simplify puzzle editing: extract or import the files related to a certain puzzle.",options_metavar='')
-def cli():
-    pass
+#@click.group(help="Simplify puzzle editing: extract or import the files related to a certain puzzle.",options_metavar='')
+#def cli():
+#    pass
 
 def load_file(rom, out_dir, file, og_path, out_path="."):
     print(f"Extracting {file}...")
@@ -18,8 +18,8 @@ def load_file(rom, out_dir, file, og_path, out_path="."):
     f.write(contents)
     f.close()
 
-@cli.command(
-                name="extract",
+@click.command(
+                name="puzzle",
                 help="Extracts all the files related to a certain puzzle from the ROM into a specific directory",
                 no_args_is_help = True,
                 options_metavar = "[--lang]"
@@ -28,7 +28,7 @@ def load_file(rom, out_dir, file, og_path, out_path="."):
 @click.argument("puzzle")
 @click.argument("out_dir")
 @click.option("--lang", is_flag=True, default = False, help = "Load the game titles in their original language.")
-def extract(romfile, puzzle, out_dir, lang):
+def cli(romfile, puzzle, out_dir, lang):
     romfile, id, title = rom.load(romfile, lang)
     try:
         os.mkdir(out_dir)

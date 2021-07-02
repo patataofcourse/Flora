@@ -5,9 +5,10 @@
     - Extract BG files to PNG and create BG files from indexed PNGs
 - [x] 0.3
     - Extract the contents of a PCM file into a folder and make a PCM file from the contents of a folder
-- [ ] 0.4
+- [x] 0.4
     - Replace files inside a PCM file with those given in a folder
-    - Extract and import files specific to a certain puzzle, for ease of puzzle editing
+    - Extract <s>and import</s> files specific to a certain puzzle, for ease of puzzle editing
+        + (Importing will be added to mod files on 0.5)
 - [ ] 0.4.1
     - Make classes for BG and GDS files, so that they can be used in other commands
 - [ ] 0.5

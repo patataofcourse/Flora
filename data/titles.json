@@ -79,9 +79,6 @@
     ],
 
     "tested_roms" : [
-        "A5FP",
-        "A5FE",
-        "A5FJ",
-        "A5FK"
+        "A5FP"
     ]
 }

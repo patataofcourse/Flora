@@ -1,1 +1,1 @@
-from formats import gds, bg, pcm
+from formats import gds, bg, pcm, puzzle, rom

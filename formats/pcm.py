@@ -145,8 +145,8 @@ def extract(input, output, file):
     try:
         os.mkdir(output)
     except FileExistsError:
-        print(f"Directory {output} already exists! Delete it, then try again.")
-        quit()
+        #raise Exception(f"Directory {output} already exists! Delete it, then try again.")
+        pass
 
     input = lz10.decompress(input)
     pcm = PCM(input)

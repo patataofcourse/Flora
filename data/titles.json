@@ -1,0 +1,84 @@
+{
+    "roms_long" : {
+        "A5FJ": "不思議な町 [Curious Village] (Japan)",
+        "A5FE": "Curious Village (America)",
+        "A5FP": "Curious Village (Europe / Australia)",
+        "A5FK": "이상한 마을 [Curious Village] (Korea)",
+        "YLTJ": "悪魔の箱 [Pandora's Box] (Japan)",
+        "YLTE": "Diabolical Box [Pandora's Box] (America)",
+        "YLTD": "Schatulle der Pandora [Pandora's Box] (Europe - German)",
+        "YLTP": "Pandora's Box (Europe / Australia - English)",
+        "YLTS": "Caja de Pandora [Pandora's Box] (Europe - Spanish)",
+        "YLTF": "Boîte de Pandore [Pandora's Box] (Europe - French)",
+        "YLTI": "Scrigno di Pandora [Pandora's Box] (Europe - Italian)",
+        "YLTH": "Doos van Pandora [Pandora's Box] (Europe - Dutch)",
+        "YLTK": "악마의 상자 [Pandora's Box] (Korea)",
+        "C3JJ": "最後の時間旅行 [Lost Future] (Japan)",
+        "C3JE": "Unwound Future [Lost Future] (America)",
+        "C3JD": "Verlorene Zukunft [Lost Future] (Europe - German)",
+        "C3JP": "Lost Future (Europe / Australia - English)",
+        "C3JS": "Futuro perdido [Lost Future] (Europe - Spanish)",
+        "C3JF": "Destin Perdu [Lost Future] (Europe - French)",
+        "C3JI": "Futuro perduto [Lost Future] (Europe - Italian)",
+        "C3JH": "Verloren Toekomst [Lost Future] (Europe - Dutch)",
+        "C3JK": "최후의 시간여행 [Lost Future] (Korea)",
+        "BLFJ": "魔神の笛 [Spectre's Call] (Japan)",
+        "BLFE": "Last Specter [Spectre's Call] (America)",
+        "BLFD": "Ruf des Phantoms [Spectre's Call] (Europe - German)",
+        "BLFP": "Spectre's Call (Europe / Australia - English)",
+        "BLFS": "Llamada del espectro [Last Specter / Spectre's Call] (Europe - Spanish)",
+        "BLFF": "Appel du Spectre [Spectre's Call] (Europe - French)",
+        "BLFI": "Richiamo dello spettro [Spectre's Call] (Europe - Italian)",
+        "BLFH": "Melodie van het Spook [Spectre's Call] (Europe - Dutch)",
+        "BLFK": "마신의 피리 [Spectre's Call] (Korea)"
+    },
+    
+    "roms" : {
+        "A5FJ": "Curious Village (Japan)",
+        "A5FE": "Curious Village (America)",
+        "A5FP": "Curious Village (Europe / Australia)",
+        "A5FK": "Curious Village (Korea)",
+        "YLTJ": "Pandora's Box (Japan)",
+        "YLTE": "Diabolical Box (America)",
+        "YLTD": "Pandora's Box (Europe - German)",
+        "YLTP": "Pandora's Box (Europe / Australia - English)",
+        "YLTS": "Pandora's Box (Europe - Spanish)",
+        "YLTF": "Pandora's Box (Europe - French)",
+        "YLTI": "Pandora's Box (Europe - Italian)",
+        "YLTH": "Pandora's Box (Europe - Dutch)",
+        "YLTK": "Pandora's Box (Korea)",
+        "C3JJ": "Lost Future (Japan)",
+        "C3JE": "Unwound Future (America)",
+        "C3JD": "Lost Future (Europe - German)",
+        "C3JP": "Lost Future (Europe / Australia - English)",
+        "C3JS": "Lost Future (Europe - Spanish)",
+        "C3JF": "Lost Future (Europe - French)",
+        "C3JI": "Lost Future (Europe - Italian)",
+        "C3JH": "Lost Future (Europe - Dutch)",
+        "C3JK": "Lost Future (Korea)",
+        "BLFJ": "Spectre's Call (Japan)",
+        "BLFE": "Last Specter (America)",
+        "BLFD": "Spectre's Call (Europe - German)",
+        "BLFP": "Spectre's Call (Europe / Australia - English)",
+        "BLFS": "Spectre's Call (Europe - Spanish)",
+        "BLFF": "Spectre's Call (Europe - French)",
+        "BLFI": "Spectre's Call (Europe - Italian)",
+        "BLFH": "Spectre's Call (Europe - Dutch)",
+        "BLFK": "Spectre's Call (Korea)"
+    },
+
+    "checksums": {
+
+    },
+
+    "supported_roms": [
+        "A5FP",
+        "A5FE",
+        "A5FJ",
+        "A5FK"
+    ],
+
+    "tested_roms" : [
+        "A5FP"
+    ]
+}

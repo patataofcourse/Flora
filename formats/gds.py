@@ -76,6 +76,12 @@ class GDS:
             elif p_type == 8:
                 params.append({"type": "unknown-8"})
                 c += 2
+            elif p_type == 9:
+                params.append({"type": "unknown-9"})
+                c += 2
+            elif p_type == 0xb:
+                params.append({"type": "unknown-b"})
+                c += 2
             elif p_type == 0xc:
                 #cmd = hex(cmd)
                 cmds.append({"command":cmd, "parameters":params})
@@ -122,6 +128,10 @@ class GDS:
                     out += param["data"].to_bytes(4, "little")
                 elif param["type"] == "unknown-8":
                     out += b"\x08\x00"
+                elif param["type"] == "unknown-9":
+                    out += b"\x09\x00"
+                elif param["type"] == "unknown-b":
+                    out += b"\x0b\x00"
                 else:
                     raise Exception(f"GDS JSON error: Invalid or unsupported parameter type '{param['type']}'!")
             out += b"\x00\x00"

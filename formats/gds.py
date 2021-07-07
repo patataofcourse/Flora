@@ -50,7 +50,7 @@ class GDS:
                 params.append({"type": "int", "data": int.from_bytes(cmd_data[c+2:c+6], "little")})
                 c += 6
             elif p_type == 2:
-                params.append({"type": "unknown", "data": int.from_bytes(cmd_data[c+2:c+6], "little")})
+                params.append({"type": "unknown-2", "data": int.from_bytes(cmd_data[c+2:c+6], "little")})
                 c += 6
             elif p_type == 3:
                 str_len = int.from_bytes(cmd_data[c+2:c+4], "little")

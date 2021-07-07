@@ -67,6 +67,9 @@ class GDS:
                 str_len = int.from_bytes(cmd_data[c+2:c+4], "little")
                 params.append({"type": "string", "data": cmd_data[c+4:c+4+str_len].decode("ascii").rstrip("\x00")})  #TODO: JP/KO compatibility
                 c += str_len+4
+            elif p_type == 6:
+                params.append({"type": "unknown-6", "data": int.from_bytes(cmd_data[c+2:c+6], "little")})
+                c += 6
             elif p_type == 0xc:
                 #cmd = hex(cmd)
                 cmds.append({"command":cmd, "parameters":params})
@@ -105,6 +108,9 @@ class GDS:
                     out += b"\x03\x00"
                     out += (len(param["data"])+1).to_bytes(2, "little")
                     out += param["data"].encode("ASCII") + b"\x00" #TODO: JP/KO compatibility
+                elif param["type"] == "unknown-6":
+                    out += b"\x06\x00"
+                    out += param["data"].to_bytes(4, "little")
                 else:
                     raise Exception(f"GDS JSON error: Invalid or unsupported parameter type '{param['type']}'!")
             out += b"\x00\x00"

@@ -86,6 +86,7 @@ class GDS:
             else:
                 raise NotImplementedError()
             for param in command["parameters"]:
+                print (param['type'], param['data'])
                 if param["type"] == "int":
                     out += b"\x01\x00"
                     out += param["data"].to_bytes(4, "little")
@@ -94,12 +95,12 @@ class GDS:
                     out += param["data"].to_bytes(4, "little")
                 elif param["type"] == "string":
                     out += b"\x03\x00"
-                    out += (len(param["data"])).to_bytes(2, "little")
+                    out += (len(param["data"])+1).to_bytes(2, "little")
                     out += param["data"].encode("ASCII") + b"\x00" #TODO: JP/KO compatibility
                 else:
                     raise Exception(f"GDS JSON error: Invalid or unsupported parameter type '{param['type']}'!")
-            out += b"\x00"
-        out = out[:-1] + b"\x0c\x00"
+            out += b"\x00\x00"
+        out = out[:-2] + b"\x0c\x00"
 
         return len(out).to_bytes(4, "little") + out
     

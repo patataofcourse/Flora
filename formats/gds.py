@@ -56,7 +56,7 @@ class GDS:
                 c += 6
             elif p_type == 3:
                 str_len = int.from_bytes(cmd_data[c+2:c+4], "little")
-                params.append({"type": "string", "data": cmd_data[c+4:c+4+str_len].decode("ascii").rstrip("\x00")})
+                params.append({"type": "string", "data": cmd_data[c+4:c+4+str_len].decode("ascii").rstrip("\x00")})  #TODO: JP/KO compatibility
                 c += str_len+4
             elif p_type == 0xc:
                 #cmd = hex(cmd)
@@ -79,12 +79,32 @@ class GDS:
         return json.dumps({"version": v, "data": self.cmds}, indent=4)
     
     def to_gds (self):
-        out = b""
+        out = b"\x00" * 2
         for command in self.cmds:
-            print(command["command"])
+            if type(command["command"]) == int:
+                out += command["command"].to_bytes(2, "little")
+            else:
+                raise NotImplementedError()
+            for param in command["parameters"]:
+                if param["type"] == "int":
+                    out += b"\x01\x00"
+                    out += param["data"].to_bytes(4, "little")
+                elif param["type"] == "unknown-2":
+                    out += b"\x02\x00"
+                    out += param["data"].to_bytes(4, "little")
+                elif param["type"] == "string":
+                    out += b"\x03\x00"
+                    out += (len(param["data"])).to_bytes(2, "little")
+                    out += param["data"].encode("ASCII") + b"\x00" #TODO: JP/KO compatibility
+                else:
+                    raise Exception(f"GDS JSON error: Invalid or unsupported parameter type '{param['type']}'!")
+            out += b"\x00"
+        out = out[:-1] + b"\x0c\x00"
+
+        return len(out).to_bytes(4, "little") + out
     
     def to_bin (self): #alias
-        return to_gds (self)
+        return self.to_gds()
 
 @cli.command(
                 name="extract",
@@ -109,4 +129,8 @@ def unpack_json(input, output):
 @click.argument("output")
 def create_json(input, output):
     input = open(input).read()
-    GDS(input, "json")
+    output = open(output, "wb")
+
+    gds = GDS(input, "json")
+    output.write(gds.to_bin())
+    output.close()

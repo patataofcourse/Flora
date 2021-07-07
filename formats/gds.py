@@ -33,6 +33,9 @@ class GDS:
 
     def from_gds(self, file):
         length = int.from_bytes(file[0:4], "little")
+        if file[4:6] == b"\x0c\x00":
+            self.cmds = []
+            return
         cmd_data = file[6:length+4]
         cmds = []
 
@@ -41,7 +44,7 @@ class GDS:
         c = 0
         while True:
             if c >= length:
-                raise Exception("End of file reached with no 0xC command!")
+                raise Exception("GDS file error: End of file reached with no 0xC command!")
             if cmd == None:
                 cmd = int.from_bytes(cmd_data[c:c+2], "little")
                 if cmd in commands_i:

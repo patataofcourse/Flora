@@ -1,9 +1,8 @@
 import click
 from ndspy import lz10
-import os
 from PIL import Image
 
-@click.group(help="'Background'/texture format.",options_metavar='')
+@click.group(help="'Background' / texture format.",options_metavar='')
 def cli():
     pass
 
@@ -81,7 +80,7 @@ def extract(input, output):
             rows = [[],[],[],[],[],[],[],[]]
     p = []
     for h in p_colors:
-        p+=h
+        p += h
     out = bytes(out)
     img = Image.frombytes("P",(width*8, height*8),out)
     img.putpalette(p)

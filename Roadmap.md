@@ -16,5 +16,9 @@
         + Add proper command names
 - [ ] 0.6
     - Flora mod files: Create and load mods based on the files that they edit, so that multiple mods can be loaded at the same time if they are compatible.
+    - Flora Patcher: a standalone program for creating, updating, and loading Flora mod files
+    - First release as executable
 - [ ] 1.0
     - Extract all data related to a puzzle to formats such as JSON, PNG, etc. for ease of editing, and later on load as a Flora mod. Includes simplifying the script into a format that can easily be understood.
+    - Flora mod file support for puzzles
+    - ANI file support (extract the images as PNGs and the animation data into a JSON)

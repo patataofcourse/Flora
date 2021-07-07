@@ -59,8 +59,8 @@ class PCM:
         h_size = int.from_bytes(self.file[offset:offset+4], "little")
         data_size = int.from_bytes(self.file[offset+12:offset+16], "little")
         return self.file[offset + h_size: offset + h_size + data_size]
-    def __getitem__(self, x):
-        return self.open(self.offsets[x])
+    def __getitem__(self, index):
+        return self.open(self.offsets[index])
     
     def from_files(self, files, names):
         self.header = {

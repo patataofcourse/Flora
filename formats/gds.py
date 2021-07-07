@@ -1,5 +1,6 @@
 import click
 import json
+import os
 
 from formats import gds_old
 from version import v
@@ -10,6 +11,10 @@ def cli():
 
 cli.add_command(gds_old.unpack)
 cli.add_command(gds_old.pack)
+
+dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
+commands = json.load(open(f"{dir_path}/data/commands.json"))
+commands_i = {val: key for key, val in commands.items()}
 
 class GDSModeException (Exception):
     def __init__(self, mode):
@@ -39,11 +44,12 @@ class GDS:
                 raise Exception("End of file reached with no 0xC command!")
             if cmd == None:
                 cmd = int.from_bytes(cmd_data[c:c+2], "little")
+                if cmd in commands_i:
+                    cmd = commands_i[cmd]
                 c += 2
                 continue
             p_type = int.from_bytes(cmd_data[c:c+2], "little")
             if p_type == 0:
-                #cmd = hex(cmd)
                 cmds.append({"command":cmd, "parameters":params})
                 cmd = None
                 params = []
@@ -84,9 +90,8 @@ class GDS:
             if type(command["command"]) == int:
                 out += command["command"].to_bytes(2, "little")
             else:
-                raise NotImplementedError()
+                out += commands[command["command"]].to_bytes(2, "little")
             for param in command["parameters"]:
-                print (param['type'], param['data'])
                 if param["type"] == "int":
                     out += b"\x01\x00"
                     out += param["data"].to_bytes(4, "little")

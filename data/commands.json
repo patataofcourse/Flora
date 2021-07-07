@@ -1,3 +1,10 @@
 {
-    
+    "engine": 27,
+    "img_win": 31,
+    "puzzle_title": 186,
+    "puzzle_picarats": 195,
+    "circle_answer": 212,
+    "puzzle_info": 220,
+    "input_answer": 251,
+    "input_bg": 252
 }

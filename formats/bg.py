@@ -52,7 +52,7 @@ def extract(input, output):
         tile = int.from_bytes(data[4+c*2:6+c*2], "little")
         flip_x = bool(tile>>11 & 1)
         flip_y = bool(tile>>10 & 1)
-        tile_num = tile & 0x7ff
+        tile_num = tile & 0x3ff
         map.append((tile_num, flip_x, flip_y))
         c += 1
     
@@ -60,12 +60,16 @@ def extract(input, output):
     out = []
     rows = [[],[],[],[],[],[],[],[]]
     for t in map:
-        tile = tiles[t[0]]
+        tile = list(tiles[t[0]])
         if t[2]:
             tile.reverse() #Flip Y
         if t[1]:
+            ntile = []
             for row in tile:
+                row = list(row) #so it doesn't override the OG rows
                 row.reverse() #Flip X
+                ntile.append(row)
+            tile = ntile
 
         d = 0
         for row in rows:

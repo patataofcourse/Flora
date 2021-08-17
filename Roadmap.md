@@ -8,7 +8,7 @@
 - [x] 0.4
     - Replace files inside a PCM file with those given in a folder
     - Extract <s>and import</s> files specific to a certain puzzle, for ease of puzzle editing
-        + (Importing will be added to mod files on 0.5)
+        + (Importing will be added to mod files on 0.6)
 - [ ] 0.5
     - Make classes for BG and GDS files, so that they can be used in other commands
     - GDS overhaul

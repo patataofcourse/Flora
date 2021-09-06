@@ -99,7 +99,6 @@ def extract(input, output):
 @click.argument("output")
 def create(input, output):
     img = Image.open(input)
-    of = output
     output = open(output, "wb")
     width, height = img.size
 

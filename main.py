@@ -1,4 +1,5 @@
 import click
+from pypreprocessor import pypreprocessor
 
 import formats
 from patcher import main as patcher
@@ -9,6 +10,8 @@ from version import v
 def cli():
     pass
 
+#define flora
+
 cli.add_command(formats.gds.cli, "gds")
 cli.add_command(formats.bg.cli, "bg")
 cli.add_command(formats.pcm.cli, "pcm")
@@ -18,4 +21,5 @@ cli.add_command(patcher.cli, "patch")
 
 if __name__ == "__main__":
     print(f"Flora v{v} by patataofcourse\n")
+    pypreprocessor.parse()
     cli() #TODO: managing exceptions, -v

@@ -38,9 +38,8 @@ Some unused variants of puzzles can't be extracted yet through Flora, as well as
 * [click](https://pypi.org/project/click/)
 * [pillow](https://pypi.org/project/pillow/)
 * [ndspy](https://pypi.org/project/ndspy/)
-* [pypreprocessor](https://pypi.org/project/pypreprocessor/)
 
-To install all modules, use: `pip install click pillow ndspy pypreprocessor` &nbsp;/ &nbsp;`py -m pip install click pillow ndspy pypreprocessor`
+To install all modules, use: `pip install click pillow ndspy` &nbsp;/ &nbsp;`py -m pip install click pillow ndspy`
 
 ### Special thanks to:
 * [pleonex](https://github.com/pleonex/) for his tool [Tinke](https://github.com/pleonex/Tinke), which gave me a base for file formats

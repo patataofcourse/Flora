@@ -1,5 +1,4 @@
 import click
-from pypreprocessor import pypreprocessor
 
 from version import v
 

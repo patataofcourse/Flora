@@ -2,6 +2,7 @@ import click
 
 import formats
 from patcher import main as patcher
+from patcher.version import v as patcherv
 from version import v
 
 @click.group(name=f"flora")
@@ -12,7 +13,7 @@ cli.add_command(formats.gds.cli, "gds")
 cli.add_command(formats.bg.cli, "bg")
 cli.add_command(formats.pcm.cli, "pcm")
 cli.add_command(formats.puzzle.cli, "puzzle")
-patcher.cli.help = "Use Flora Patcher."
+patcher.cli.help = f"Use Flora Patcher version {patcherv}."
 cli.add_command(patcher.cli, "patch")
 
 if __name__ == "__main__":

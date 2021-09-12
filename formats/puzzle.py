@@ -4,8 +4,8 @@ import os
 
 from formats import rom
 
-dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
-puzzles = json.load(open(f"{dir_path}/data/puzzles.json"))
+dir_path = "/".join(os.path.dirname(os.path.realpath(__file__).replace("\\", "/")).split("/")[:-1])
+puzzles = json.load(open(f"{dir_path}/data/puzzles.json", encoding="utf-8"))
 
 #@click.group(help="Simplify puzzle editing: extract or import the files related to a certain puzzle.",options_metavar='')
 #def cli():

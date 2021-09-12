@@ -12,8 +12,8 @@ def cli():
 cli.add_command(gds_old.unpack)
 cli.add_command(gds_old.pack)
 
-dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
-commands = json.load(open(f"{dir_path}/data/commands.json"))
+dir_path = "/".join(os.path.dirname(os.path.realpath(__file__).replace("\\", "/")).split("/")[:-1])
+commands = json.load(open(f"{dir_path}/data/commands.json", encoding="utf-8"))
 commands_i = {val: key for key, val in commands.items()}
 
 class GDSModeException (Exception):

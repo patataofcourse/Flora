@@ -2,8 +2,8 @@ import json
 from ndspy import rom
 import os
 
-dir_path = "/".join(os.path.dirname(os.path.realpath(__file__)).split("/")[:-1])
-titles = json.load(open(f"{dir_path}/data/titles.json"))
+dir_path = "/".join(os.path.dirname(os.path.realpath(__file__).replace("\\", "/")).split("/")[:-1])
+titles = json.load(open(f"{dir_path}/data/titles.json", encoding="utf-8"))
 
 def load(romfile, long=False, layton_only=True):
     print("Loading ROM...")

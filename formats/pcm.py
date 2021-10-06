@@ -171,7 +171,7 @@ def create(input, output):
     
     files = []
     names = []
-    for f in list(os.walk("./"+input))[0][2]:
+    for f in list(os.walk(input))[0][2]:
         names.append(f)
         files.append(open(f"{input}/{f}", "rb").read())
     pcm = PCM(files, names)
@@ -197,7 +197,7 @@ def replace(in_file, in_dir, output):
     in_file = lz10.decompress(in_file)
     pcm = PCM(in_file)
 
-    for f in list(os.walk("./"+in_dir))[0][2]:
+    for f in list(os.walk(in_dir))[0][2]:
         pcm.replace(f, open(f"{in_dir}/{f}", "rb").read())
         
     out = lz10.compress(pcm.file)

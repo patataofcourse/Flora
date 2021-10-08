@@ -13,6 +13,7 @@
     + The image must have at most 256 different colors. This is a limitation of the format.
 * Extracting the contents of a PCM file into a folder, and building a PCM file from the contents of a folder.
 * Replacing certain files inside a PCM file.
+* Extracting all files related to a certain puzzle (needs testing on non-PAL regions)
 
 For a full roadmap of the features that will be added to Flora in the near future, check out [Roadmap.md](Roadmap.md)
 

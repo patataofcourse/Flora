@@ -42,7 +42,7 @@ def remove_strings(text): #wow i actually commented this very cool
 @click.argument("output")
 def unpack(input, output):
     input = open(input, "rb").read()
-    output = open(output, "w")
+    output = open(output, "w", encoding="utf-8")
 
     length = int.from_bytes(input[0:4], "little")
     cmd_data = input[6:length+4]

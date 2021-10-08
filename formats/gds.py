@@ -95,6 +95,9 @@ class GDS:
         self.cmds = json.loads(file)["data"]
         #TODO: reject non-compatible json files
     
+    def from_old (self, file): #TODO: make this, so gds_old can be completely removed
+        pass
+
     def __getitem__ (self, index):
         index = int(index)
         return self.cmds[index]
@@ -151,7 +154,7 @@ class GDS:
 @click.argument("output")
 def unpack_json(input, output):
     input = open(input, "rb").read()
-    output = open(output, "w")
+    output = open(output, "w", encoding="utf-8")
     gds = GDS(input)
     output.write(gds.to_json())
     output.close()
@@ -164,7 +167,7 @@ def unpack_json(input, output):
 @click.argument("input")
 @click.argument("output")
 def create_json(input, output):
-    input = open(input).read()
+    input = open(input, encoding="utf-8").read()
     output = open(output, "wb")
 
     gds = GDS(input, "json")

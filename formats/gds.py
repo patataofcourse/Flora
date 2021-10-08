@@ -2,31 +2,30 @@ import click
 import json
 import os
 
-from formats import gds_old
+import parse
 from version import v
 
 @click.group(help="Script-like format, also used to store puzzle parameters.",options_metavar='')
 def cli():
     pass
 
-cli.add_command(gds_old.unpack)
-cli.add_command(gds_old.pack)
-
 dir_path = "/".join(os.path.dirname(os.path.realpath(__file__).replace("\\", "/")).split("/")[:-1])
 commands = json.load(open(f"{dir_path}/data/commands.json", encoding="utf-8"))
-commands_i = {val: key for key, val in commands.items()}
+commands_i = {val: key for key, val in commands.items()} # Inverted version of commands
 
 class GDSModeException (Exception):
     def __init__(self, mode):
-        self.args = (f"'{mode}' is not a valid mode for GDS.__init__(): must be one of 'bin', 'json', 'gda'",)
+        self.mode = mode
+        super().__init__(
+            f"'{mode}' is not a valid mode for GDS.__init__(): must be one of 'bin', 'json', 'gda'")
 
 class GDS:
     def __init__(self, file, mode="bin"): #modes: "bin"/"b", "json"/"j", "gda"/"a"
-        if mode == "bin":
+        if mode == "bin" or mode == "b":
             self.from_gds(file)
-        elif mode == "json":
+        elif mode == "json" or mode == "j":
             self.from_json(file)
-        elif mode == "gda":
+        elif mode == "gda" or mode == "a":
             self.from_old(file)
         else:
             raise GDSModeException(mode)
@@ -51,7 +50,9 @@ class GDS:
                     cmd = commands_i[cmd]
                 c += 2
                 continue
+
             p_type = int.from_bytes(cmd_data[c:c+2], "little")
+            
             if p_type == 0:
                 cmds.append({"command":cmd, "parameters":params})
                 cmd = None
@@ -96,7 +97,39 @@ class GDS:
         #TODO: reject non-compatible json files
     
     def from_old (self, file): #TODO: make this, so gds_old can be completely removed
-        pass
+        cmds = []
+        
+        for line in file.split("\n"):
+            data = {}
+            if line.startswith("#"):
+                continue
+
+            line, strings = parse.remove_strings(line)
+            line = line.rstrip().split(" ")
+            cmd = line[0]
+
+            if cmd == "engine":
+                cmd = "0x1b"
+            elif cmd == "img_win":
+                cmd = "0x1f"
+            
+            cmd = int(cmd[2:], base=16)
+            params = []
+
+            for param in line[1:]:
+                if param.isdigit():
+                    params.append({"type":"int", "data":int(param)})
+                elif param.startswith("0x"):
+                    params.append({"type":"unknown-2", "data":int(param[2:], 16)})
+                elif param.startswith('"') and param.endswith('"'):
+                    param = strings[int(param[1:-1])]
+                    params.append({"type":"string", "data":param})
+                else:
+                    raise Exception(f"Invalid GDA parameter: {param}")
+            
+            cmds.append({"command":cmd, "parameters":params})
+
+        self.cmds = cmds
 
     def __getitem__ (self, index):
         index = int(index)
@@ -172,4 +205,19 @@ def create_json(input, output):
 
     gds = GDS(input, "json")
     output.write(gds.to_bin())
+    output.close()
+
+@cli.command(
+                name="gdaimport",
+                help="Creates a GDS JSON file from the old GDA format.",
+                no_args_is_help = True
+            )
+@click.argument("input")
+@click.argument("output")
+def create_from_gda(input, output):
+    input = open(input, encoding="utf-8").read()
+    output = open(output, "w", encoding="utf-8")
+
+    gds = GDS(input, "gda")
+    output.write(gds.to_json())
     output.close()

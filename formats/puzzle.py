@@ -2,7 +2,7 @@ import click
 import json
 import os
 
-from formats import rom
+from formats import ndsrom
 
 dir_path = "/".join(os.path.dirname(os.path.realpath(__file__).replace("\\", "/")).split("/")[:-1])
 puzzles = json.load(open(f"{dir_path}/data/puzzles.json", encoding="utf-8"))
@@ -11,9 +11,9 @@ puzzles = json.load(open(f"{dir_path}/data/puzzles.json", encoding="utf-8"))
 #def cli():
 #    pass
 
-def load_file(rom, out_dir, file, og_path, out_path="."):
+def load_file(rom_, out_dir, file, og_path, out_path="."):
     print(f"Extracting {file}...")
-    contents = rom.getFileByName(f"data/{og_path}/{file}")  #maybe "data" is not an essential part?
+    contents = rom_.getFileByName(f"data/{og_path}/{file}")  #maybe "data" is not an essential part?
     f = open(f"{out_dir}/{out_path}/{file}", "wb")
     f.write(contents)
     f.close()
@@ -29,7 +29,7 @@ def load_file(rom, out_dir, file, og_path, out_path="."):
 @click.argument("out_dir")
 @click.option("--lang", is_flag=True, default = False, help = "Load the game titles in their original language.")
 def cli(romfile, puzzle, out_dir, lang):
-    romfile, id, title = rom.load(romfile, lang)
+    romfile, id, title = ndsrom.load(romfile, lang)
     try:
         os.mkdir(out_dir)
     except FileExistsError:
@@ -40,7 +40,7 @@ def cli(romfile, puzzle, out_dir, lang):
     if id.startswith("A5F"): #Curious Village
         #TODO: get files called from the script?
 
-        readme = open(f"{out_dir}/readme.txt", "a")
+        readme = open(f"{out_dir}/readme.txt", "a", encoding="utf-8")
 
         puzzle = puzzles["A5F"].get(puzzle)
         if puzzle == None:
@@ -128,8 +128,8 @@ f'''The files you want from the PCM file are:
             load_file(romfile, out_dir, f"h_{puzzle}_3.txt", "qtext/en", "qtext")
             load_file(romfile, out_dir, f"f_{puzzle}.txt", "qtext/en", "qtext")
             load_file(romfile, out_dir, f"c_{puzzle}.txt", "qtext/en", "qtext")
-            load_file(romfile, out_dir, f"qscript.gds", "script/qinfo/en", "script")
-            load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle/en", "script")
+            load_file(romfile, out_dir, "qscript.gds", "script/qinfo/en", "script")
+            load_file(romfile, out_dir, "qtitle.gds", "script/puzzletitle/en", "script")
         
         elif id.endswith("J"):
             if puzzle == 163:
@@ -149,8 +149,8 @@ f'''The files you want from the PCM file are:
             load_file(romfile, out_dir, f"h_{puzzle}_3.txt", "qtext", "qtext")
             load_file(romfile, out_dir, f"f_{puzzle}.txt", "qtext", "qtext")
             load_file(romfile, out_dir, f"c_{puzzle}.txt", "qtext", "qtext")
-            load_file(romfile, out_dir, f"qscript.gds", "script/qinfo", "script")
-            load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle", "script")
+            load_file(romfile, out_dir, "qscript.gds", "script/qinfo", "script")
+            load_file(romfile, out_dir, "qtitle.gds", "script/puzzletitle", "script")
         
         elif id.endswith("K"):
             try:
@@ -170,8 +170,8 @@ f'''The files you want from the PCM file are:
                 except ValueError:
                     print(f"File q{puzzle}a_bg.arc not found in /ko folder")
             load_file(romfile, out_dir, pcm_file, "qtext/ko", "qtext")
-            load_file(romfile, out_dir, f"qscript.gds", "script/qinfo/ko", "script")
-            load_file(romfile, out_dir, f"qtitle.gds", "script/puzzletitle/ko", "script")
+            load_file(romfile, out_dir, "qscript.gds", "script/qinfo/ko", "script")
+            load_file(romfile, out_dir, "qtitle.gds", "script/puzzletitle/ko", "script")
 
             readme.write(
 f'''The files you want from the PCM file are:
@@ -198,6 +198,6 @@ Inside the qscript.gds script, look for the line that starts with: 0xdc {puzzle}
         #extract all files that don't depend on language (the grand total of 3 :P)
         load_file(romfile, out_dir, f"jiten_q{puzzle}.arc", "bg", "bg")
         load_file(romfile, out_dir, f"q{puzzle}_param.gds", "script/qscript", "script")
-        load_file(romfile, out_dir, f"pscript.gds", "script/pcarot", "script")
+        load_file(romfile, out_dir, "pscript.gds", "script/pcarot", "script")
 
         print("\nDone!")

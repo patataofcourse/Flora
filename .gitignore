@@ -1,5 +1,7 @@
 __pycache__/
 *.pyc
+.vscode/
+/venv/
 
 releases/
 scripts/

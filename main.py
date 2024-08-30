@@ -13,5 +13,5 @@ cli.add_command(formats.pcm.cli, "pcm")
 cli.add_command(formats.puzzle.cli, "puzzle")
 
 if __name__ == "__main__":
-    print(f"Flora v{v} by patataofcourse\n")
+    # print(f"Flora v{v} by patataofcourse\n")
     cli() #TODO: managing exceptions, -v

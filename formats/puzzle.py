@@ -35,7 +35,7 @@ def cli(romfile, puzzle, out_dir, lang):
     except FileExistsError:
         pass
 
-    print("") #newline lol
+    # print("") #newline lol
 
     if id.startswith("A5F"): #Curious Village
         #TODO: get files called from the script?

@@ -1,5 +1,4 @@
 import os
-from tqdm import tqdm
 
 def cli_file_pairs(input = None, output = None, *, in_ending = None, out_ending = None, recursive = False):
     """
@@ -79,11 +78,16 @@ def cli_file_pairs(input = None, output = None, *, in_ending = None, out_ending 
     return pairs
 
 def foreach_file_pair(pairs, fn, quiet = False):
-    if not quiet:
-        progress = tqdm(pairs)
-        for (input, output) in progress:
-            progress.set_description(input)
-            fn(input, output)
-    else:
-        for (input, output) in pairs:
-            fn(input, output)
+    try:
+        from tqdm import tqdm
+        if not quiet:
+            progress = tqdm(pairs)
+            for (input, output) in progress:
+                progress.set_description(input)
+                fn(input, output)
+            return
+    except ImportError:
+        # TQDM isn't installed; just don't show a progress bar.
+        pass
+    for (input, output) in pairs:
+        fn(input, output)

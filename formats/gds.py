@@ -3,6 +3,7 @@ import json
 import os
 
 import parse
+from utils import cli_file_pairs, foreach_file_pair
 from version import v
 
 @click.group(help="Script-like format, also used to store puzzle parameters.",options_metavar='')
@@ -180,17 +181,38 @@ class GDS:
 
 @cli.command(
                 name="extract",
-                help="Converts a GDS script to JSON.",
-                no_args_is_help = True
+                no_args_is_help = False
             )
-@click.argument("input")
-@click.argument("output")
-def unpack_json(input, output):
-    input = open(input, "rb").read()
-    output = open(output, "w", encoding="utf-8")
-    gds = GDS(input)
-    output.write(gds.to_json())
-    output.close()
+@click.argument("input", required=False, type=click.Path(exists=True))
+@click.argument("output", required=False, type=click.Path(exists=False))
+@click.option("--recursive", "-r", is_flag=True, help="Recurse into subdirectories of the input directory to find more applicable files.")
+@click.option("--quiet", "-q", is_flag=True, help="Suppress all output. By default, operations involving multiple files will show a progressbar.")
+def unpack_json(input = None, output = None, recursive = False, quiet = False):
+    """
+    Converts the GDS script(s) at INPUT to JSON files at OUTPUT.
+
+    INPUT can be a single file or a directory (which obviously has to exist). In the latter case subfiles with the correct file ending will be processed.
+    If unset, defaults to the current working directory.
+
+    The meaning of OUTPUT may depend on INPUT:
+    - If INPUT is a file, then OUTPUT is expected to be a file, unless it explicitly ends with a slash indicating a directory.
+      In this case, if unset OUTPUT will default to the INPUT filename with `.json` exchanged/appended.
+    - Otherwise OUTPUT has to be a directory as well (or an error will be shown).
+      In this case, if unset OUTPUT will default to the INPUT directory (which may itself default to the current working directory).
+
+    In the file-to-file case, the paths are explicitly used as they are. Otherwise, if multiple input files were collected, or OUTPUT is a directory,
+    an output path is inferred for each input file by exchanging the `.gds` file ending for `.json`, or otherwise appending the `.json` file ending.
+    """
+    def process(input, output):
+        input = open(input, "rb").read()
+        output = open(output, "w", encoding="utf-8")
+        gds = GDS(input)
+        output.write(gds.to_json())
+        output.close()
+
+    pairs = cli_file_pairs(input, output, in_ending=".gds", out_ending=".json", recursive=recursive)
+    foreach_file_pair(pairs, process, quiet=quiet)
+
 
 @cli.command(
                 name="create",

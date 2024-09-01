@@ -1,6 +1,7 @@
 import click
 from ndspy import lz10
 from PIL import Image
+from .compression import huffman, rle
 
 @click.group(help="'Background' / texture format.",options_metavar='')
 def cli():
@@ -12,11 +13,36 @@ def cli():
                 no_args_is_help = True
             )
 @click.argument("input")
-@click.argument("output")
-def extract(input, output):
+@click.argument("output", required=False)
+def extract(input, output=None):
+    if output is None:
+        output = input + ".png"
+    
     input = open(input, "rb").read()
 
-    data = lz10.decompress(input[4:])
+    data = None
+
+    try:
+        data = lz10.decompress(input[4:])
+    except TypeError:
+        # Not LZ10, try next format
+        pass
+    
+    try:
+        data = huffman.decompress(input[4:])
+    except TypeError:
+        # Not Huffman, try next format
+        pass
+    
+    try:
+        data = rle.decompress(input[4:])
+    except TypeError:
+        # Not RLE, try next format
+        pass
+    
+    if data is None:
+        raise TypeError(f"Input file {input} is not a valid archive file with a known compression type")
+
     p_len = int.from_bytes(data[0:4], "little")
     c = 0
     p_colors = []
@@ -96,8 +122,15 @@ def extract(input, output):
                 no_args_is_help = True
             )
 @click.argument("input")
-@click.argument("output")
-def create(input, output):
+@click.argument("output", required=False)
+def create(input, output=None):
+    if output is None:
+        output = input
+        if output.lower().endswith(".png"):
+            output = output[:-4]
+        if not output.lower().endswith(".arc"):
+            output = output + ".arc"
+    
     img = Image.open(input)
     output = open(output, "wb")
     width, height = img.size
@@ -165,6 +198,7 @@ def create(input, output):
     for tile in map:
         out += tile.to_bytes(2, "little") #TODO: this is without axis-flipping yet
 
+    # TODO: use ideal compression method, or let user override
     out = lz10.compress(out)
     output.write(b"\x02\x00\x00\x00")
     output.write(out)

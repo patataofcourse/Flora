@@ -40,7 +40,7 @@ Some unused variants of puzzles can't be extracted yet through Flora, as well as
 * [pillow](https://pypi.org/project/pillow/)
 * [ndspy](https://pypi.org/project/ndspy/)
 
-To install all modules, use: `pip install click pillow ndspy` &nbsp;/ &nbsp;`py -m pip install click pillow ndspy`
+To install all modules, use: `pip install -r requirements.txt`
 
 ### Special thanks to:
 * [pleonex](https://github.com/pleonex/) for his tool [Tinke](https://github.com/pleonex/Tinke), which gave me a base for file formats

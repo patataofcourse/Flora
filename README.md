@@ -39,6 +39,7 @@ Some unused variants of puzzles can't be extracted yet through Flora, as well as
 * [click](https://pypi.org/project/click/)
 * [pillow](https://pypi.org/project/pillow/)
 * [ndspy](https://pypi.org/project/ndspy/)
+* Optional: [tqdm](https://pypi.org/project/tqdm) (to display a progress bar for long-running processes)
 
 To install all modules, use: `pip install -r requirements.txt`
 

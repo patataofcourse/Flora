@@ -1,1 +1,1 @@
-from formats import gds, bg, pcm, puzzle, ndsrom
+from formats import gds, bg, pcm, puzzle, ndsrom, compression

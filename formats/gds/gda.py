@@ -7,6 +7,9 @@ Requires the command definitions provided by `cmddef` for type checking and para
 from typing import Optional, List
 from dataclasses import dataclass
 
+
+from utils import round_perfect
+from .cmddef import GDSCommand
 from .model import (
     GDSProgram,
     GDSElement,
@@ -17,8 +20,6 @@ from .model import (
     GDSLoopInvocation,
     GDSConditionToken
 )
-
-from utils import round_perfect
 
 def read_gda(data: str, path: Optional[str] = None) -> GDSProgram:
     pass
@@ -36,9 +37,10 @@ class WriterContext:
         self.result += '\n' + ' '*self.indent
     def insert_comment(self, comment: str):
         self.result, latest_line = self.result.rsplit("\n", 1)
-        self.nl()
-        self.write(f"# {comment}\n")
-        self.write(latest_line)
+        for line in comment.splitlines():
+            self.nl()
+            self.write(f"# {line}")
+        self.write("\n"+latest_line)
 
 
 def write_gda(prog: GDSProgram, filename: Optional[str] = None) -> str:
@@ -185,3 +187,33 @@ WRITE_COMPLEX = {
     "repeatN": write_repeatN,
     "while": write_while,
 }
+
+
+
+def format_comment(comment: str, filename: str, args: List[GDSValue], cmd: GDSCommand):
+    from parsy import forward_declaration, regex, seq, string, alt
+    
+    str_part = regex(r'[^$]')
+    str_part_fvar = regex(r'[^$}:]')
+    str_part_expr = regex(r'[^$)]')
+    fvar_esc = string(r'}}') | string(r'::')
+    expr_esc = string(r'))')
+    
+    format_args = regex(r"0\d+")
+    fvar = forward_declaration()
+    expr = forward_declaration()
+    str_var = string('$') >> (
+        string('{') >> fvar << string('}')
+        | string('(') >> expr << string(')')
+    )
+    
+    varname = regex(r"\w+")
+    
+    fvar_expr = (str_part_fvar | fvar_esc | str_var).many().concat()
+    fvar.become( seq ( (varname) , string(":") >> format_args | None ) )
+    expr.become( (str_part_expr | expr_esc | str_var).many().concat() )
+    
+    str_ = (str_part | str_var).many().concat()
+    
+    # TODO: parse variables like $TEST or ${1:03} and $(filepath)
+    pass

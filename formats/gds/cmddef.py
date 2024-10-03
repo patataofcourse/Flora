@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from typing import Optional, List, Union, Set
+from typing import Optional, List, Union, Set, Any, Mapping
 import os
 from dataclasses import dataclass, field
 

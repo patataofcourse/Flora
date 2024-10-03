@@ -1,6 +1,6 @@
 import os
 
-def cli_file_pairs(input = None, output = None, *, in_ending = None, out_ending = None, recursive = False):
+def cli_file_pairs(input = None, output = None, *, in_ending = None, out_ending = None, filter_infer=None, recursive = False):
     """
     Given the file path inputs to the various CLI commands, determines which input files should be operated on and mapped to which output files.
 
@@ -39,7 +39,7 @@ def cli_file_pairs(input = None, output = None, *, in_ending = None, out_ending 
                     continue
                 yield os.path.join(path, f)
     
-    def filter_infer(input):
+    def default_filter_infer(input, force_accept=False):
         if in_ending is not None and not input.lower().endswith(in_ending):
             return None
         if out_ending is not None and input.lower().endswith(out_ending):
@@ -53,15 +53,20 @@ def cli_file_pairs(input = None, output = None, *, in_ending = None, out_ending 
         output += out_ending
         return output
     
+    if filter_infer is None:
+        filter_infer = default_filter_infer
+    
     input_dir = ""
     input_paths = []
+    rel_pairs = None
     if os.path.isfile(input):
         input_dir, ip = os.path.split(input)
         input_paths = [ip]
+        rel_pairs = [(ip, filter_infer(ip, force_accept=True)) for ip in input_paths]
     else:
         input_dir = input
         input_paths = [os.path.relpath(f, input_dir) for f in listfiles(input)]
-    rel_pairs = [(ip, filter_infer(ip)) for ip in input_paths]
+        rel_pairs = [(ip, filter_infer(ip)) for ip in input_paths]
     rel_pairs = [(ip, op) for (ip, op) in rel_pairs if op is not None]
     
     if output is None:

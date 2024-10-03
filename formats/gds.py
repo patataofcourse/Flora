@@ -1,6 +1,9 @@
 import click
+import contextlib
 import json
+import yaml
 import os
+import sys
 
 import parse
 import ast
@@ -16,7 +19,9 @@ commands = json.load(open(f"{dir_path}/data/commands.json", encoding="utf-8"))
 commands_i = {val["id"]: key for key, val in commands.items() if "id" in val} # Inverted version of commands
 
 class GDS:
-    def __init__(self, cmds = []): #modes: "bin"/"b", "json"/"j", "gda"/"a"
+    def __init__(self, cmds=None): #modes: "bin"/"b", "json"/"j", "gda"/"a"
+        if cmds is None:
+            cmds = []
         self.cmds = cmds
 
     @classmethod
@@ -83,8 +88,14 @@ class GDS:
     
     @classmethod
     def from_json (Self, file):
-        cmds = json.loads(file)
+        cmds = json.loads(file)["data"]
         #TODO: reject non-compatible json files
+        return Self(cmds)
+    
+    @classmethod
+    def from_yaml(Self, file):
+        cmds = yaml.safe_load(file)["data"]
+        #TODO: reject non-compatible yaml files
         return Self(cmds)
     
     @classmethod
@@ -97,8 +108,6 @@ class GDS:
                 continue
             if line == '':
                 continue
-
-            data = {}
 
             line, strings = parse.remove_strings(line)
             line = line.rstrip().split(" ")
@@ -148,14 +157,17 @@ class GDS:
         index = int(index)
         return self.cmds[index]
     
-    def to_json (self):
+    def to_json(self):
         return json.dumps({"version": v, "data": self.cmds}, indent=4)
+
+    def to_yaml(self):
+        return yaml.safe_dump({"version": v, "data": self.cmds})
     
     def to_gds (self):
         out = b"\x00" * 2
         for command in self.cmds:
-            if type(command["command"]["id"]) == int:
-                out += command["command"]["id"].to_bytes(2, "little")
+            if type(command["command"]) == int:
+                out += command["command"].to_bytes(2, "little")
             else:
                 out += commands[command["command"]["id"]].to_bytes(2, "little")
             for param in command["parameters"]:
@@ -258,52 +270,109 @@ def unpack_json(input = None, output = None, recursive = False, quiet = False):
     foreach_file_pair(pairs, process, quiet=quiet)
 
 
-@cli.command(
-                name="compilejson",
-                help="Converts a JSON document created by 'compilejson' to a GDS script file.",
-                no_args_is_help = True
-            )
-@click.argument("input")
-@click.argument("output")
-def create_json(input, output):
-    input = open(input, encoding="utf-8").read()
-    output = open(output, "wb")
-
-    gds = GDS.from_json(input)
-    output.write(gds.to_bin())
-    output.close()
 
 @cli.command(
                 name="compile",
-                help="Generates a GDS binary script file from human-readable GDA files.",
                 no_args_is_help = True
             )
 @click.argument("input")
-@click.argument("output")
-def create_from_gda(input, output):
-    input = open(input, encoding="utf-8").read()
-    output = open(output, "wb")
+@click.argument("output", required=False, default = None)
+@click.option("--format", "-f", required=False, default = None, multiple=False, help="The format of the input file. Will be inferred from the file ending or content if unset. Possible values: gda, json, yaml")
+def compile(input, output, format):
+    """
+    Generates a GDS binary from a human-readable script file.
+    """
+    inpath = input
+    if format not in [None, "gda", "json", "yaml", "yml"]:
+        raise Exception(f"Unsupported input format: '{format}'")
 
-    gds = GDS.from_gda(input)
+    if format is None:
+        if inpath.lower().endswith(".gda"):
+            format = "gda"
+        elif inpath.lower().endswith(".json"):
+            format = "json"
+        elif inpath.lower().endswith(".yml") or inpath.lower().endswith(".yaml"):
+            format = "yaml"
+
+
+    if output is None:
+        output = inpath
+        if format == 'gda' and output.lower().endswith(".gda"):
+            output = output[:-4]
+        elif format == 'json' and output.lower().endswith(".json"):
+            output = output[:-5]
+        elif format in ['yaml', 'yml'] and output.lower().endswith(".yml"):
+            output = output[:-4]
+        elif format in ['yaml', 'yml'] and output.lower().endswith(".yaml"):
+            output = output[:-5]
+        output += ".gds"
+
+    input = open(inpath, encoding="utf-8").read()
+    gds = None
+    with contextlib.suppress(Exception):
+        if format == 'gda':
+            gds = GDS.from_gda(input)
+        elif format == 'json':
+            gds = GDS.from_json(input)
+        elif format in ['yaml', 'yml']:
+            gds = GDS.from_yaml(input)
+    
+    if gds is None:
+        if format is not None:
+            # TODO: should this abort instead?
+            print(f"WARNING: Input file '{inpath}' did not have expected format '{format}'", file = sys.stderr)
+        # format not specified and couldn't be inferred, or file turns out not to have the correct format
+        # => try all the formats & see which one works (only one should be possible)
+        for f in ["json", "yaml", "gda"]:
+            with contextlib.suppress(Exception):
+                if f == 'gda':
+                    gds = GDS.from_gda(input)
+                elif f == 'json':
+                    gds = GDS.from_json(input)
+                elif f == 'yaml':
+                    gds = GDS.from_yaml(input)
+        if gds is None:
+            raise Exception(f"File '{inpath}' couldn't be read: not a known file format"
+                            +(f" (expected '{format}')" if format is not None else ""))
+    
+    output = open(output, "wb")
     output.write(gds.to_bin())
     output.close()
 
 @cli.command(
                 name="decompile",
-                help="Converts a GDS file into a human-readable GDA script format.",
                 no_args_is_help = True
             )
 @click.argument("input")
-@click.argument("output", required=False)
-def create_to_gda(input, output = None):
+@click.argument("output", required=False, default = None)
+@click.option("--format", "-f", default="gda", required=False, multiple=False, help="The format used for output. Possible values: gda (default), json, yaml")
+def decompile(input, output, format):
+    """
+    Convert a GDS file into a human-readable GDA script format.
+    """
+    out_ending = ""
+    if format == 'gda':
+        out_ending = ".gda"
+    elif format == 'json':
+        out_ending = ".json"
+    elif format in ['yaml', 'yml']:
+        out_ending = ".yml"
+    else:
+        raise Exception(f"Unsupported output format: '{format}'")
+    
     if output is None:
         output = input
         if output.lower().endswith(".gds"):
             output = output[:-4]
-        output = output + ".gda"
+        output = output + out_ending
     
     input = open(input, "rb").read()
-    output = open(output, "w", encoding="utf-8")
     gds = GDS.from_gds(input)
-    output.write(gds.to_gda())
-    output.close()
+    
+    with open(output, "w", encoding="utf-8") as output:
+        if format == 'gda':
+            output.write(gds.to_gda())
+        elif format == 'json':
+            output.write(gds.to_json())
+        elif format in ['yaml', 'yml']:
+            output.write(gds.to_yaml())

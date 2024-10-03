@@ -1,5 +1,5 @@
 import os
-
+from typing import TypeVar, Generic, Mapping, get_type_hints, get_origin, Callable, Union, Any
 
 def cli_file_pairs(
     input=None,
@@ -120,3 +120,75 @@ def foreach_file_pair(pairs, fn, quiet=False):
         pass
     for input, output in pairs:
         fn(input, output)
+
+T = TypeVar('T')
+class TU(Generic[T]):
+    union: type
+    name: str
+
+    def __init__(self, union: type, name: str):
+        self.union = union
+        self.name = name
+
+    def __call__(self, val=None) -> "TUI[T]":
+        # assert isinstance(val, T)
+        return TUI(self, val)
+
+    def __contains__(self, other):
+        return other.variant == self if isinstance(other, TUI) else False
+
+    # def __eq__(self, other):
+    #     return self.union == other.union and self.name == other.name
+
+    def __hash__(self):
+        return hash((self.union, self.name))
+
+    def __repr__(self):
+        return f"{self.union.__name__}.{self.name}"
+
+class TUI(Generic[T]):
+    variant: TU[T]
+    value: T
+
+    def __init__(self, variant: TU[T], value: T):
+        self.variant = variant
+        self.value = value
+
+    def __call__(self) -> T:
+        return self.value
+
+    def __eq__(self, other):
+        return self.variant == other.variant and self.value == other.value
+
+    def __hash__(self):
+        return hash((self.variant, self.value))
+
+    def __repr__(self):
+        return f"{repr(self.variant)}({repr(self.value)})"
+
+def tagged_union(cls: type):
+    hints = get_type_hints(cls)
+    members = [(k,v) for (k,v) in hints.items() if get_origin(v) == TU]
+    
+    for (name, t) in members:
+        setattr(cls, name, t(cls, name))
+    
+    return cls
+
+class Test:
+    a: TU[int]
+    b: TU[str]
+
+R = TypeVar('R')
+def match(union: TUI, fns: Mapping[Union[TU, type(...)], Callable[[Any],R]]) -> R:
+    ellipsis_fn = None
+    for k,v in fns.items():
+        if k is Ellipsis:
+            ellipsis_fn = v
+            continue
+        if union in k:
+            return v(union())
+    if ellipsis_fn is not None:
+        return ellipsis_fn()
+
+RESOURCES = os.path.join(os.path.dirname(__file__), "data")

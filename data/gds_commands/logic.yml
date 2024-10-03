@@ -17,6 +17,7 @@ commands:
     aliases:
     - jumpUnlessTarget
     desc: If reached through regular program flow, always jumps. If reached from a `jump` instruction, simply continues.
+    complex: true
   repeatN:
     id: 0x14
     desc: Takes an loop count (int) and a jump target (addr), and loops the instructions up to that target location that many times.

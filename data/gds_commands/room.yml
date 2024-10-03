@@ -193,8 +193,6 @@ commands:
         type: int
       unk_5:
         type: int
-      unk_6:
-        type: int
 
 
   nazobabaBottle:

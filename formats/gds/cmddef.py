@@ -9,6 +9,8 @@ import logging
 import yaml
 from dacite import from_dict
 
+from utils import RESOURCES
+
 
 logger = logging.getLogger("flora.debug.gds.cmddef")
 
@@ -29,7 +31,8 @@ class GDSCommandParam:
     
     Our GDA framework also defines some auxiliary datatypes:
     bool: backed by either an int (true = nonzero) or a string (true = "true")
-    bool|int: backed by an int (true = nonzero
+    bool|int: backed by an int (true = nonzero)
+    bool|string: backed by a string (true = "true")
     
     TODO: Compound datatypes may make the code more understandable, by combining semantically
     related parameters into a single one:
@@ -181,6 +184,7 @@ def load_group(
             c["context"] = context or "all"
         if isinstance(c["context"], str):
             c["context"] = [c["context"]]
+        c["context"] = set(c["context"])
         if "prefix" not in c:
             c["prefix"] = prefix
         if c["prefix"] is not None and c["name"] is not None:
@@ -255,6 +259,7 @@ def load_file(filename: str, root: str) -> list[GDSCommand]:
             parent_prefix = f"{seg}.{parent_prefix}"
     else:
         parent_prefix = None
+        group_name = None
 
     return load_group(data, group_name, parent_prefix, None, filename)
 
@@ -345,7 +350,7 @@ def build_maps(
 COMMANDS_BYNAME = {}
 COMMANDS_BYID = {}
 
-CMDDEF_ROOT = "data/gds_commands/"
+CMDDEF_ROOT = os.path.join(RESOURCES, "gds_commands")
 
 
 def init_commands(root: str = None):

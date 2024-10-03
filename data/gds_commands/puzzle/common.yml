@@ -1,4 +1,4 @@
-prefix: "puzzle"
+prefix: "puzzle."
 commands:  
   setCurrent:
     id: 0x48
@@ -119,6 +119,8 @@ commands:
   gridTileSize:
     id: 0xa5
     desc: For grid-based puzzles, determines the size in pixels that each grid cell should have.
+    params:
+      sizePx: int
   
 
   title:
@@ -171,12 +173,14 @@ commands:
     - type: int
     - type: int
     - type: float
+    # ok so apparently it can happen that an instruction checks if the next token
+    # is of the type it expects, and if not it uses a default value instead.
     - type: float
-    - type: float
-      # ok so apparently it can happen that an instruction checks if the next token
-      # is of the type it expects, and if not it uses a default value instead.
       optional: true
-      default: 30
+      default: 16.0
+    - type: float
+      optional: true
+      default: 30.0
   0x39:
     desc: For puzzles that involve tiles in a grid (tile, tileRotate, shape (unused)) do ???
     params:
@@ -188,7 +192,9 @@ commands:
     desc: checks some kind of flag for the current puzzle (puzzle flags mask 1)
   0x58:
     condition: true
-    desc: checks some kind of flag for the current puzzle (puzzle flags mask 1); for regular puzzles at least.
+    desc: checks some kind of flag for the given puzzle (puzzle flags mask 1); for regular puzzles at least.
+    params:
+    - int
   0x4e:
     condition: true
     desc: checks some kind of flag for the current puzzle (puzzle flags mask 4)

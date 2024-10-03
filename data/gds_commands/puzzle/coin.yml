@@ -3,7 +3,6 @@ commands:
     params:
     - type: int
     - type: int
-    - type: int
   0x26:
     params:
     - type: int

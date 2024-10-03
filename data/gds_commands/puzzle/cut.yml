@@ -27,14 +27,14 @@ commands:
   0xac:
     desc: sets the color of the cut line once it's done
     uncertain: true
-    param:
+    params:
     - int
     - int 
     - int
   0xad:
     desc: sets the color of the cut line while it's still being drawn
     uncertain: true
-    param:
+    params:
     - int
     - int 
     - int

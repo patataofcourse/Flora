@@ -1,7 +1,7 @@
-from typing import List, Optional, NewType, Union, Set
+from typing import List, Optional, NewType, Union, Set, Mapping
 from dataclasses import dataclass, field
 # pylint: disable=unused-wildcard-import,wildcard-import
-from tagged_union import *
+from utils import tagged_union, TU
 
 from .cmddef import GDSCommand
 
@@ -12,13 +12,15 @@ class GDSValue:
     """
     A value usable as a parameter in a GDSInvocation.
     """
-    int = int
-    float = float
-    str = str
-    longstr = str
+    int: TU[int]
+    float: TU[float]
+    str: TU[str]
+    longstr: TU[str]
+    # (value, represented_as_string)
+    bool: TU[Union[bool, int, str]]
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GDSInvocation:
     """
     The specific invocation of a GDS commmand, with the given parameter values.
@@ -32,14 +34,14 @@ class GDSConditionToken:
     """
     A token that appears in the condition for a flow statement.
     """
-    command = GDSInvocation
-    NOT = Unit
-    AND = Unit
-    OR = Unit
+    command: TU[GDSInvocation]
+    NOT: TU[None]
+    AND: TU[None]
+    OR: TU[None]
 
 
-@dataclass
-class GDSJumpTarget:
+@dataclass(kw_only=True)
+class GDSJumpAddress:
     """
     A jump address used by flow instructions in GDS scripts.
     """
@@ -47,25 +49,31 @@ class GDSJumpTarget:
     """
     The name of the label to be jumped to.
     """
+    primary: bool = True
+    """
+    Whether the label this address points to actually points back to this address
+    instance. Only one of the pointers to a single label can have this flag set
+    (but normally, there is also a 1:1 correspondence between addresses and labels)
+    """
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GDSIfInvocation(GDSInvocation):
     condition: List[GDSConditionToken]
+    target: GDSJumpAddress
     block: Optional[List["GDSElement"]]
     elseif: bool = False
     elze: bool = False
-    target: GDSJumpTarget
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GDSLoopInvocation(GDSInvocation):
-    condition: Union[List[GDSConditionToken] | int]
+    condition: Union[List[GDSConditionToken], int]
     block: Optional[List["GDSElement"]]
-    target: GDSJumpTarget
+    target: GDSJumpAddress
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GDSLabel:
     """
     A target label from a GDS script file.
@@ -92,12 +100,12 @@ class GDSElement:
     """
     An entry in a GDS script file.
     """
-    command = GDSInvocation
-    label = GDSLabel
-    BREAK = Unit
+    command: TU[GDSInvocation]
+    label: TU[GDSLabel]
+    BREAK: TU[None]
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GDSContext:
     """
     The context that was determined for a GDS script, either manually or by context narrowing.
@@ -178,7 +186,7 @@ class GDSContext:
         return set()
 
 
-@dataclass
+@dataclass(kw_only=True)
 class GDSProgram:
     """
     The program contained in a GDS script file.
@@ -195,7 +203,7 @@ class GDSProgram:
     """
     The instructions or other flow elements in the script.
     """
-    labels: List[str] = field(default_factory=list)
+    labels: Mapping[str, List[Union[GDSLabel, GDSJumpAddress]]] = field(default_factory=list)
     """
     A list of all the labels present in the script. May not technically be necessary.
     """

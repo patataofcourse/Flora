@@ -4,7 +4,7 @@ commands:
     desc: >
       Sets the current event in global state. Once the current script is completed,
       and the script type is set to "Event", that script will be executed.
-    param:
+    params:
       eventId:
         type: int
 
@@ -52,6 +52,15 @@ commands:
   textboxMiddle:
     id: 0xcd
     desc: Displays a text box for the specified on-screen actor, with no arrow pointing.
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+      actorId:
+        type: int
+        desc: the id (in initialization order) of the actor sprite saying the text.
   
   textboxNoSpeaker:
     id: 0x9b
@@ -228,6 +237,8 @@ commands:
   currentMovie:
     id: 0xd3
     desc: Sets the current movie ID. Once the current script completes, if the current script state is set to "Movie", that movie will play.
+    params:
+      movieId: int
 
   
   choice3:

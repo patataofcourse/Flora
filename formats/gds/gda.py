@@ -4,7 +4,8 @@ Provides the `read_gda` and `write_gda` methods to read/write a `GDSProgram` (se
 Requires the command definitions provided by `cmddef` for type checking and parameter data, as well as (possibly in the future) documentation features.
 """
 
-from typing import Optional, List
+import contextlib
+from typing import Any, Optional, List
 from dataclasses import dataclass
 
 
@@ -191,15 +192,65 @@ WRITE_COMPLEX = {
 
 
 def format_comment(comment: str, filename: str, args: List[GDSValue], cmd: GDSCommand):
-    from parsy import forward_declaration, regex, seq, string, alt
+    import re
+    def get_var(name: str) -> Any:
+        if name.lower() == "lang":
+            return "en"
+        if name.lower() == "eventid":
+            match: re.Match = re.match(r"/data/script/event/e(\d+).gd[as]", filename)
+            if match:
+                return int(match.group(1))
+            else:
+                return "?"
+        with contextlib.suppress(ValueError):
+            arg_id = int(name) - 1
+            if arg_id < 0 or arg_id >= len(args):
+                return "?"
+            
+            arg = args[arg_id]
+
+            
+        
+        return "?"
+
+    def format_value(value: Any, modifiers: List[str]) -> str:
+        for m in modifiers:
+            if not m.startswith("r"):
+                continue
+            step, max_, *_ = m[1:].split("<=") + [None]
+            if not isinstance(value, int):
+                value = "?"
+                break
+            step = int(step)
+            value = (value // step) * step
+            if max_ is not None:
+                value = min(value, int(max_))
+        
+        for m in modifiers:
+            if not m.startswith("0"):
+                continue
+            l = int(m[1:])
+            if not isinstance(value, int):
+                value = "?" * l
+                break
+            value = str(value)
+            value = "0" * max(0, l - len(value)) + value
+        
+        return str(value)
+
+    def readfile(path: str) -> str:
+        return f"test file content\n({path})"
+
+    from parsy import forward_declaration, regex, seq, string
     
     str_part = regex(r'[^$]')
+    str_esc = string(r'$$')
     str_part_fvar = regex(r'[^$}:]')
     str_part_expr = regex(r'[^$)]')
     fvar_esc = string(r'}}') | string(r'::')
     expr_esc = string(r'))')
     
-    format_args = regex(r"0\d+")
+    format_args = regex(r"0\d+") | regex(r"r\d+(<=\d+)?")
     fvar = forward_declaration()
     expr = forward_declaration()
     str_var = string('$') >> (
@@ -210,10 +261,18 @@ def format_comment(comment: str, filename: str, args: List[GDSValue], cmd: GDSCo
     varname = regex(r"\w+")
     
     fvar_expr = (str_part_fvar | fvar_esc | str_var).many().concat()
-    fvar.become( seq ( (varname) , string(":") >> format_args | None ) )
-    expr.become( (str_part_expr | expr_esc | str_var).many().concat() )
+    fvar.become( seq ( varname.map(get_var) , (string(":") >> format_args).many() ).map(lambda a: format_value(a[0], a[1])) )
+    expr.become( (str_part_expr | expr_esc | str_var).many().concat().map(readfile) )
     
-    str_ = (str_part | str_var).many().concat()
+    str_ = (str_part | str_esc | str_var).many().concat()
     
     # TODO: parse variables like $TEST or ${1:03} and $(filepath)
-    pass
+    return str_.parse(comment)
+
+if __name__ == "__main__":
+    EXAMPLE = """
+    /data/etext/${lang}/e${eventid:r100<=300:03}{pcm}/e${eventid}_t${1}.txt:
+
+    $(/data/etext/${lang}/e${eventid:r100<=300:03}{pcm}/e${eventid}_t${1}.txt)
+    """
+    print(format_comment(EXAMPLE, "/data/script/event/e324.gds", [], None))

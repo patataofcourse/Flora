@@ -29,7 +29,7 @@ commands_i = {
 
 
 class GDS:
-    def __init__(self, cmds=None):  # modes: "bin"/"b", "json"/"j", "gda"/"a"
+    def __init__(self, cmds=None):
         if cmds is None:
             cmds = []
         self.cmds = cmds
@@ -86,10 +86,10 @@ class GDS:
                     {
                         "type": "string",
                         "data": cmd_data[c + 4 : c + 4 + str_len]
-                        .decode("ascii")
+                        .decode("ascii")  # TODO: JP/KO compatibility
                         .rstrip("\x00"),
                     }
-                )  # TODO: JP/KO compatibility
+                )
                 c += str_len + 4
             elif p_type == 6:
                 params.append(

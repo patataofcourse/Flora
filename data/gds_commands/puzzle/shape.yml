@@ -1,0 +1,29 @@
+# This puzzle type seems to be unused, which means I can't infer anything from usage.
+commands:
+  shape:
+    id: 0x33
+    desc: Adds a shape object (max 8)
+  point:
+    id: 0x34
+    desc: Adds a point to the last created shape object (max 16)
+    params:
+      xPos:
+        type: int
+        desc: x-position of the point
+      yPos:
+        type: int
+        desc: y-position of the point (orientation unclear)
+
+
+  0x35:
+    params:
+    - type: int
+    - type: int
+    - type: int
+  0x36:
+    params:
+    - type: int
+    - type: int
+  0x37:
+    params:
+    - type: float

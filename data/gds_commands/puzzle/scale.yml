@@ -1,0 +1,11 @@
+commands:
+  0x2d:
+    params:
+    - type: int
+  0x2e:
+    params: []
+  0x2f:
+    params: []
+  0x30:
+    params: []
+  

@@ -1,0 +1,7 @@
+version: 0.1
+prefix: "nope."
+
+commands:
+    hi:
+        id: 0x24
+        desc: hi

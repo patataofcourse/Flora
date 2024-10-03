@@ -1,0 +1,18 @@
+commands:
+  cup:
+    id: 0x3a
+    desc: Adds a new cup object.
+    params:
+    - type: string
+    - type: int
+    - type: int
+    - type: int
+    - type: int
+    - type: int
+  color:
+    id: 0xbf
+    desc: Sets the color of the liquid
+    params:
+      r: int
+      g: int
+      b: int

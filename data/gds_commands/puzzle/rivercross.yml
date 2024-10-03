@@ -1,0 +1,34 @@
+commands:
+  chicken:
+    id: 0x31
+    desc: Adds a chicken to the puzzle's play field.
+    params:
+      xPos: int
+      yPos: int
+  wolf:
+    id: 0x32
+    desc: Adds a wolf to the puzzle's play field.
+    params:
+      xPos: int
+      yPos: int
+  man:
+    id: 0x89
+    desc: Adds a man to the puzzle's play field.
+    params:
+      xPos: int
+      yPos: int
+  cabbage:
+    id: 0x8a
+    desc: Adds a man to the puzzle's play field.
+    params:
+      xPos: int
+      yPos: int
+  sheep:
+    id: 0x8b
+    desc: Adds a man to the puzzle's play field.
+    params:
+      xPos: int
+      yPos: int
+
+  0x8c:
+    params: [int]

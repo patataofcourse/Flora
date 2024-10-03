@@ -1,0 +1,45 @@
+commands:
+  fadeIn:
+    id: 0x01
+    desc: Shows a fast fade in effect on both screens.
+  fadeIn2:
+    id: 0x02
+    desc: Shows a slow fade in effect on both screens.
+  fadeInTop:
+    id: 0x03
+    desc: Shows a fade in effect on the top screen.
+  fadeInBottom:
+    id: 0x04
+    desc: Shows a fade in effect on the bottom screen.
+  fadeOut:
+    id: 0x05
+    desc: Shows a fast fade out effect on both screens.
+  fadeOut2:
+    id: 0x06
+    desc: Shows a slow fade out effect on both screens.
+  fadeOutTop:
+    id: 0x07
+    desc: Shows a fade out effect on the top screen.
+  fadeOutBottom:
+    id: 0x08
+    desc: Shows a fade out effect on the bottom screen.
+  displayImgBottom:
+    id: 0x0b
+    desc: Shows the specified image path on the bottom screen
+    params:
+      bgxName:
+        type: string
+        desc: The name of the image file, with bgx file ending (will look for a .arc file with that name under /bg)
+      unk_2:
+        type: int
+        desc: Seems to always be 2 (for now)
+  displayImgTop:
+    id: 0x0c
+    desc: Shows the specified image path on the top screen
+    params:
+      bgxName:
+        type: string
+        desc: The name of the image file, with bgx file ending (will look for a .arc file with that name under /bg)
+      unk_2:
+        type: int
+        desc: Seems to always be 3 (for now)

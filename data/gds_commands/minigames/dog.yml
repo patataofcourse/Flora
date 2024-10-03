@@ -1,0 +1,10 @@
+commands:
+  partdef:
+    id: 0xc2
+    params:
+    - int
+    - int
+    - int
+    - int
+    - int
+    - int

@@ -1,0 +1,3 @@
+commands:
+  0xf2:
+    params: [float]

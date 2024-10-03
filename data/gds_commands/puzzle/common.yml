@@ -1,0 +1,208 @@
+prefix: "puzzle"
+commands:  
+  setCurrent:
+    id: 0x48
+    desc: |
+      Sets the current puzzle ID in the global game state. If at the end of script execution the
+      global "current script type" is set to "question", the puzzle with this ID will be started.
+    params:
+      puzzleId:
+        type: int
+  isCurrentNotSolved:
+    id: 0x4c
+    condition: true
+    desc: Checks if the most recently (perhaps currently) attempted puzzle has NOT been solved
+  isCurrentSolved:
+    id: 0x4d
+    condition: true
+    desc: Checks if the most recently (perhaps currently) attempted puzzle has been solved
+  
+  isSolved:
+    id: 0x54
+    condition: true
+    desc: Checks if the specified puzzle ID has been solved (puzzle flag 2)
+    params: 
+      puzzleId: int
+  countEnoughSolved:
+    id: 0x77
+    condition: true
+    desc: >
+      Counts how many puzzles the player has solved, and returns true if that number is greater
+      than or equal to the given threshold.
+    params:
+      threshold: int
+
+  engine:
+    id: 0x1b
+    desc: Loads a puzzle engine with the specified name, and continues the script in that context.
+    params:
+      engineName:
+        type: string
+        desc: the name of the engine to load
+  imgWin:
+    id: 0x1f
+    desc: Selects the image to be displayed when the puzzle is done, probably.
+    uncertain: true
+    params:
+      id:
+        type: int
+        desc: seems to always be the current puzzle ID
+      unk_2:
+        type: int
+        desc: seems to always be 0
+  slideItemGoalTile:
+    id: 0x38
+    desc: For puzzles that involve sliding objects into correct locations (slide, drag, shape (unused)) define the location that would be an object's goal.
+    params:
+      xPos:
+        type: int
+      yPos:
+        type: int
+  drawLineColor:
+    id: 0x42
+    desc: |
+      Many puzzle types give the user the ability to draw lines freehand or between points; this command sets the RGB color of those lines (with 5bit channel precision).
+
+      A full list of those puzzle types: trace, traceButton, drawInput2, cut, drag.
+    params:
+      r:
+        type: int
+      g:
+        type: int
+      b:
+        type: int
+  
+  button:
+    id: 0x5d
+    desc: For the puzzle types OnOff and FreeButton, this adds a button with the specified sprite texture at the given location.
+    params:
+      xPos:
+        type: int
+      yPos: 
+        type: int
+      spriteName:
+        type: string
+        desc: The sprite used for the button. As with all button sprites, it should define a depressed state in the animation "shadow".
+      correct:
+        type: bool|int
+        desc: Whether this button should be (de)pressed in order for the puzzle to solve.
+      unk_5:
+        type: int
+  
+  placeTarget:
+    id: 0x5e
+    desc: The sole defining command for the PlaceTarget puzzle type.
+    params:
+      unk_1:
+        type: int
+      unk_2:
+        type: int
+      unk_3:
+        type: string
+      unk_4:
+        type: float
+      unk_5:
+        type: int
+  
+  gridOffset:
+    id: 0xa3
+    desc: For grid-based puzzles, determines the offset in pixels that grid should have on the screen.
+    params:
+      xPos: int
+      yPos: int
+  gridDimensions:
+    id: 0xa4
+    desc: For grid-based puzzles, determines the dimensions of the grid in tiles. This also initializes the grid.
+    params:
+      width: int
+      height: int
+  gridTileSize:
+    id: 0xa5
+    desc: For grid-based puzzles, determines the size in pixels that each grid cell should have.
+  
+
+  title:
+    id: 0xba
+    desc: >
+      Used in the technical script/puzzletitle/?/qtitle.gds, to determine the localized name
+      of all puzzles at once. This script is read, for example, by the Puzzle Index and Wifi Puzzle list.
+    params:
+      puzzleId:
+        type: int
+        desc: the ID of the puzzle to set the name for
+      name: string
+  picarat:
+    id: 0xc3
+    desc: Defines how many picarat are awarded for each attempt. Stored in script/pcarot/pscript.gds
+    params:
+      puzzleId: int
+      first:
+        type: int
+        desc: The amount awarded solving on first try
+      second:
+        type: int
+        desc: The amount awarded after one error
+      other:
+        type: int
+        desc: The amount awarded after the second failed attempt, on all subsequent tries
+  indexInfo:
+    id: 0xdc
+    desc: Loads information for the puzzle index
+    params:
+      puzzleId: int
+      type:
+        type: string
+        desc: There is no fixed list of options, but the length may not exceed 64 characters.
+      location:
+        type: string
+        desc: There is no fixed list of options, but the length may not exceed 64 characters.
+
+
+  0x20:
+    params:
+    - type: int
+  0x27:
+    desc: Used by the match, scale, coin and cut puzzle types.
+    params:
+    - type: int
+  0x2b:
+    desc: Used by the match and tileRotate puzzle types, so it's likely a way to define the initial positions for movable and rotatable pieces.
+    params:
+    - type: int
+    - type: int
+    - type: float
+    - type: float
+    - type: float
+      # ok so apparently it can happen that an instruction checks if the next token
+      # is of the type it expects, and if not it uses a default value instead.
+      optional: true
+      default: 30
+  0x39:
+    desc: For puzzles that involve tiles in a grid (tile, tileRotate, shape (unused)) do ???
+    params:
+      unk_1:
+        type: float
+  
+  0x49:
+    condition: true
+    desc: checks some kind of flag for the current puzzle (puzzle flags mask 1)
+  0x58:
+    condition: true
+    desc: checks some kind of flag for the current puzzle (puzzle flags mask 1); for regular puzzles at least.
+  0x4e:
+    condition: true
+    desc: checks some kind of flag for the current puzzle (puzzle flags mask 4)
+  0xb7:
+    desc: sets all the flags for the given puzzle ID to true (1, 4, and 2 ie "solved")
+    params:
+      puzzleId: int
+
+  0xaa:
+    desc: used by all the tile-based puzzles
+    params: [int]
+  
+
+  0x00:
+    desc: DO NOT USE! The function pointer slot for this command is never populated, trying to call it will probably crash!
+  0xff:
+    desc: DO NOT USE! The function pointer slot for this command is never populated, trying to call it will probably crash!

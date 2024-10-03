@@ -1,0 +1,20 @@
+commands:
+  0x25:
+    params:
+    - type: int
+    - type: int
+    - type: int
+  0x26:
+    params:
+    - type: int
+    - type: int
+  0x83:
+    params:
+    - int
+    - int
+    - int
+  0x84:
+    params:
+    - int
+    - int
+    - int

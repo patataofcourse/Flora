@@ -6,6 +6,7 @@ import os
 import sys
 import collections
 
+import struct
 import parse
 import ast
 from utils import cli_file_pairs, foreach_file_pair
@@ -68,14 +69,14 @@ class GDS:
                 params.append(
                     {
                         "type": "int",
-                        "data": int.from_bytes(cmd_data[c + 2 : c + 6], "little"),
+                        "data": struct.unpack('>f', cmd_data[c + 2 : c + 6])[0],
                     }
                 )
                 c += 6
             elif p_type == 2:
                 params.append(
                     {
-                        "type": "unknown-2",
+                        "type": "float",
                         "data": int.from_bytes(cmd_data[c + 2 : c + 6], "little"),
                     }
                 )
@@ -92,9 +93,10 @@ class GDS:
                 )
                 c += str_len + 4
             elif p_type == 6:
+                # address within the gds file range. usually fits in a short, but can be an int.
                 params.append(
                     {
-                        "type": "unknown-6",
+                        "type": "taddr",
                         "data": int.from_bytes(cmd_data[c + 2 : c + 6], "little"),
                     }
                 )
@@ -102,22 +104,26 @@ class GDS:
             elif p_type == 7:
                 params.append(
                     {
-                        "type": "unknown-7",
+                        "type": "saddr",
                         "data": int.from_bytes(cmd_data[c + 2 : c + 6], "little"),
                     }
                 )
                 c += 6
             elif p_type == 8:
-                params.append({"type": "unknown-8"})
+                params.append({"type": "not"})
                 c += 2
             elif p_type == 9:
-                params.append({"type": "unknown-9"})
+                params.append({"type": "and"})
+                c += 2
+            elif p_type == 0xA:
+                params.append({"type": "or"})
                 c += 2
             elif p_type == 0xB:
-                params.append({"type": "unknown-b"})
+                # break
+                params.append({"type": "break"})
                 c += 2
             elif p_type == 0xC:
-                # cmd = hex(cmd)
+                # eof
                 cmds.append({"command": cmd, "parameters": params})
                 break
             else:
@@ -160,7 +166,7 @@ class GDS:
                 cmd = commands[cmd]
                 if "alias" in cmd:
                     cmd = commands[cmd["alias"]]
-            elif cmd.startswith("cmd_"):
+            elif cmd.startswith("cmd_") or cmd.startswith("unk_"):
                 cmd = int(cmd[4:])
             elif cmd.startswith("0x"):
                 cmd = int(cmd[2:], base=16)
@@ -173,20 +179,22 @@ class GDS:
                 if param.isdigit():
                     params.append({"type": "int", "data": int(param)})
                 elif param.startswith("0x"):
-                    params.append({"type": "unknown-2", "data": int(param[2:], 16)})
+                    params.append({"type": "float", "data": float(param)})
                 elif param.startswith('"') and param.endswith('"'):
                     param = ast.literal_eval(f'"{strings[int(param[1:-1])]}"')
                     params.append({"type": "string", "data": param})
-                elif param.startswith("!6("):
-                    params.append({"type": "unknown-6", "data": int(param[3:-1], 16)})
-                elif param.startswith("!7("):
-                    params.append({"type": "unknown-7", "data": int(param[3:-1], 16)})
-                elif param.startswith("!8"):
-                    params.append({"type": "unknown-8"})
-                elif param.startswith("!9"):
-                    params.append({"type": "unknown-9"})
-                elif param.startswith("!b"):
-                    params.append({"type": "unknown-b"})
+                elif param.startswith("@"):
+                    params.append({"type": "taddr", "data": int(param[1:], 16)})
+                elif param.startswith("$"):
+                    params.append({"type": "saddr", "data": int(param[1:], 16)})
+                elif param.startswith("NOT"):
+                    params.append({"type": "not"})
+                elif param.startswith("AND"):
+                    params.append({"type": "and"})
+                elif param.startswith("OR"):
+                    params.append({"type": "or"})
+                elif param.startswith("BREAK"):
+                    params.append({"type": "break"})
                 else:
                     raise Exception(f"Invalid GDA parameter: {param}")
 
@@ -215,26 +223,28 @@ class GDS:
                 if param["type"] == "int":
                     out += b"\x01\x00"
                     out += param["data"].to_bytes(4, "little")
-                elif param["type"] == "unknown-2":
+                elif param["type"] == "float":
                     out += b"\x02\x00"
-                    out += param["data"].to_bytes(4, "little")
+                    out += struct.pack('>f', param["data"])
                 elif param["type"] == "string":
                     out += b"\x03\x00"
                     out += (len(param["data"]) + 1).to_bytes(2, "little")
                     out += (
                         param["data"].encode("ASCII") + b"\x00"
                     )  # TODO: JP/KO compatibility
-                elif param["type"] == "unknown-6":
+                elif param["type"] == "taddr":
                     out += b"\x06\x00"
                     out += param["data"].to_bytes(4, "little")
-                elif param["type"] == "unknown-7":
+                elif param["type"] == "saddr":
                     out += b"\x07\x00"
                     out += param["data"].to_bytes(4, "little")
-                elif param["type"] == "unknown-8":
+                elif param["type"] == "not":
                     out += b"\x08\x00"
-                elif param["type"] == "unknown-9":
+                elif param["type"] == "and":
                     out += b"\x09\x00"
-                elif param["type"] == "unknown-b":
+                elif param["type"] == "or":
+                    out += b"\x0a\x00"
+                elif param["type"] == "break":
                     out += b"\x0b\x00"
                 else:
                     raise Exception(
@@ -261,20 +271,20 @@ class GDS:
                     out += str(param["data"])
                 elif param["type"] == "string":
                     out += repr(param["data"])
-                elif param["type"] == "unknown-2":
-                    out += hex(param["data"])
-                elif param["type"] == "unknown-6":
-                    b = param["data"].to_bytes(4, "little")
-                    out += f"!6({b.hex()})"
-                elif param["type"] == "unknown-7":
-                    b = param["data"].to_bytes(4, "little")
-                    out += f"!7({b.hex()})"
-                elif param["type"] == "unknown-8":
-                    out += "!8"
-                elif param["type"] == "unknown-9":
-                    out += "!9"
-                elif param["type"] == "unknown-b":
-                    out += "!b"
+                elif param["type"] == "float":
+                    out += str(param["data"])
+                elif param["type"] == "taddr":
+                    out += f"@{param['data'].hex()}"
+                elif param["type"] == "saddr":
+                    out += f"${param['data'].hex()}"
+                elif param["type"] == "not":
+                    out += "NOT"
+                elif param["type"] == "and":
+                    out += "AND"
+                elif param["type"] == "or":
+                    out += "OR"
+                elif param["type"] == "break":
+                    out += "BREAK"
                 else:
                     raise Exception(
                         f"GDA error: invalid or unsupported parameter type '{param['type']}'!"

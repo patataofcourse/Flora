@@ -1,0 +1,6 @@
+commands:
+  0x2a:
+    params:
+    - type: int
+    - type: int
+    - type: float

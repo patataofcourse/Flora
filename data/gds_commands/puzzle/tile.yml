@@ -1,0 +1,46 @@
+commands:
+  tile:
+    id: 0x73
+    desc: Adds a tile to the puzzle field. A reset-linked slot is automatically created.
+    params:
+      xPos: int
+      yPos: int
+      spriteName: string
+      animId:
+        type: int
+  slot:
+    id: 0x74
+    desc: Adds a slot to the puzzle field; tiles can only be dropped in slots.
+    params:
+      xPos: int
+      yPos: int
+  assign:
+    id: 0x75
+    desc: >
+      Assigns the given tile ID (in declaration order) to the given slot ID. To solve the puzzle
+      it is checked whether one of these assignments is satisfied; note particularly that you can add
+      multiple, which will result in the puzzle having multiple solutions.
+    params:
+      tileId: int
+      slotId: int
+  rotButton:
+    id: 0xb5
+    desc: >
+      For the non-rotate tile puzzles, there may be buttons on the side to rotate the pieces
+      (there's actually only one example of this in the entire game, Puzzle #116p112)
+    params:
+      xPos: int
+      yPos: int
+      width: int
+      height: int
+
+
+  0x76:
+    desc: Most likely sets the solution count for a tile puzzle.
+    params:
+    - int
+  0xbb:
+    desc: pushes a truth value into a list
+    params: [bool]
+  0xbe:
+    desc: sets some field to 0

@@ -1,10 +1,16 @@
+"""
+Provides the `read_gds` and `write_gds` methods to read/write a `GDSProgram` (see the `model` module) from/to a binary GDS file (buffer).
+
+Requires the command definitions provided by `cmddef` to know parameter counts and behavior
+"""
+
 from typing import Tuple, List, Optional, Callable, TypeVar, Mapping, Union
 from dataclasses import dataclass, field
 import struct
 import functools
 
 # pylint: disable=unused-wildcard-import,wildcard-import
-from utils import tagged_union, TU, match
+from utils import tagged_union, TU, match, nested_break
 
 from .model import (
     GDSProgram,
@@ -264,6 +270,117 @@ class DecompilerState:
             #     pass
         return label_names
 
+    def collapse_blocks(self, block: List[GDSElement]) -> List[GDSElement]:
+        sid = 0
+        while sid < len(block):
+            with nested_break() as continue_outer:
+                el = block[sid]
+                if el not in GDSElement.command or not isinstance(
+                    el(), (GDSIfInvocation, GDSLoopInvocation)
+                ):
+                    raise continue_outer  # also very convenient for preserving a cleanup block in a continue
+
+                block_cmd: Union[GDSIfInvocation, GDSLoopInvocation] = el()
+
+                source: LabelUse = block_cmd.target
+                if source is None:
+                    raise continue_outer
+                target: LabelToken = None
+                for label in self.labels[source.addr]:
+                    if isinstance(label, LabelUse) and label is not source:
+                        # more than one thing jumps here,
+                        # that's not pro-level
+                        raise continue_outer
+                    if isinstance(label, LabelToken):
+                        target = label
+                if target.loc <= source.loc:
+                    # backwards jumps are VERY not pro-level
+                    raise continue_outer
+
+                # Cut out the frame between these two tokens and put it in a block in the command right before.
+                # Also remove the labels from the map
+                tid = sid + 1
+                while tid < len(block) and not (
+                    block[tid] in GDSElement.label and block[tid]() is target
+                ):
+                    tid += 1
+                if tid == len(block):
+                    # I believe the only way this can happen at this point,
+                    # is if the jump target is outside of the current block. Which is perfect!
+                    raise continue_outer
+
+                # excludes the command in front and the target label
+                sub_block = block[sid + 1 : tid]
+                block = block[: sid + 1] + block[tid + 1 :]
+                block_cmd.target = None
+                block_cmd.block = sub_block
+                
+                block_cmd.block = self.collapse_blocks(sub_block)
+            sid += 1
+        return block
+
+    def finalize_labels(
+        self, block: List[GDSElement], label_names: Mapping[int, str], labels=None
+    ) -> Mapping[str, Union[GDSLabel, GDSAddress]]:
+        if labels is None:
+            labels = {}
+
+        oldlabel_indices = [
+            (i, el()) for i, el in enumerate(block) if el in GDSElement.label
+        ]
+        olduse_indices = [
+            (el, el().target)
+            for el in block
+            if el in GDSElement.command
+            and isinstance(el(), (BinaryIfCommand, BinaryLoopCommand))
+            and isinstance(el().target, LabelUse)
+        ]
+
+        for addr, name in label_names.items():
+            if name not in labels:
+                labels[name] = []
+            for i in self.labels[addr]:
+                if isinstance(i, LabelToken):
+                    newlabel = GDSLabel(
+                        name=name,
+                        present=i.addr is not None,
+                        loc=i.addr if i.pointsto is None else None,
+                    )
+                    found = False
+                    idx = None
+                    for idx, el in oldlabel_indices:
+                        if el == i:
+                            found = True
+                            break
+                    if found:
+                        block[idx] = GDSElement.label(newlabel)
+                        labels[name].append(newlabel)
+                elif isinstance(i, LabelUse):
+                    newuse = GDSJumpAddress(label=name, primary=i.primary)
+                    found = False
+                    el = None
+                    for el, olduse in olduse_indices:
+                        if olduse == i:
+                            found = True
+                            break
+                    if found:
+                        el().target = newuse
+                        labels[name].append(newuse)
+                else:
+                    raise TypeError()
+
+        for el in block:
+            if el not in GDSElement.command or not isinstance(
+                el(), (BinaryIfCommand, BinaryLoopCommand)
+            ):
+                continue
+            block_cmd = el()
+            if block_cmd.block is None:
+                continue
+            self.finalize_labels(block_cmd.block, label_names, labels)
+
+        return labels
+
 
 def read_gds(data: bytes, path: str = None) -> GDSProgram:
     ctx = DecompilerState(data)
@@ -287,42 +404,9 @@ def read_gds(data: bytes, path: str = None) -> GDSProgram:
 
     label_names = ctx.name_labels()
 
-    oldlabel_indices = [
-        (i, el()) for i, el in enumerate(ctx.elements) if el in GDSElement.label
-    ]
-    olduse_indices = [
-        (el, el().target)
-        for el in ctx.elements
-        if el in GDSElement.command
-        and isinstance(el(), (BinaryIfCommand, BinaryLoopCommand))
-        and isinstance(el().target, LabelUse)
-    ]
+    ctx.elements = ctx.collapse_blocks(ctx.elements)
 
-    labels = {}
-    for addr, name in label_names.items():
-        lst = []
-        for i in ctx.labels[addr]:
-            if isinstance(i, LabelToken):
-                newlabel = GDSLabel(
-                    name=name,
-                    present=i.addr is not None,
-                    loc=i.addr if i.pointsto is None else None,
-                )
-                for idx, el in oldlabel_indices:
-                    if el == i:
-                        ctx.elements[idx] = GDSElement.label(newlabel)
-                        break
-                lst.append(newlabel)
-            elif isinstance(i, LabelUse):
-                newuse = GDSJumpAddress(label=name, primary=i.primary)
-                for el, olduse in olduse_indices:
-                    if olduse == i:
-                        el().target = newuse
-                        break
-                lst.append(newuse)
-            else:
-                raise TypeError()
-        labels[name] = lst
+    labels = ctx.finalize_labels(ctx.elements, label_names)
 
     return GDSProgram(
         context=ctx.context, path=path, elements=ctx.elements, labels=labels
@@ -379,7 +463,10 @@ def read_simple(ctx: DecompilerState, cmdobj: GDSCommand) -> BinaryCommand:
             arg.val,
             {
                 GDSTokenValue.int: lambda val: [
-                    (GDSValue.int(val), ["int"]),
+                    (
+                        GDSValue.int(val),
+                        ["int", "uint", "short", "ushort", "byte", "ubyte"],
+                    ),
                     (
                         GDSValue.bool(val),
                         ["bool", "bool|int"],
@@ -399,7 +486,16 @@ def read_simple(ctx: DecompilerState, cmdobj: GDSCommand) -> BinaryCommand:
                 ...: lambda: [],
             },
         )
-        val = next((v for v, reqtypes in options if param.type in reqtypes), None)
+        # pylint: disable=not-callable
+        val = next(
+            (
+                v
+                for v, reqtypes in options
+                if (isinstance(reqtypes, list) and param.type in reqtypes)
+                or (callable(reqtypes) and reqtypes(param.type))
+            ),
+            None,
+        )
         if val is None:
             if not param.optional:
                 raise ValueError(
@@ -421,7 +517,7 @@ def read_if(ctx: DecompilerState, cmdobj: GDSCommand) -> BinaryIfCommand:
         command=cmdobj,
         args=[],
         condition=cond,
-        block=[],
+        block=None,
         elze=False,
         elseif=False,
         target=addr,
@@ -437,7 +533,7 @@ def read_elif(ctx: DecompilerState, cmdobj: GDSCommand) -> BinaryIfCommand:
         command=cmdobj,
         args=[],
         condition=cond,
-        block=[],
+        block=None,
         elze=False,
         elseif=True,
         target=addr,
@@ -457,7 +553,7 @@ def read_else(ctx: DecompilerState, cmdobj: GDSCommand) -> BinaryIfCommand:
         command=cmdobj,
         args=[],
         condition=None,
-        block=[],
+        block=None,
         elze=True,
         elseif=False,
         target=addr,
@@ -622,15 +718,15 @@ def write_gds(prog: GDSProgram) -> bytes:
             ctx.write_command(el())
         elif el in GDSElement.label:
             ctx.write_label(el())
-    
+
     ctx.write_token(GDSTokenValue.fileend())
-    return len(ctx.data).to_bytes(4, 'little') + bytes(ctx.data)
+    return len(ctx.data).to_bytes(4, "little") + bytes(ctx.data)
 
 
 def write_simple(ctx: CompilerState, cmd: GDSInvocation):
     args = cmd.args
     if len(args) < len(cmd.command.params):
-        args += [None] * len(cmd.command.params)-len(args)
+        args += [None] * len(cmd.command.params) - len(args)
     for arg, param in zip(args, cmd.command.params):
         if arg is None:
             if param.optional:
@@ -641,7 +737,19 @@ def write_simple(ctx: CompilerState, cmd: GDSInvocation):
             arg,
             {
                 GDSValue.int: lambda val: [
-                    (GDSTokenValue.int(val), ["int", "bool", "bool|int"]),
+                    (
+                        GDSTokenValue.int(val),
+                        [
+                            "int",
+                            "uint",
+                            "short",
+                            "ushort",
+                            "byte",
+                            "ubyte",
+                            "bool",
+                            "bool|int",
+                        ],
+                    ),
                 ],
                 GDSValue.float: lambda val: [(GDSTokenValue.float(val), ["float"])],
                 GDSValue.str: lambda val: [
@@ -650,23 +758,34 @@ def write_simple(ctx: CompilerState, cmd: GDSInvocation):
                 GDSValue.longstr: lambda val: [
                     (GDSTokenValue.longstr(val), ["longstr"])
                 ],
-                GDSValue.bool: lambda val: 
-                    [(GDSTokenValue.int(val), ["bool", "bool|int"])] if isinstance(val, int)
-                    else
-                    [(GDSTokenValue.str(val), ["bool", "bool|string"])] if isinstance(val, str)
-                    else
-                    [
-                    (GDSTokenValue.int(1 if val else 0), ["bool", "bool|int"]),
-                    (
-                        GDSTokenValue.str("true" if val else "false"),
-                        ["bool", "bool|string"],
-                    ),
-                ]
-                ,
+                GDSValue.bool: lambda val: (
+                    [(GDSTokenValue.int(val), ["bool", "bool|int"])]
+                    if isinstance(val, int)
+                    else (
+                        [(GDSTokenValue.str(val), ["bool", "bool|string"])]
+                        if isinstance(val, str)
+                        else [
+                            (GDSTokenValue.int(1 if val else 0), ["bool", "bool|int"]),
+                            (
+                                GDSTokenValue.str("true" if val else "false"),
+                                ["bool", "bool|string"],
+                            ),
+                        ]
+                    )
+                ),
                 ...: lambda: [],
             },
         )
-        tok = next((v for v, reqtypes in options if param.type in reqtypes), None)
+        # pylint: disable=not-callable
+        tok = next(
+            (
+                v
+                for v, reqtypes in options
+                if (isinstance(reqtypes, list) and param.type in reqtypes)
+                or (callable(reqtypes) and reqtypes(param.type))
+            ),
+            None,
+        )
         if tok is None:
             raise ValueError(
                 f"Unexpected parameter type: should have been {param.type}, value was {arg}"
@@ -702,6 +821,7 @@ def write_else(ctx: CompilerState, cmd: GDSIfInvocation):
 def write_repeatN(ctx: CompilerState, cmd: GDSLoopInvocation):
     ctx.write_token(GDSTokenValue.int(cmd.condition))
     ctx.write_addr(cmd.target)
+
 
 def write_while(ctx: CompilerState, cmd: GDSLoopInvocation):
     write_condition(ctx, cmd.condition)

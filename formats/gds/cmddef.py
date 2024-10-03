@@ -25,6 +25,7 @@ class GDSCommandParam:
     """
     The data type of the command. Real builtin GDS datatypes are:
     int (1)
+    (also usable as uint, short, ushort, byte, ubyte; TODO: document which parameters use which)
     float (2)
     string (3)
     longstr (4, never used)
@@ -40,6 +41,7 @@ class GDSCommandParam:
     rect(x: int, y: int, w: int, h: int)
     ...
     """
+        
     name: Optional[str] = None
     """A descriptive name for the parameter. Can optionally be written in the script."""
     desc: Optional[str] = None

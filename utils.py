@@ -1,5 +1,8 @@
 import os
-from typing import TypeVar, Generic, Mapping, get_type_hints, get_origin, Callable, Union, Any
+from contextlib import contextmanager, suppress
+from typing import (Any, Callable, Generic, Mapping, TypeVar, Union,
+                    get_origin, get_type_hints)
+
 
 def cli_file_pairs(
     input=None,
@@ -192,3 +195,15 @@ def match(union: TUI, fns: Mapping[Union[TU, type(...)], Callable[[Any],R]]) -> 
         return ellipsis_fn()
 
 RESOURCES = os.path.join(os.path.dirname(__file__), "data")
+
+
+@contextmanager
+def nested_break():
+    """
+    Raise the returned value to instantly bail out of the with block.
+    Replaces loop labels for breaking out of nested iterations.
+    """
+    class NestedBreakException(Exception):
+        pass
+    with suppress(NestedBreakException):
+        yield NestedBreakException

@@ -61,7 +61,7 @@ class GDSJumpAddress:
 class GDSIfInvocation(GDSInvocation):
     condition: List[GDSConditionToken]
     target: GDSJumpAddress
-    block: Optional[List["GDSElement"]]
+    block: Optional[List["GDSElement"]] = None
     elseif: bool = False
     elze: bool = False
 
@@ -69,7 +69,7 @@ class GDSIfInvocation(GDSInvocation):
 @dataclass(kw_only=True)
 class GDSLoopInvocation(GDSInvocation):
     condition: Union[List[GDSConditionToken], int]
-    block: Optional[List["GDSElement"]]
+    block: Optional[List["GDSElement"]] = None
     target: GDSJumpAddress
 
 

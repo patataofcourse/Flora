@@ -2,6 +2,7 @@ import os
 from contextlib import contextmanager, suppress
 from typing import (Any, Callable, Generic, Mapping, TypeVar, Union,
                     get_origin, get_type_hints)
+import struct
 
 
 def cli_file_pairs(
@@ -207,3 +208,16 @@ def nested_break():
         pass
     with suppress(NestedBreakException):
         yield NestedBreakException
+
+def round_places(x: float, places: int=0) -> float:
+    return round(x * (10**places)) / (10**places)
+
+def round_perfect(x: float) -> float:
+    for i in range(1, 8):
+        y = round_places(x, i)
+        # If the rounded form is equivalent in bits to the full version,
+        # just use this simpler rounded version.
+        if struct.unpack("<f", struct.pack("<f", y))[0] == x:
+            return y
+    # We couldn't round without loss of information
+    return x

@@ -18,6 +18,7 @@ from .model import (
     GDSConditionToken
 )
 
+from utils import round_perfect
 
 def read_gda(data: str, path: Optional[str] = None) -> GDSProgram:
     pass
@@ -101,7 +102,7 @@ def write_simple(ctx: WriterContext, cmd: GDSInvocation):
             ctx.write(str(val))
         elif arg in GDSValue.float:
             val: float = arg()
-            ctx.write(str(val))
+            ctx.write(str(round_perfect(val)))
         elif arg in GDSValue.str or arg in GDSValue.longstr:
             val: str = arg()
             if param.type == "longstr":

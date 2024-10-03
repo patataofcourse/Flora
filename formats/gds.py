@@ -3,6 +3,7 @@ import json
 import os
 
 import parse
+import ast
 from utils import cli_file_pairs, foreach_file_pair
 from version import v
 
@@ -12,30 +13,17 @@ def cli():
 
 dir_path = "/".join(os.path.dirname(os.path.realpath(__file__).replace("\\", "/")).split("/")[:-1])
 commands = json.load(open(f"{dir_path}/data/commands.json", encoding="utf-8"))
-commands_i = {val: key for key, val in commands.items()} # Inverted version of commands
-
-class GDSModeException (Exception):
-    def __init__(self, mode):
-        self.mode = mode
-        super().__init__(
-            f"'{mode}' is not a valid mode for GDS.__init__(): must be one of 'bin', 'json', 'gda'")
+commands_i = {val["id"]: key for key, val in commands.items() if "id" in val} # Inverted version of commands
 
 class GDS:
-    def __init__(self, file, mode="bin"): #modes: "bin"/"b", "json"/"j", "gda"/"a"
-        if mode == "bin" or mode == "b":
-            self.from_gds(file)
-        elif mode == "json" or mode == "j":
-            self.from_json(file)
-        elif mode == "gda" or mode == "a":
-            self.from_old(file)
-        else:
-            raise GDSModeException(mode)
+    def __init__(self, cmds = []): #modes: "bin"/"b", "json"/"j", "gda"/"a"
+        self.cmds = cmds
 
-    def from_gds(self, file):
+    @classmethod
+    def from_gds(Self, file):
         length = int.from_bytes(file[0:4], "little")
         if file[4:6] == b"\x0c\x00":
-            self.cmds = []
-            return
+            return Self([])
         cmd_data = file[6:length+4]
         cmds = []
 
@@ -91,30 +79,44 @@ class GDS:
             else:
                 raise Exception(f"GDS file error: Invalid or unsupported parameter type {hex(p_type)}!")
         
-        self.cmds = cmds
+        return Self(cmds)
     
-    def from_json (self, file):
-        self.cmds = json.loads(file)["data"]
+    @classmethod
+    def from_json (Self, file):
+        cmds = json.loads(file)
         #TODO: reject non-compatible json files
+        return Self(cmds)
     
-    def from_old (self, file): #TODO: make this, so gds_old can be completely removed
+    @classmethod
+    def from_gda (Self, file): #TODO: make this, so gds_old can be completely removed
         cmds = []
         
         for line in file.split("\n"):
-            data = {}
+            line = line.strip()
             if line.startswith("#"):
                 continue
+            if line == '':
+                continue
+
+            data = {}
 
             line, strings = parse.remove_strings(line)
             line = line.rstrip().split(" ")
             cmd = line[0]
 
-            if cmd == "engine":
-                cmd = "0x1b"
-            elif cmd == "img_win":
-                cmd = "0x1f"
+            # TODO: handle inline comments, maybe
+
+            if cmd in commands:
+                cmd = commands[cmd]
+                if "alias" in cmd:
+                    cmd = commands[cmd["alias"]]
+            elif cmd.startswith("cmd_"):
+                cmd = int(cmd[4:])
+            elif cmd.startswith("0x"):
+                cmd = int(cmd[2:], base=16)
+            else:
+                raise Exception(f"Unknown GDA command: {cmd}")
             
-            cmd = int(cmd[2:], base=16)
             params = []
 
             for param in line[1:]:
@@ -123,14 +125,24 @@ class GDS:
                 elif param.startswith("0x"):
                     params.append({"type":"unknown-2", "data":int(param[2:], 16)})
                 elif param.startswith('"') and param.endswith('"'):
-                    param = strings[int(param[1:-1])]
+                    param = ast.literal_eval(f'"{strings[int(param[1:-1])]}"')
                     params.append({"type":"string", "data":param})
+                elif param.startswith("!6("):
+                    params.append({"type":"unknown-6", "data":int(param[3:-1], 16)})
+                elif param.startswith("!7("):
+                    params.append({"type":"unknown-7", "data":int(param[3:-1], 16)})
+                elif param.startswith("!8"):
+                    params.append({"type":"unknown-8"})
+                elif param.startswith("!9"):
+                    params.append({"type":"unknown-9"})
+                elif param.startswith("!b"):
+                    params.append({"type":"unknown-b"})
                 else:
                     raise Exception(f"Invalid GDA parameter: {param}")
             
             cmds.append({"command":cmd, "parameters":params})
 
-        self.cmds = cmds
+        return Self(cmds)
 
     def __getitem__ (self, index):
         index = int(index)
@@ -142,10 +154,10 @@ class GDS:
     def to_gds (self):
         out = b"\x00" * 2
         for command in self.cmds:
-            if type(command["command"]) == int:
-                out += command["command"].to_bytes(2, "little")
+            if type(command["command"]["id"]) == int:
+                out += command["command"]["id"].to_bytes(2, "little")
             else:
-                out += commands[command["command"]].to_bytes(2, "little")
+                out += commands[command["command"]["id"]].to_bytes(2, "little")
             for param in command["parameters"]:
                 if param["type"] == "int":
                     out += b"\x01\x00"
@@ -178,6 +190,38 @@ class GDS:
     
     def to_bin (self): #alias
         return self.to_gds()
+    
+    def to_gda(self):
+        out = ""
+        for command in self.cmds:
+            if type(command["command"]) == int:
+                out += "0x"+command["command"].to_bytes(1, "little").hex()
+            else:
+                out += command['command']
+            for param in command["parameters"]:
+                out += " "
+                if param["type"] == "int":
+                    out += str(param["data"])
+                elif param["type"] == "string":
+                    out += repr(param["data"])
+                elif param["type"] == "unknown-2":
+                    out += hex(param["data"])
+                elif param["type"] == "unknown-6":
+                    b = param["data"].to_bytes(4, "little")
+                    out += f"!6({b.hex()})"
+                elif param["type"] == "unknown-7":
+                    b = param["data"].to_bytes(4, "little")
+                    out += f"!7({b.hex()})"
+                elif param["type"] == "unknown-8":
+                    out += "!8"
+                elif param["type"] == "unknown-9":
+                    out += "!9"
+                elif param["type"] == "unknown-b":
+                    out += "!b"
+                else:
+                    raise Exception(f"GDA error: invalid or unsupported parameter type '{param['type']}'!")
+            out += "\n"
+        return out
 
 @cli.command(
                 name="extract",
@@ -215,8 +259,8 @@ def unpack_json(input = None, output = None, recursive = False, quiet = False):
 
 
 @cli.command(
-                name="create",
-                help="Converts a JSON to GDS.",
+                name="compilejson",
+                help="Converts a JSON document created by 'compilejson' to a GDS script file.",
                 no_args_is_help = True
             )
 @click.argument("input")
@@ -225,21 +269,41 @@ def create_json(input, output):
     input = open(input, encoding="utf-8").read()
     output = open(output, "wb")
 
-    gds = GDS(input, "json")
+    gds = GDS.from_json(input)
     output.write(gds.to_bin())
     output.close()
 
 @cli.command(
-                name="gdaimport",
-                help="Creates a GDS JSON file from the old GDA format.",
+                name="compile",
+                help="Generates a GDS binary script file from human-readable GDA files.",
                 no_args_is_help = True
             )
 @click.argument("input")
 @click.argument("output")
 def create_from_gda(input, output):
     input = open(input, encoding="utf-8").read()
-    output = open(output, "w", encoding="utf-8")
+    output = open(output, "wb")
 
-    gds = GDS(input, "gda")
-    output.write(gds.to_json())
+    gds = GDS.from_gda(input)
+    output.write(gds.to_bin())
+    output.close()
+
+@cli.command(
+                name="decompile",
+                help="Converts a GDS file into a human-readable GDA script format.",
+                no_args_is_help = True
+            )
+@click.argument("input")
+@click.argument("output", required=False)
+def create_to_gda(input, output = None):
+    if output is None:
+        output = input
+        if output.lower().endswith(".gds"):
+            output = output[:-4]
+        output = output + ".gda"
+    
+    input = open(input, "rb").read()
+    output = open(output, "w", encoding="utf-8")
+    gds = GDS.from_gds(input)
+    output.write(gds.to_gda())
     output.close()

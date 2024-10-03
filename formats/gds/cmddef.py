@@ -10,6 +10,7 @@ import yaml
 from dacite import from_dict
 
 from utils import RESOURCES
+import formats.gds.value as value
 
 
 logger = logging.getLogger("flora.debug.gds.cmddef")
@@ -21,7 +22,7 @@ class GDSCommandParam:
     """The command for which this is a parameter"""
     idx: int
     """The index of the parameter in order"""
-    type: str
+    type: "value.GDSValueType"
     """
     The data type of the command. Real builtin GDS datatypes are:
     int (1)
@@ -85,6 +86,12 @@ class GDSCommand:
     etc of this command. Note that the structural properties below are obvious to read off from
     disassembly, and are therefore not subject to this; it purely qualifies our understanding
     of the command's meaning and usage.
+    """
+    comment: Optional[str] = None
+    """
+    A format string for a comment that should be placed above every execution of this command in
+    decompiled scripts. Useful to give the reader additional context, such as the path to a file
+    referenced by an abstract numeric parameter, or even the contents of said file!
     """
 
     condition: bool = False
@@ -220,6 +227,8 @@ def load_group(
                 p = {"type": p}
             p["cmd"] = c["id"]
             p["idx"] = idx
+            
+            p["type"] = value.parse_type(p["type"])
 
             return from_dict(data_class=GDSCommandParam, data=p)
 
@@ -394,5 +403,3 @@ if __name__ == "__main__":
 
     pprint.pp(COMMANDS_BYID)
     pprint.pp(COMMANDS_BYNAME)
-else:
-    init_commands()

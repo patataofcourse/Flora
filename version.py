@@ -1,1 +1,1 @@
-v = "0.5 alpha 1"
+__version__ = "0.5 alpha 1"

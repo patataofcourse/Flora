@@ -25,7 +25,7 @@ commands:
       The comment from Layton when placing the given item in his room. Must be called right after an
       `0xbc itemLayton` command, and refers to that item.
     params:
-      comment: string
+      comment: string(82)
   itemComment2Layton:
     id: 0xc7
     desc: >
@@ -33,7 +33,7 @@ commands:
       is already in there. Used to point out duplications, as well as two things going together well.
       Like `0xc6 itemComment1Layton`, has to follow after a `0xbc itemLayton` call.
     params:
-      comment: string
+      comment: string(82)
       otherItem: int
 
   itemLuke:
@@ -54,7 +54,7 @@ commands:
       The comment from Luke when placing the given item in his room. Must be called right after an
       `0xbd itemLuke` command, and refers to that item.
     params:
-      comment: string
+      comment: string(82)
   itemComment2Luke:
     id: 0xc9
     desc: >
@@ -62,7 +62,7 @@ commands:
       is already in there. Used to point out duplications, as well as two things going together well.
       Like `0xc8 itemComment1Like`, has to follow after a `0xbd itemLuke` call.
     params:
-      comment: string
+      comment: string(82)
       otherItem: int
 
   
@@ -70,7 +70,7 @@ commands:
     id: 0xca
     desc: The comment from Layton, expressing his overall satisfaction with the room layout.
     params:
-      comment: string
+      comment: string(75)
       level: int
       unused:
         type: int
@@ -79,7 +79,7 @@ commands:
     id: 0xcb
     desc: The comment from Luke, expressing his overall satisfaction with the room layout.
     params:
-      comment: string
+      comment: string(75)
       level: int
       unused:
         type: int

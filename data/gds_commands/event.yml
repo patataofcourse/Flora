@@ -14,6 +14,10 @@ commands:
     desc: >
       Displays a textbox for the specified on-screen actor, pointing in the
       direction indicated by that actor's sprite location.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -27,6 +31,10 @@ commands:
     id: 0x9c
     desc: >
       Displays a textbox for the specified on-screen actor, pointing right.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -40,6 +48,10 @@ commands:
     id: 0x9d
     desc: >
       Displays a textbox for the specified on-screen actor, pointing left.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -52,6 +64,10 @@ commands:
   textboxMiddle:
     id: 0xcd
     desc: Displays a text box for the specified on-screen actor, with no arrow pointing.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -65,6 +81,10 @@ commands:
   textboxNoSpeaker:
     id: 0x9b
     desc: Displays a textbox without a speaker on screen.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -74,6 +94,10 @@ commands:
   textboxNoSpeaker2:
     id: 0x44
     desc: Displays a textbox without a speaker on screen. (I'm not sure what the difference between these two functions is)
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -83,6 +107,10 @@ commands:
   textboxNoSpeakerRight:
     id: 0x99
     desc: Displays a textbox pointing right, but without a speaker on screen.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -92,6 +120,10 @@ commands:
   textboxNoSpeakerLeft:
     id: 0x9a
     desc: Displays a textbox pointing left, but without a speaker on screen.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
     params:
       textId:
         type: int
@@ -252,14 +284,14 @@ commands:
     desc: The question to be displayed for this choice
     params:
       question:
-        type: string
+        type: string(64)
         desc: Unlike most strings in this game, this one is hardcoded in the script, and therefore NOT localized!
   choiceAnswer1:
     id: 0xd6
     desc: Answer 1 of this choice
     params:
       answer:
-        type: string
+        type: string(64)
         desc: Just like the question, not localizable.
       unk_2: int
   choiceAnswer2:
@@ -267,7 +299,7 @@ commands:
     desc: Answer 2 of this choice
     params:
       answer:
-        type: string
+        type: string(64)
         desc: Just like the question, not localizable.
       unk_2: int
   choiceAnswer3:
@@ -275,7 +307,7 @@ commands:
     desc: Answer 3 of this choice
     params:
       answer:
-        type: string
+        type: string(64)
         desc: Just like the question, not localizable.
       unk_2: int
   choiceAnswerIs:

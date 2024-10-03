@@ -1,32 +1,20 @@
 from typing import List, Optional, NewType, Union, Set, Mapping
 from dataclasses import dataclass, field
 # pylint: disable=unused-wildcard-import,wildcard-import
-from utils import tagged_union, TU
 
-from .cmddef import GDSCommand
+from utils import tagged_union, TU
+import formats.gds.value as value
+import formats.gds.cmddef as cmddef
 
 GDSAddress = NewType('GDSAddress', int)
-
-@tagged_union
-class GDSValue:
-    """
-    A value usable as a parameter in a GDSInvocation.
-    """
-    int: TU[int]
-    float: TU[float]
-    str: TU[str]
-    longstr: TU[str]
-    # (value, represented_as_string)
-    bool: TU[Union[bool, int, str]]
-
 
 @dataclass(kw_only=True)
 class GDSInvocation:
     """
     The specific invocation of a GDS commmand, with the given parameter values.
     """
-    command: GDSCommand
-    args: List[GDSValue]
+    command: "cmddef.GDSCommand"
+    args: List["value.GDSValue"]
 
 
 @tagged_union
@@ -120,13 +108,13 @@ class GDSContext:
     """
     A list of candidate contexts, if any are still applicable. This list will be empty if narrowing caused a conflict.
     """
-    conflicts: List[GDSCommand] = field(default_factory=list)
+    conflicts: List["cmddef.GDSCommand"] = field(default_factory=list)
     """
     Whenever an instruction does not match any of the candidate contexts, the offending command is recorded here, and its
     context candidates added to the global candidate list.
     """
 
-    def narrow(self, cmd: GDSCommand) -> bool:
+    def narrow(self, cmd: "cmddef.GDSCommand") -> bool:
         """
         Checks if the given command is compatible with the currently assumed candidates, and narrows the list if so.
         Otherwise, records the conflict and returns false.

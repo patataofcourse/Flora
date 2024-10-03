@@ -7,10 +7,11 @@ import sys
 import collections
 
 import struct
-import parse
 import ast
+
+import version
+import parse
 from utils import cli_file_pairs, foreach_file_pair, RESOURCES
-from version import v
 
 
 @click.group(
@@ -202,10 +203,10 @@ class GDS:
         return self.cmds[index]
 
     def to_json(self):
-        return json.dumps({"version": v, "data": self.cmds}, indent=4)
+        return json.dumps({"version": version.__version__, "data": self.cmds}, indent=4)
 
     def to_yaml(self):
-        return yaml.safe_dump({"version": v, "data": self.cmds})
+        return yaml.safe_dump({"version": version.__version__, "data": self.cmds})
 
     def to_gds(self):
         out = b"\x00" * 2

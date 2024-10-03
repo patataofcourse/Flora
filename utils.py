@@ -1,18 +1,28 @@
 import os
 from contextlib import contextmanager, suppress
-from typing import (Any, Callable, Generic, Mapping, TypeVar, Union,
-                    get_origin, get_type_hints)
+from typing import (
+    Any,
+    Callable,
+    Generic,
+    Mapping,
+    TypeVar,
+    Union,
+    Optional,
+    get_origin,
+    get_type_hints,
+    List,
+)
 import struct
 
 
 def cli_file_pairs(
-    input=None,
-    output=None,
+    ipaths: Optional[str] = None,
+    opaths: Optional[str] = None,
     *,
-    in_endings=None,
-    out_ending=None,
-    filter_infer=None,
-    recursive=False,
+    in_endings: Optional[List[str]] = None,
+    out_ending: Optional[str] = None,
+    filter_infer: Callable[[str, bool], bool] = None,
+    recursive: bool = False,
 ):
     """
     Given the file path inputs to the various CLI commands, determines which input files should be operated on and mapped to which output files.
@@ -35,11 +45,11 @@ def cli_file_pairs(
     (i.e. `in/a/b/c.input` becomes `out/a/b/c.output`). If the output exists but isn't a directory, the CLI exits with an error explaining how this doesn't make sense.
     """
 
-    if input is None:
-        input = "."
+    if ipaths is None:
+        ipaths = "."
 
-    if not os.path.exists(input):
-        raise FileNotFoundError(input)
+    if not os.path.exists(ipaths):
+        raise FileNotFoundError(ipaths)
 
     def listfiles(path):
         if recursive:
@@ -52,19 +62,25 @@ def cli_file_pairs(
                     continue
                 yield os.path.join(path, f)
 
-    def default_filter_infer(input, force_accept=False):
-        if in_endings is not None and not any(
-            input.lower().endswith(ie) for ie in in_endings
+    def default_filter_infer(ipath, force_accept=False):
+        if (
+            in_endings is not None
+            and not any(ipath.lower().endswith(ie) for ie in in_endings)
+            and not force_accept
         ):
             return None
-        if out_ending is not None and input.lower().endswith(out_ending):
+        if (
+            out_ending is not None
+            and ipath.lower().endswith(out_ending)
+            and not force_accept
+        ):
             return None
 
-        output = input
+        output = ipath
         if in_endings is not None:
-            endings = [ie for ie in in_endings if input.lower().endswith(ie)]
+            endings = [ie for ie in in_endings if ipath.lower().endswith(ie)]
             if endings:
-                output = input[: -len(endings[0])]
+                output = ipath[: -len(endings[0])]
         if out_ending is None:
             raise ValueError(
                 "Can't infer output file names without a target file ending specified"
@@ -78,25 +94,25 @@ def cli_file_pairs(
     input_dir = ""
     input_paths = []
     rel_pairs = None
-    if os.path.isfile(input):
-        input_dir, ip = os.path.split(input)
+    if os.path.isfile(ipaths):
+        input_dir, ip = os.path.split(ipaths)
         input_paths = [ip]
-        rel_pairs = [(ip, filter_infer(ip, force_accept=True)) for ip in input_paths]
+        rel_pairs = [(ip, filter_infer(ip, True)) for ip in input_paths]
     else:
-        input_dir = input
-        input_paths = [os.path.relpath(f, input_dir) for f in listfiles(input)]
-        rel_pairs = [(ip, filter_infer(ip)) for ip in input_paths]
+        input_dir = ipaths
+        input_paths = [os.path.relpath(f, input_dir) for f in listfiles(ipaths)]
+        rel_pairs = [(ip, filter_infer(ip, False)) for ip in input_paths]
     rel_pairs = [(ip, op) for (ip, op) in rel_pairs if op is not None]
 
-    if output is None:
+    if opaths is None:
         output = input_dir
 
     if (
-        os.path.isfile(input)
+        os.path.isfile(ipaths)
         and not os.path.isdir(output)
         and os.path.split(output)[1] != ""
     ):
-        return [(input, output)]
+        return [(ipaths, output)]
 
     if os.path.isfile(output):
         raise OSError(f"Output path exists but is not a directory: '{output}'")
@@ -110,22 +126,23 @@ def cli_file_pairs(
 
 
 def foreach_file_pair(pairs, fn, quiet=False):
-    try:
+    # If TQDM isn't installed, continue as if --quiet was specified
+    with suppress(ImportError):
         from tqdm import tqdm
 
         if not quiet and len(pairs) > 5:
             progress = tqdm(pairs)
-            for input, output in progress:
-                progress.set_description(input)
-                fn(input, output)
+            for ipath, opath in progress:
+                progress.set_description(ipath)
+                fn(ipath, opath)
             return
-    except ImportError:
-        # TQDM isn't installed; just don't show a progress bar.
-        pass
-    for input, output in pairs:
-        fn(input, output)
+    for ipath, opath in pairs:
+        fn(ipath, opath)
 
-T = TypeVar('T')
+
+T = TypeVar("T")
+
+
 class TU(Generic[T]):
     union: type
     name: str
@@ -150,6 +167,7 @@ class TU(Generic[T]):
     def __repr__(self):
         return f"{self.union.__name__}.{self.name}"
 
+
 class TUI(Generic[T]):
     variant: TU[T]
     value: T
@@ -170,23 +188,28 @@ class TUI(Generic[T]):
     def __repr__(self):
         return f"{repr(self.variant)}({repr(self.value)})"
 
+
 def tagged_union(cls: type):
     hints = get_type_hints(cls)
-    members = [(k,v) for (k,v) in hints.items() if get_origin(v) == TU]
-    
-    for (name, t) in members:
+    members = [(k, v) for (k, v) in hints.items() if get_origin(v) == TU]
+
+    for name, t in members:
         setattr(cls, name, t(cls, name))
-    
+
     return cls
+
 
 class Test:
     a: TU[int]
     b: TU[str]
 
-R = TypeVar('R')
-def match(union: TUI, fns: Mapping[Union[TU, type(...)], Callable[[Any],R]]) -> R:
+
+R = TypeVar("R")
+
+
+def match(union: TUI, fns: Mapping[Union[TU, type(...)], Callable[[Any], R]]) -> R:
     ellipsis_fn = None
-    for k,v in fns.items():
+    for k, v in fns.items():
         if k is Ellipsis:
             ellipsis_fn = v
             continue
@@ -195,6 +218,8 @@ def match(union: TUI, fns: Mapping[Union[TU, type(...)], Callable[[Any],R]]) -> 
     if ellipsis_fn is not None:
         return ellipsis_fn()
 
+
+# TODO: use importlib.resources instead
 RESOURCES = os.path.join(os.path.dirname(__file__), "data")
 
 
@@ -204,13 +229,17 @@ def nested_break():
     Raise the returned value to instantly bail out of the with block.
     Replaces loop labels for breaking out of nested iterations.
     """
+
     class NestedBreakException(Exception):
         pass
+
     with suppress(NestedBreakException):
         yield NestedBreakException
 
-def round_places(x: float, places: int=0) -> float:
+
+def round_places(x: float, places: int = 0) -> float:
     return round(x * (10**places)) / (10**places)
+
 
 def round_perfect(x: float) -> float:
     for i in range(1, 8):

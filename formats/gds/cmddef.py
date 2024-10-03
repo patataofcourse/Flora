@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
-import yaml
+from typing import Optional, List, Union, Set
 import os
 from dataclasses import dataclass, field
-from dacite import from_dict
-from typing import Optional, List, Union
 
 import logging
+
+import yaml
+from dacite import from_dict
+
 
 logger = logging.getLogger("flora.debug.gds.cmddef")
 
@@ -84,7 +86,7 @@ class GDSCommand:
     """
     True if the command sets the condition flag. Those commands usually don't have side effects.
     """
-    context: list[str] = field(default_factory=lambda: ["all"])
+    context: Set[str] = field(default_factory=lambda: {"all"})
     """
     (list of) context name(s) where the command is defined. The game contains many different
     script engines called in different contexts, and while they all run the same type of script,
@@ -378,7 +380,7 @@ if __name__ == "__main__":
     logging.basicConfig()
 
     # TODO: unit tests just to make sure this function's understanding of syntax is still correct
-    # initGlobalCommands("formats/gds/_test")
+    # init_commands("formats/gds/_test")
     init_commands()
 
     import pprint

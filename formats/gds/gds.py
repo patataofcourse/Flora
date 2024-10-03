@@ -1,9 +1,11 @@
 from typing import Tuple, List
 import struct
 
+# pylint: disable=unused-wildcard-import,wildcard-import
+from tagged_union import *
+
 from .model import (
     GDSProgram,
-    GDSToken,
     GDSElement,
     GDSInvocation,
     GDSLoopInvocation,
@@ -13,6 +15,30 @@ from .model import (
     GDSConditionToken
 )
 from .cmddef import COMMANDS_BYID, GDSCommand
+
+
+
+@tagged_union
+class GDSToken:
+    """
+    Raw token 
+    """
+    command = int
+    int = int
+    float = float
+    str = str
+    longstr = str
+    unused5 = Unit
+    # the source address is the one pointing to the target
+    saddr = GDSAddress
+    taddr = GDSAddress
+    NOT = Unit
+    AND = Unit
+    OR = Unit
+    BREAK = Unit
+    fileend = Unit
+
+
 
 from tagged_union import _
 from tagged_union import match
@@ -139,7 +165,6 @@ def read_command(data: bytes, cursor: int, token: GDSToken) -> Tuple[int, GDSInv
 
         args.append(val)
     return GDSInvocation(command=cmdobj, args=args)
-
 
 
 

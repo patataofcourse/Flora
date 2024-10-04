@@ -105,18 +105,18 @@ def cli_file_pairs(
     rel_pairs = [(ip, op) for (ip, op) in rel_pairs if op is not None]
 
     if opaths is None:
-        output = input_dir
+        opaths = input_dir
 
     if (
         os.path.isfile(ipaths)
-        and not os.path.isdir(output)
-        and os.path.split(output)[1] != ""
+        and not os.path.isdir(opaths)
+        and os.path.split(opaths)[1] != ""
     ):
-        return [(ipaths, output)]
+        return [(ipaths, opaths)]
 
-    if os.path.isfile(output):
-        raise OSError(f"Output path exists but is not a directory: '{output}'")
-    output_dir = output
+    if os.path.isfile(opaths):
+        raise OSError(f"Output path exists but is not a directory: '{opaths}'")
+    output_dir = opaths
 
     pairs = [
         (os.path.join(input_dir, ip), os.path.join(output_dir, op))

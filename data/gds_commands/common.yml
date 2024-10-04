@@ -227,12 +227,18 @@ commands:
     - int
     - int
   
-  0xb6:
+  storyscript:
+    id: 0xb6
     desc: >
-      Passing this function a format string will printf the current condition flag value into it.
-      However, nothing is done with that value.
+      In the debug storyscript, registers a starting point from which (presumably) playtesters
+      could jump into the game without having to replay large earlier parts of it.
     params:
-      fmt: string
+      desc: 
+        type: string
+        desc: The description of the starting point
+      scriptPath:
+        type: string
+        desc: The path to the script executed to setup the game state to the specified starting point
 
   0xc0:
     params: [int]

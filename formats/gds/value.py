@@ -18,7 +18,7 @@ def parse_type(descriptor: str) -> Optional["GDSValueType"]:
     """
     Given a type descriptor (used internally in the GDS command definition files),
     creates a corresponding type object, or returns None if the descriptor is invalid.
-    
+
     See the individual type classes registered in `TYPES` for information on valid
     descriptor formats
     """
@@ -34,6 +34,7 @@ class GDSValueType(ABC):
     A GDS Value Type. Defines how a value of this type is created from
     a GDS token or a string parsed in a GDA file.
     """
+
     @classmethod
     @abstractmethod
     def parse_type(cls, descriptor: str) -> Optional["GDSValueType"]:
@@ -41,6 +42,12 @@ class GDSValueType(ABC):
         Parses the descriptor and returns the corresponding type object
         if the descriptor corresponds to a variant of this type,
         otherwise returns None to signal the next candidate type should be tried.
+        """
+
+    @abstractmethod
+    def describe(self) -> str:
+        """
+        Returns a descriptor for this variant of the type. The inverse of `parse_type`, in a sense.
         """
 
     @abstractmethod
@@ -64,6 +71,7 @@ class GDSValue(ABC):
     is printed, either in Python code or in a GDA script,
     and conversion to other value types / GDS tokens.
     """
+
     type: GDSValueType
     value: Any
 
@@ -98,6 +106,7 @@ class GDSIntType(GDSValueType):
     An integer type, with a fixed byte length, and a marker whether it is intended to be
     read as an unsigned integer in the game.
     """
+
     bytelen: int = 4
     unsigned: bool = True
 
@@ -107,12 +116,12 @@ class GDSIntType(GDSValueType):
         Valid descriptors are:
         int(n): n bytes, signed
         uint(n): n bytes, unsigned
-        
+
         or alternatively the shorthands:
         int / uint: 4 bytes, optionally unsigned
         short / ushort: 2 bytes, optionally unsigned
         byte / ubyte: 1 byte, optionally unsigned
-        
+
         Note that all int values are still written as 4 little endian bytes in GDS files,
         but only a subset of these values is actually read by the game. Note also that
         this hard limits the byte length to 4 at most.
@@ -137,11 +146,14 @@ class GDSIntType(GDSValueType):
             return None
         return GDSIntType(bytelen=bytelen, unsigned=unsigned)
 
+    def describe(self) -> str:
+        return ("uint" if self.unsigned else "int") + f"({self.bytelen})"
+
     def from_token(self, tok: gds.GDSTokenValue) -> "GDSIntValue":
         if tok not in gds.GDSTokenValue.int:
             return None
         val = tok()
-        if not self.unsigned and val >= (256**self.bytelen)/2:
+        if not self.unsigned and val >= (256**self.bytelen) / 2:
             val -= 256**self.bytelen
         return GDSIntValue(val, self)
 
@@ -151,6 +163,7 @@ class GDSIntType(GDSValueType):
         base 16/2 (prefixed by 0x or 0b respectively). Note that if a dot is found at the end of
         the literal, parsing will fail, as this designates the value as a float instead.
         """
+
         def parser_map(
             val: int, lit_fmt: Literal["hex", "bin", "dec"] = "dec"
         ) -> "GDSIntValue":
@@ -201,6 +214,7 @@ class GDSIntValue(GDSValue):
     An integer value. If written in a non-decimal base in a GDA script, this information is
     preserved here (but not after being written to a GDS binary).
     """
+
     value: int
     lit_fmt: Literal["hex", "bin", "dec"] = "dec"
 
@@ -231,9 +245,13 @@ class GDSFloatType(GDSValueType):
     A float type, of which there are no variations. It matches the IEEE-754 32-bit float
     specification, though it is stored in little-endian byte order in GDS files.
     """
+
     @classmethod
     def parse_type(cls, descriptor: str) -> "GDSFloatType":
         return GDSFloatType() if descriptor == "float" else None
+
+    def describe(self) -> str:
+        return "float"
 
     def from_token(self, tok: gds.GDSTokenValue) -> "GDSFloatValue":
         return GDSFloatValue(tok(), self) if tok in gds.GDSTokenValue.float else None
@@ -244,7 +262,7 @@ class GDSFloatType(GDSValueType):
         as a nonempty int literal to either side of it. Omitting the other will denote it as 0,
         therefore `123.` is a convenient way to write integers explicitly as floats.
         Literals may also include an exponent.
-        
+
         TODO: allow writing integers here? Since we already know where the program expects
         a float due to the command list, we could make a convenient conversion here...
         """
@@ -263,6 +281,7 @@ class GDSFloatValue(GDSValue):
     we correct this by attempting to round to the float with the least decimal digits
     which still produces the same value as the original.
     """
+
     value: float
 
     def __init__(self, value: float, ty: GDSFloatType):
@@ -283,6 +302,7 @@ class GDSStringType(GDSValueType):
     a "long string". The main difference between the two is that a long string is stored in a
     different buffer, meaning the two types can NOT be substituted for each other!
     """
+
     maxlen: int = 63
     longstr: bool = False
 
@@ -314,6 +334,9 @@ class GDSStringType(GDSValueType):
             return None
         return GDSStringType(maxlen=maxlen, longstr=longstr)
 
+    def describe(self) -> str:
+        return ("longstr" if self.longstr else "string") + f"({self.maxlen})"
+
     def from_token(self, tok: gds.GDSTokenValue) -> "GDSStringValue":
         # TODO: this should allow me to make things more flexible later
         if self.longstr:
@@ -330,9 +353,10 @@ class GDSStringType(GDSValueType):
         Valid literals can be delimited by double quotes or single quotes;
         the chosed quote type will need to be escaped if it appears in the literal.
         Generally most Python string escape sequences should be supported.
-        
+
         Long strings are denoted by prepending a single "l" to the front of the quoted literal.
         """
+
         def parser_map(args: List[Any]) -> Parser:
             is_longstr: bool = args[0]
             text: str = args[1]
@@ -363,7 +387,9 @@ class GDSStringType(GDSValueType):
         )
         quoted = (
             string('"') >> (string_part_dq | string_esc).many().concat() << string('"')
-        ) | (string("'") >> (string_part_sq | string_esc).many().concat() << string("'"))
+        ) | (
+            string("'") >> (string_part_sq | string_esc).many().concat() << string("'")
+        )
 
         return seq(regex("l?").map(lambda s: s != ""), quoted).bind(parser_map)
 
@@ -378,6 +404,7 @@ class GDSStringValue(GDSValue):
     whether a long string is expected; however, in the future interoperability
     of the types might be possible.
     """
+
     value: str
     longstr: bool
 
@@ -402,6 +429,7 @@ class GDSBoolType(GDSValueType):
     file format; however it is a useful abstraction for writing GDA scripts, and can be easily
     converted into the GDS format (though this process may be lossy).
     """
+
     force_rep: Optional[Literal["int", "str"]] = None
 
     @classmethod
@@ -426,6 +454,13 @@ class GDSBoolType(GDSValueType):
         else:
             return None
 
+    def describe(self) -> str:  # sourcery skip: assign-if-exp, reintroduce-else
+        if self.force_rep == "int":
+            return "bool|int"
+        if self.force_rep == "str":
+            return "bool|string"
+        return "bool"
+
     def from_token(self, tok: gds.GDSTokenValue) -> "GDSBoolValue":
         if (tok in gds.GDSTokenValue.int and self.force_rep != "str") or (
             tok in gds.GDSTokenValue.str and self.force_rep != "int"
@@ -438,7 +473,7 @@ class GDSBoolType(GDSValueType):
         `true` and `false` are always valid literals, and will be converted to the required
         backing token type (default is int). Otherwise, if the backing type allows it,
         either a string or an int literal can be used instead.
-        
+
         As all values other than 0/1 or "true"/"false" are flattened into a truth value by
         the game, this is only possible to preserve binary parity between decompiled-then-recompiled
         original scripts (which sometimes show a preference for either type despite the command
@@ -462,6 +497,7 @@ class GDSBoolValue(GDSValue):
     here is encoded as the opposite backing type, the value will be converted
     in a lossy manner (this doesn't matter for the game though.)
     """
+
     value: Union[bool, int, str]
 
     def __init__(self, value: bool, ty: GDSBoolType):

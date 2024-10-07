@@ -316,6 +316,7 @@ def read_file(raw: bytes, id: int, data: Savedata):
         data.files[id] = None
         return
     file = Savefile()
+    data.files[id] = file
 
     # Header block
     raw_filename = raw[0x108 + 20 * id : 0x108 + 20 * (id + 1)]

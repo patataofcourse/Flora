@@ -1,3 +1,4 @@
+import contextlib
 from dataclasses import dataclass, field
 from enum import IntEnum
 from typing import Mapping, Optional, Tuple, Annotated
@@ -55,7 +56,6 @@ class StoryStateFlags:
 
     TODO: put in the puzzle flags somehow
     """
-    pass
 
 
 class HotelroomPlacement(IntEnum):
@@ -296,61 +296,62 @@ def read_savedata(raw: bytes) -> Savedata:
     if raw[4 : 4 + 14] != b"ATAMFIREBELLNY":
         raise ValueError("Input buffer is not a valid LT1_EU savefile (magic mismatch)")
 
-    hash = int.from_bytes(raw[0:4], "little")
+    read_hash = int.from_bytes(raw[:4], "little")
     actual_hash = compute_hash(raw[4:0x150])
-    if hash != actual_hash:
+    if read_hash != actual_hash:
         print("WARN: input savefile had invalid global hash; will be accepted anyway")
 
     data.cur_file = raw[0x14]
 
-    for id in range(3):
-        read_file(raw, id, data)
+    for i in range(3):
+        read_file(raw, i, data)
 
     read_bonus(raw, data)
-    pass
+    
+    return data
 
 
-def read_file(raw: bytes, id: int, data: Savedata):
-    file_present = raw[0x15 + id] != 0
+def read_file(raw: bytes, i: int, data: Savedata):
+    file_present = raw[0x15 + i] != 0
     if not file_present:
-        data.files[id] = None
+        data.files[i] = None
         return
     file = Savefile()
-    data.files[id] = file
+    data.files[i] = file
 
     # Header block
-    raw_filename = raw[0x108 + 20 * id : 0x108 + 20 * (id + 1)]
+    raw_filename = raw[0x108 + 20 * i : 0x108 + 20 * (i + 1)]
     dec_filename = decode_str(raw_filename)
     if dec_filename is None:
         print("WARN: filename is not a valid encoding")
     file.filename = dec_filename
 
-    raw_location = raw[0x18 + 64 * id : 0x18 + 64 * (id + 1)]
+    raw_location = raw[0x18 + 64 * i : 0x18 + 64 * (i + 1)]
     dec_location = decode_str(raw_location)
     if dec_location is None:
         print("WARN: current location name is not a valid encoding")
     file.cur_location = dec_location
 
     file.playtime_simple = (
-        int.from_bytes(raw[0xE4 + id * 4 : 0xE4 + (id + 1) * 4], "little"),
-        int.from_bytes(raw[0xD8 + id * 4 : 0xD8 + (id + 1) * 4], "little"),
+        int.from_bytes(raw[0xE4 + i * 4 : 0xE4 + (i + 1) * 4], "little"),
+        int.from_bytes(raw[0xD8 + i * 4 : 0xD8 + (i + 1) * 4], "little"),
     )
     file.puzzles_discovered = int.from_bytes(
-        raw[0xF0 + id * 4 : 0xF0 + (id + 1) * 4], "little"
+        raw[0xF0 + i * 4 : 0xF0 + (i + 1) * 4], "little"
     )
     file.puzzles_solved = int.from_bytes(
-        raw[0xFC + id * 4 : 0xFC + (id + 1) * 4], "little"
+        raw[0xFC + i * 4 : 0xFC + (i + 1) * 4], "little"
     )
 
-    file.game_cleared = raw[0x144 + id] != 0
+    file.game_cleared = raw[0x144 + i] != 0
 
     # File body block
-    block_offset = 1000 + 2000 * id
+    block_offset = 1000 + 2000 * i
     block = raw[block_offset : block_offset + 2000]
-    hash = int.from_bytes(block[0x538 : 0x538 + 4], "little")
+    read_hash = int.from_bytes(block[0x538 : 0x538 + 4], "little")
     actual_hash = compute_hash(block[:0x538])
-    if hash != actual_hash:
-        print(f"WARN: input savefile {id+1} has invalid hash; will be accepted anyway")
+    if read_hash != actual_hash:
+        print(f"WARN: input savefile {i+1} has invalid hash; will be accepted anyway")
 
     file.cur_puzzle_id = block[0x0]
     file.cur_room_id = block[0x1]
@@ -389,7 +390,7 @@ def read_file(raw: bytes, id: int, data: Savedata):
     }
     file.unk9 = int.from_bytes(block[0x42D:0x431], "little")
     file.puzzle_pieces_obtained = {i: b != 0 for i, b in enumerate(block[0x431:0x445])}
-    file.puzzle_pieces_location = {i: v for i, v in enumerate(block[0x445:459])}
+    file.puzzle_pieces_location = dict(enumerate(block[0x445:459]))
 
     hotelroom_locations = [None for _ in range(32)]
     for i in range(32):
@@ -429,29 +430,40 @@ def read_storyflags(block: bytes, data: Savefile):
 
 
 def read_bonus(raw: bytes, data: Savedata):
-    hash = int.from_bytes(raw[0x1B58:0x1B5C], "little")
+    read_hash = int.from_bytes(raw[0x1B58:0x1B5C], "little")
     actual_hash = compute_hash(raw[0x1B5C:0x1BD0])
-    if hash != actual_hash:
+    if read_hash != actual_hash:
         print(
             "WARN: input savefile bonus section has invalid hash; will be accepted anyway"
         )
 
     # TODO
-    pass
 
 
 def compute_hash(data: bytes) -> int:
-    pass
+    acc1 = 0xffff
+    acc2 = 0xffff
+    
+    for i in range(0, len(data), 360):
+        block = data[i : min(i + 360, len(data))]
+
+        for j in range(0, len(block), 2):
+            val = int.from_bytes(block[j : j + 2], "little")
+            acc1 = (acc1 + val) & 0xffffffff
+            acc2 = (acc2 + acc1) & 0xffffffff
+        acc1 = (acc1 >> 16) + (acc1 & 0xffff)
+        acc2 = (acc2 >> 16) + (acc2 & 0xffff)
+    
+    return ((acc1 >> 16) + (acc1 & 0xffff) | ((acc2 >> 16) + (acc2 & 0xffff)) << 16) & 0xffffffff
+
 
 
 def decode_str(raw: bytes) -> str:
     raw = raw.rstrip(b'\0')
     encodings_to_try = ["utf8", "shift-jis"]
     for enc in encodings_to_try:
-        try:
+        with contextlib.suppress(UnicodeDecodeError):
             return raw.decode(enc)
-        except UnicodeDecodeError:
-            pass
     return None
 
 

@@ -6,8 +6,12 @@
     + Warning: the only version with guaranteed compatibility is EU/AUS. Please specify the region of your ROM when reporting a bug or opening an issue.
 
 ### Current utilities
-* GDS script extracting and repacking to a custom readable format.
-    + Currently, the parameters supported are those of types 1 (int), 2 (double int) and 3 (string). Since some scripts use other parameter types, this will be fixed in the future.
+* GDS script decompilation and recompilation into a custom human-readable scripting language.
+    + Supports control flow instructions with conditionals
+    + An effort to catalogue all command IDs with speaking names and parameter lists is ongoing
+    + All vanilla files from the EU version of CV decompile* and recompile into identical bytecode.  
+      (* Some scripts are structurally incorrect in ways that make parsing difficult, so a set of baseline
+      patches is applied first to make them functional)
 * Exporting BG ARC files to PNG, and creating them from PNGs.
     + Currently, the PNG's color mode must be set to indexed. This will be changed in future versions.
     + The image must have at most 256 different colors. This is a limitation of the format.
@@ -35,10 +39,13 @@ You can also extract the match puzzle tutorial (from puzzle #10) using "match_tu
 Some unused variants of puzzles can't be extracted yet through Flora, as well as some Japanese-exclusive weekly puzzles, however, this will be fixed in a future update.
 
 ### Requirements
-* Python 3
+* Python 3.10
 * [click](https://pypi.org/project/click/)
 * [pillow](https://pypi.org/project/pillow/)
 * [ndspy](https://pypi.org/project/ndspy/)
+* [pyyaml](https://pypi.org/project/pyyaml)
+* [dacite](https://pypi.org/project/dacite)
+* [parsy](https://pypi.org/project/parsy)
 * Optional: [tqdm](https://pypi.org/project/tqdm) (to display a progress bar for long-running processes)
 
 To install all modules, use: `pip install -r requirements.txt`

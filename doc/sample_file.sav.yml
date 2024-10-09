@@ -1,0 +1,2438 @@
+files:
+- filename: ilona
+  cur_location: Tower Top Floor
+  playtime: 43131
+  playtime_simple:
+  - 11
+  - 58
+  puzzles_discovered: 135
+  puzzles_solved: 135
+  game_cleared: true
+  cur_room_id: 78
+  cur_puzzle_id: 139
+  cur_puzzle_solved: 1
+  cur_puzzle_retry: 0
+  cur_puzzle_aborted: 0
+  cur_script_type: 3
+  return_script_type: 30
+  puzzle_win_img: 0
+  puzzle_flags:
+    0:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    1:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    2:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    3:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    4:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    5:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    6:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    7:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    8:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    9:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    10:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    11:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    12:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    13:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    14:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    15:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    16:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    17:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    18:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    19:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    20:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    21:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    22:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    23:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    24:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    25:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    26:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    27:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    28:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    29:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    30:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    31:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    32:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    33:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    34:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    35:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    36:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    37:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    38:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    39:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    40:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    41:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    42:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    43:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    44:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    45:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    46:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    47:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    48:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    49:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    50:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    51:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    52:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    53:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    54:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    55:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    56:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    57:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    58:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    59:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    60:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    61:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    62:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    63:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    64:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    65:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    66:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    67:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    68:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    69:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    70:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    71:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    72:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    73:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    74:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    75:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    76:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    77:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    78:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    79:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    80:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    81:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    82:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    83:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    84:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    85:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    86:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    87:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    88:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    89:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    90:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    91:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    92:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    93:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    94:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    95:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    96:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    97:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    98:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    99:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    100:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    101:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    102:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    103:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    104:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 3
+    105:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    106:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    107:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    108:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    109:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    110:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    111:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    112:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    113:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    114:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    115:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    116:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    117:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    118:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    119:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    120:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    121:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    122:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    123:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    124:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    125:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    126:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    127:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    128:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    129:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    130:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    131:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    132:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    133:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    134:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    135:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    136:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    137:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    138:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    139:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    140:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    141:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    142:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    143:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    144:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    145:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    146:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    147:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    148:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    149:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    150:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 3
+    151:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    152:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    153:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 3
+    154:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    155:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    156:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    157:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 2
+    158:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 1
+    159:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    160:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    161:
+      discovered: true
+      solved: true
+      unk: true
+      hints_unlocked: 0
+      fail_count: 0
+    162:
+      discovered: true
+      solved: true
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    163:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    164:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    165:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    166:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    167:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    168:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    169:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    170:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    171:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    172:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    173:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    174:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    175:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    176:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    177:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    178:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    179:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    180:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    181:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    182:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    183:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    184:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    185:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    186:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    187:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    188:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    189:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    190:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    191:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    192:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    193:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    194:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    195:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    196:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    197:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    198:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    199:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    200:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    201:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    202:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    203:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    204:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    205:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    206:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    207:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    208:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    209:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    210:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    211:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    212:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    213:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    214:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    215:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    216:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    217:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    218:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    219:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    220:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    221:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    222:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    223:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    224:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    225:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    226:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    227:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    228:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    229:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    230:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    231:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    232:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    233:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    234:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    235:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    236:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    237:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    238:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    239:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    240:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    241:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    242:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    243:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    244:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    245:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    246:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    247:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    248:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    249:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    250:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    251:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    252:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    253:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    254:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+    255:
+      discovered: false
+      solved: false
+      unk: false
+      hints_unlocked: 0
+      fail_count: 0
+  cur_event: 259
+  event_flags:
+    0: false
+    1: true
+    2: true
+    3: true
+    4: true
+    5: true
+    6: true
+    7: true
+    8: true
+    9: true
+    10: true
+    11: true
+    12: true
+    13: true
+    14: true
+    15: true
+    16: true
+    17: true
+    18: true
+    19: true
+    20: true
+    21: true
+    22: true
+    23: true
+    24: true
+    25: true
+    26: true
+    27: true
+    28: true
+    29: true
+    30: true
+    31: true
+    32: true
+    33: true
+    34: false
+    35: true
+    36: true
+    37: true
+    38: false
+    39: true
+    40: false
+    41: true
+    42: true
+    43: true
+    44: true
+    45: true
+    46: true
+    47: true
+    48: true
+    49: true
+    50: true
+    51: false
+    52: true
+    53: true
+    54: true
+    55: true
+    56: true
+    57: false
+    58: true
+    59: true
+    60: true
+    61: false
+    62: true
+    63: false
+    64: true
+    65: true
+    66: true
+    67: true
+    68: true
+    69: true
+    70: true
+    71: true
+    72: false
+    73: true
+    74: true
+    75: true
+    76: true
+    77: true
+    78: true
+    79: true
+    80: true
+    81: true
+    82: true
+    83: true
+    84: true
+    85: true
+    86: true
+    87: true
+    88: true
+    89: false
+    90: true
+    91: true
+    92: true
+    93: true
+    94: true
+    95: true
+    96: true
+    97: true
+    98: true
+    99: true
+    100: true
+    101: true
+    102: true
+    103: true
+    104: true
+    105: true
+    106: true
+    107: false
+    108: true
+    109: true
+    110: true
+    111: true
+    112: true
+    113: true
+    114: true
+    115: true
+    116: true
+    117: true
+    118: true
+    119: true
+    120: true
+    121: true
+    122: true
+    123: true
+    124: true
+    125: true
+    126: true
+    127: true
+    128: true
+    129: true
+    130: true
+    131: true
+    132: true
+    133: true
+    134: true
+    135: true
+    136: true
+    137: true
+    138: true
+    139: true
+    140: false
+    141: true
+    142: false
+    143: true
+    144: true
+    145: false
+    146: true
+    147: false
+    148: false
+    149: true
+    150: true
+    151: true
+    152: true
+    153: true
+    154: false
+    155: true
+    156: true
+    157: true
+    158: true
+    159: true
+    160: true
+    161: true
+    162: true
+    163: false
+    164: true
+    165: true
+    166: true
+    167: false
+    168: true
+    169: false
+    170: false
+    171: true
+    172: true
+    173: true
+    174: true
+    175: true
+    176: true
+    177: true
+    178: true
+    179: true
+    180: true
+    181: true
+    182: true
+    183: true
+    184: false
+    185: true
+    186: true
+    187: true
+    188: true
+    189: true
+    190: true
+    191: false
+    192: true
+    193: true
+    194: true
+    195: true
+    196: true
+    197: true
+    198: false
+    199: true
+    200: true
+    201: true
+    202: true
+    203: true
+    204: true
+    205: true
+    206: false
+    207: false
+    208: true
+    209: true
+    210: true
+    211: true
+    212: true
+    213: true
+    214: true
+    215: true
+    216: true
+    217: true
+    218: true
+    219: true
+    220: true
+    221: true
+    222: true
+    223: true
+    224: true
+    225: true
+    226: true
+    227: true
+    228: true
+    229: true
+    230: true
+    231: true
+    232: true
+    233: true
+    234: true
+    235: true
+    236: true
+    237: true
+    238: true
+    239: true
+    240: true
+    241: true
+    242: true
+    243: true
+    244: false
+    245: true
+    246: true
+    247: true
+    248: true
+    249: true
+    250: true
+    251: true
+    252: true
+    253: true
+    254: true
+    255: false
+    256: true
+    257: true
+    258: true
+    259: true
+    260: true
+    261: true
+    262: true
+    263: true
+    264: true
+    265: true
+    266: true
+    267: false
+    268: false
+    269: true
+    270: true
+    271: true
+    272: true
+    273: true
+    274: true
+    275: true
+    276: true
+    277: false
+    278: true
+    279: false
+    280: false
+    281: true
+    282: true
+    283: true
+    284: false
+    285: false
+    286: false
+    287: false
+    288: true
+    289: false
+    290: true
+    291: false
+    292: false
+    293: false
+    294: false
+    295: true
+    296: false
+    297: false
+    298: false
+    299: false
+    300: true
+    301: true
+    302: false
+    303: false
+    304: false
+    305: false
+    306: false
+    307: false
+    308: false
+    309: false
+    310: false
+    311: true
+    312: true
+    313: true
+    314: false
+    315: false
+    316: true
+    317: true
+    318: true
+    319: true
+    320: true
+    321: true
+    322: true
+    323: true
+    324: true
+    325: true
+    326: true
+    327: true
+    328: true
+    329: true
+    330: true
+    331: true
+    332: true
+    333: true
+    334: true
+    335: true
+    336: true
+    337: true
+    338: true
+    339: true
+    340: true
+    341: true
+    342: true
+    343: true
+    344: true
+    345: true
+    346: false
+    347: false
+    348: false
+    349: false
+    350: true
+    351: true
+    352: true
+    353: true
+    354: true
+    355: true
+    356: true
+    357: true
+    358: true
+    359: true
+    360: true
+    361: true
+    362: true
+    363: true
+    364: true
+    365: false
+    366: false
+    367: false
+    368: false
+    369: false
+    370: false
+    371: false
+    372: false
+    373: false
+    374: false
+    375: false
+    376: false
+    377: false
+    378: false
+    379: false
+    380: false
+    381: false
+    382: false
+    383: false
+    384: false
+    385: false
+    386: false
+    387: false
+    388: false
+    389: false
+    390: false
+    391: false
+    392: false
+    393: false
+    394: false
+    395: false
+    396: false
+    397: false
+    398: false
+    399: false
+    400: false
+    401: false
+    402: false
+    403: false
+    404: false
+    405: false
+    406: false
+    407: false
+    408: false
+    409: false
+    410: false
+    411: false
+    412: false
+    413: false
+    414: false
+    415: false
+    416: false
+    417: false
+    418: false
+    419: false
+    420: false
+    421: false
+    422: false
+    423: false
+    424: false
+    425: false
+    426: false
+    427: false
+    428: false
+    429: false
+    430: false
+    431: false
+    432: false
+    433: false
+    434: false
+    435: false
+    436: false
+    437: false
+    438: false
+    439: false
+    440: false
+    441: false
+    442: false
+    443: false
+    444: false
+    445: false
+    446: false
+    447: false
+    448: false
+    449: false
+    450: false
+    451: false
+    452: false
+    453: false
+    454: false
+    455: false
+    456: false
+    457: false
+    458: false
+    459: false
+    460: false
+    461: false
+    462: false
+    463: false
+    464: false
+    465: false
+    466: false
+    467: false
+    468: false
+    469: false
+    470: false
+    471: false
+    472: false
+    473: false
+    474: false
+    475: false
+    476: false
+    477: false
+    478: false
+    479: false
+  hint_coins: 93
+  inventory:
+  - 24
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  story_flags:
+    dog_unlocked: true
+    painting_unlocked: true
+    hotelroom_unlocked: true
+    puzzle_at_nazobaba: {}
+  cur_objective: 45
+  dog_parts_backlog:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  dog_parts_placed:
+    0: true
+    1: true
+    2: true
+    3: true
+    4: true
+    5: true
+    6: true
+    7: true
+    8: true
+    9: true
+    10: true
+    11: true
+    12: true
+    13: true
+    14: true
+    15: true
+    16: true
+    17: true
+    18: true
+    19: true
+    20: false
+    21: false
+    22: false
+    23: false
+    24: false
+    25: false
+    26: false
+    27: false
+    28: false
+    29: false
+    30: false
+    31: false
+  puzzle_pieces_obtained:
+    0: true
+    1: true
+    2: true
+    3: true
+    4: true
+    5: true
+    6: true
+    7: true
+    8: true
+    9: true
+    10: true
+    11: true
+    12: true
+    13: true
+    14: true
+    15: true
+    16: true
+    17: true
+    18: true
+    19: true
+  puzzle_pieces_location: {}
+  hotelroom_items:
+  - 1
+  - 2
+  - 2
+  - 1
+  - 1
+  - 1
+  - 2
+  - 2
+  - 2
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 2
+  - 2
+  - 1
+  - 1
+  - null
+  - null
+  - 0
+  - 1
+  - 0
+  - 1
+  - 1
+  - 0
+  - 1
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  news_journal: 1
+  news_dog: 0
+  news_hotelroom: 0
+  news_painting: 0
+  news_mysteries: 0
+  journal_entries_unread:
+    0: false
+    1: true
+    2: true
+    3: true
+    4: true
+    5: true
+    6: true
+    7: true
+    8: true
+    9: true
+    10: true
+    11: true
+    12: true
+    13: true
+    14: true
+    15: true
+    16: true
+    17: true
+    18: true
+    19: true
+    20: true
+    21: true
+    22: true
+    23: true
+    24: true
+    25: true
+    26: true
+    27: true
+    28: true
+    29: true
+    30: true
+    31: true
+    32: true
+    33: true
+    34: true
+    35: true
+    36: true
+    37: true
+    38: true
+    39: true
+    40: true
+    41: true
+    42: true
+    43: true
+    44: true
+    45: true
+    46: false
+    47: false
+    48: false
+    49: false
+    50: false
+    51: false
+    52: false
+    53: false
+    54: false
+    55: false
+    56: false
+    57: false
+    58: false
+    59: false
+    60: false
+    61: false
+    62: false
+    63: false
+  dog_name: pochi
+  unk1: 0
+  unk2: 0
+  unk3: 0
+  unk4: 0
+  unk5: 1
+  unk6: 12
+  unk7:
+  - 0
+  - 0
+  - 0
+  - 1
+  - 1
+  - 0
+  - 1
+  - 1
+  - 0
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  - 1
+  - 1
+  - 1
+  - 0
+  - 0
+  - 1
+  - 1
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  unk8:
+  - 192
+  - 231
+  - 95
+  - 199
+  - 136
+  - 252
+  - 106
+  - 252
+  - 17
+  - 193
+  - 0
+  - 0
+  - 48
+  - 129
+  - 10
+  - 231
+  - 166
+  - 36
+  - 140
+  - 211
+  - 194
+  - 141
+  - 117
+  - 104
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  unk9: 5302
+  unk10:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  unk_bitfield2:
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  - false
+  unk11: 299
+  unk12: 22
+- null
+- null
+cur_file: 0
+bonus_data: {}

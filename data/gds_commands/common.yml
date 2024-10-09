@@ -3,7 +3,6 @@
 # By default the prefix is generated from the directory structure and package file name,
 # we reset it explicitly here to get these functions into the common namespace.
 prefix: null
-
 # Commands that we know the meaning of, reasonably well at least.
 commands:
   playSfx:
@@ -120,9 +119,6 @@ commands:
     params:
       unk_1:
         type: int
-  0x1c:
-    params:
-    - type: int
   0x4a:
     condition: true
     desc: checks if some global flag is false

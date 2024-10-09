@@ -100,6 +100,7 @@ class GDSValue(ABC):
         return format(self)
 
 
+# TODO: int value with a specified range (e.g. "int[0,3)" or just "int[0,2]")
 @dataclass
 class GDSIntType(GDSValueType):
     """

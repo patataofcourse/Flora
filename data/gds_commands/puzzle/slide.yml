@@ -1,3 +1,4 @@
+context: "puzzle.slide"
 commands:
   item:
     id: 0xa6

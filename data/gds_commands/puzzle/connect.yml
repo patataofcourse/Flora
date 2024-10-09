@@ -1,12 +1,23 @@
+context: "puzzle.connect"
 commands:
-  0x28:
+  barrier:
+    id: 0x28
+    desc: >
+      Fills the specified area in the grid with "barrier" tiles, i.e. tiles that the line cannot cross into.
+      By default the entire grid is accessible.
     params:
-    - type: int
-    - type: int
-    - type: int
-    - type: int
-  0x29:
+      # TODO: range [0, 19)
+      xPos: int
+      yPos: int
+      width: int
+      height: int
+  goal:
+    id: 0x29
+    desc: >
+      Sets the specified cell in the grid to be a goal with the given ID. Two goals of the same ID must be matched up for the puzzle to solve.
     params:
-    - type: int
-    - type: int
-    - type: int
+      xPos: int
+      yPos: int
+      goalId:
+        type: int
+        desc: Note that this cannot be zero, as that would be treated like no goal at all.

@@ -1,5 +1,6 @@
+context: "puzzle.queen"
 commands:
-  defineBoard:
+  board:
     id: 0x3b
     desc: Defines base parameters for the overall board of the Queen puzzle.
     params:
@@ -18,7 +19,7 @@ commands:
     params:
       count:
         type: int
-  fixedQueen:
+  fixed:
     id: 0x3d
     desc: Places an immovable (golden) queen on the board in the specified tile location
     params:
@@ -26,7 +27,7 @@ commands:
         type: int
       tileY:
         type: int
-  partialMode:
+  partial:
     id: 0x3e
     desc: "Determines the \"partial mode\" setting, which is used in 'Too Many Queens 3': there are less queens than tile width, but they still need to block the entire grid."
     params:

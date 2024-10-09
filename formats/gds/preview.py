@@ -3,7 +3,8 @@ This module (eventually) contains a small GDS simulator, suitable for piecing to
 explorable representation of room layouts, a structured view of dialogue events, and an overview
 of the script's logical control flow.
 
-TODO: WIP, and no priority at the moment
+TODO: WIP, and no priority at the moment. Though given Flora's main motivation statement is to make
+puzzle editing a one-step process, maybe the preview at least for simple puzzle types should be prioritized.
 """
 
 from .model import GDSProgram

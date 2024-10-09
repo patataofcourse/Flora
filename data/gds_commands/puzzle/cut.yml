@@ -1,3 +1,4 @@
+context: "puzzle.cut"
 commands:
   gridFillType:
     id: 0x9f

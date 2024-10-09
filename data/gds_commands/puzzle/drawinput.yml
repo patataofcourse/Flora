@@ -1,3 +1,5 @@
+context: ["puzzle.drawinput", "puzzle.drawinput2"]
+
 commands:
   setup:
     id: 0xa8
@@ -7,6 +9,7 @@ commands:
       numInputs: int
 
   0x24:
+    context: "puzzle.drawinput"
     params:
     - type: int
     - type: int

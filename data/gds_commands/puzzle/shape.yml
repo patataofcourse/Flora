@@ -1,3 +1,4 @@
+context: "puzzle.shape"
 # This puzzle type seems to be unused, which means I can't infer anything from usage.
 commands:
   shape:
@@ -26,4 +27,4 @@ commands:
     - type: int
   0x37:
     params:
-    - type: float
+      angle: float

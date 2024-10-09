@@ -1,3 +1,4 @@
+context: ["puzzle.tile", "puzzle.tilerotate"]
 commands:
   tile:
     id: 0x73
@@ -14,7 +15,7 @@ commands:
     params:
       xPos: int
       yPos: int
-  assign:
+  targetSlot:
     id: 0x75
     desc: >
       Assigns the given tile ID (in declaration order) to the given slot ID. To solve the puzzle
@@ -22,7 +23,9 @@ commands:
       multiple, which will result in the puzzle having multiple solutions.
     params:
       tileId: int
-      slotId: int
+      slotId:
+        type: int
+        desc: Note this value is negative
   rotButton:
     id: 0xb5
     desc: >

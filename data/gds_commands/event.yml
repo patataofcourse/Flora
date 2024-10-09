@@ -1,3 +1,4 @@
+context: "event"
 commands:
   setCurrent:
     id: 0x60

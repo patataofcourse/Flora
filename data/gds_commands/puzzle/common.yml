@@ -1,4 +1,5 @@
 prefix: "puzzle."
+context: "puzzle"
 commands:  
   setCurrent:
     id: 0x48
@@ -6,8 +7,7 @@ commands:
       Sets the current puzzle ID in the global game state. If at the end of script execution the
       global "current script type" is set to "question", the puzzle with this ID will be started.
     params:
-      puzzleId:
-        type: int
+      puzzleId: int
   isCurrentNotSolved:
     id: 0x4c
     condition: true
@@ -34,6 +34,8 @@ commands:
 
   engine:
     id: 0x1b
+    # TECHNICALLY. But nobody would use this outside of puzzle scripts, because the grading and everything would be missing.
+    context: "all"
     desc: Loads a puzzle engine with the specified name, and continues the script in that context.
     params:
       engineName:
@@ -41,6 +43,7 @@ commands:
         desc: the name of the engine to load
   imgWin:
     id: 0x1f
+    context: "all"
     desc: Selects the image to be displayed when the puzzle is done, probably.
     uncertain: true
     params:
@@ -52,18 +55,19 @@ commands:
         desc: seems to always be 0
   slideItemGoalTile:
     id: 0x38
+    context: ["puzzle.shape", "puzzle.slide", "puzzle.drag"]
     desc: For puzzles that involve sliding objects into correct locations (slide, drag, shape (unused)) define the location that would be an object's goal.
     params:
-      xPos:
-        type: int
-      yPos:
-        type: int
+      xPos: int
+      yPos: int
   drawLineColor:
     id: 0x42
+    context: "all"
     desc: |
       Many puzzle types give the user the ability to draw lines freehand or between points; this command sets the RGB color of those lines (with 5bit channel precision).
 
-      A full list of those puzzle types: trace, traceButton, drawInput2, cut, drag.
+      A full list of the puzzle types that use this: [trace, traceButton, drawInput2, cut, drag]
+      However, the function is available independent of engine.
     params:
       r:
         type: int
@@ -159,32 +163,53 @@ commands:
         type: string
         desc: There is no fixed list of options, but the length may not exceed 64 characters.
 
-
+  0x1c:
+    desc: >
+      Effectively calls 0x20 <parameter> times with parameter 0, though this value is hardcoded to 3 in the release.
+      Therefore, fills that 3-element list with 0 (all puzzles in the game do this at the start)
+    params:
+    - type: int
+      desc: gets overwritten by 3, so unused
   0x20:
+    desc: Pushes the specified byte to a list with at most 3 elements.
+    unused: true
     params:
-    - type: int
-  0x27:
-    desc: Used by the match, scale, coin and cut puzzle types.
+    - type: byte
+
+  moveLimit:
+    id: 0x27
+    context: ["puzzle.coin", "puzzle.match", "puzzle.scale", "puzzle.cut"]
+    desc: Sets the move limit for this puzzle. Note that the max for match and coin puzzles is 255.
     params:
-    - type: int
-  0x2b:
-    desc: Used by the match and tileRotate puzzle types, so it's likely a way to define the initial positions for movable and rotatable pieces.
+      # TODO: types dependent on conditions? Maybe allow defining the same command multiple times for different contexts???
+      limit: int
+
+  targetPosRot:
+    id: 0x2b
+    context: ["puzzle.match", "puzzle.tilerotate"]
+    desc: Defines a target position for movable and rotatable objects.
     params:
-    - type: int
-    - type: int
-    - type: float
-    # ok so apparently it can happen that an instruction checks if the next token
-    # is of the type it expects, and if not it uses a default value instead.
-    - type: float
-      optional: true
-      default: 16.0
-    - type: float
-      optional: true
-      default: 30.0
-  0x39:
-    desc: For puzzles that involve tiles in a grid (tile, tileRotate, shape (unused)) do ???
+      xPos: int
+      yPos: int
+      angle: float
+      posTolerance:
+        type: float
+        optional: true
+        uncertain: true
+        desc: (Probably) the radius of pixels that the player may be off for a match to still be counted
+      angleTolerance:
+        type: float
+        optional: true
+        uncertain: true
+        desc: (Probably) the angle in degrees that the player may be off for a match to still be counted
+
+
+  targetAngle:
+    id: 0x39
+    context: ["puzzle.tile", "puzzle.tilerotate", "puzzle.shape"]
+    desc: Sets the target angle of the previously specified object. The object must be rotated to that exact angle for the puzzle to solve.
     params:
-      unk_1:
+      angle:
         type: float
   
   0x49:

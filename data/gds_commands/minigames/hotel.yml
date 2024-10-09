@@ -13,12 +13,27 @@ commands:
       itemId: int
       xPos: int
       yPos: int
-      unk_4: int
-      unk_5: int
-      unk_6: int
-      unk_7: int
-      unk_8: int
-      unk_9: int
+      zIndex:
+        type: int
+        uncertain: true
+        desc: Defines the z-order of the item when displayed in the room. Required since some configurations definitely overlap.
+      blockerId:
+        type: int
+        desc: >
+          The ID of another item in the room, which if present, implies that this item's preferred spot can't/shouldn't be used.
+          Instead the position is calculated relative to the blocker item.
+      blockerOffsetX: int
+      blockerOffsetY: int
+      blockerZ:
+        type: int
+        uncertain: true
+        desc: Definitely the same kind of value as zIndex, and if -1 will reuse the above. But if the blocker is present, this value is used instead.
+      overlayId:
+        type: int
+        desc: >
+          Some of the furniture items have a completely different sprite when their blocker is present, namely the flowers in the vase and the books on the shelf.
+          If that is the case, this value will be the ID of the sprite for that case. If the item doesn't have a blocker, this value is ignored; set it to -1
+          to mean there is no alternate sprite.
   itemComment1Layton:
     id: 0xc6
     desc: >
@@ -39,15 +54,30 @@ commands:
   itemLuke:
     id: 0xbd
     params:
-    - int
-    - int
-    - int
-    - int
-    - int
-    - int
-    - int
-    - int
-    - int
+      itemId: int
+      xPos: int
+      yPos: int
+      zIndex:
+        type: int
+        uncertain: true
+        desc: Defines the z-order of the item when displayed in the room. Required since some configurations definitely overlap.
+      blockerId:
+        type: int
+        desc: >
+          The ID of another item in the room, which if present, implies that this item's preferred spot can't/shouldn't be used.
+          Instead the position is calculated relative to the blocker item.
+      blockerOffsetX: int
+      blockerOffsetY: int
+      blockerZ:
+        type: int
+        uncertain: true
+        desc: Definitely the same kind of value as zIndex, and if -1 will reuse the above. But if the blocker is present, this value is used instead.
+      overlayId:
+        type: int
+        desc: >
+          Some of the furniture items have a completely different sprite when their blocker is present, namely the flowers in the vase and the books on the shelf.
+          If that is the case, this value will be the ID of the sprite for that case. If the item doesn't have a blocker, this value is ignored; set it to -1
+          to mean there is no alternate sprite.
   itemComment1Luke:
     id: 0xc8
     desc: >

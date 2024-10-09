@@ -1,3 +1,4 @@
+context: "puzzle.rivercross"
 commands:
   chicken:
     id: 0x31

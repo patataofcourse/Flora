@@ -1,32 +1,27 @@
+context: "puzzle.trace"
 commands:
-  traceCenter:
+  center:
     id: 0x3f
     desc: Places the centerpoint of the shape to be traced. I'm not yet sure what the significance of that is, because it seems very lax.
     params:
-      xPos:
-        type: int
-      yPos:
-        type: int
+      xPos: int
+      yPos: int
   inPoint:
     id: 0x40
     desc: Adds an Inpoint, a point that needs to be inside the traced shape for the puzzle to complete.
     params:
-      xPos:
-        type: int
-      yPos:
-        type: int
+      xPos: int
+      yPos: int
   outPoint:
     id: 0x41
     desc: Adds an Outpoint, a point that mustn't be inside the traced shape for the puzzle to complete.
     params:
-      xPos:
-        type: int
-      yPos:
-        type: int
-  
+      xPos: int
+      yPos: int
 
   circleAnswer:
     id: 0xd4
+    context: puzzle.tracebutton"
     desc: In the TraceButton (ie Circle Answer) puzzles, used to define a possible circle target
     params:
       xPos: int

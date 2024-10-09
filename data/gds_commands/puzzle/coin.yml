@@ -1,9 +1,14 @@
+context: "puzzle.coin"
 commands:
-  0x25:
+  coin:
+    id: 0x25
+    desc: Places a coin on the puzzle field, and defines its reset slot
     params:
-    - type: int
-    - type: int
-  0x26:
+      xPos: int
+      yPos: int
+  target:
+    id: 0x26
+    desc: Defines one of the target locations where a coin needs to be placed for the puzzle to solve
     params:
     - type: int
     - type: int

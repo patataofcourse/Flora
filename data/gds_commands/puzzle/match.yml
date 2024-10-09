@@ -1,6 +1,9 @@
+context: "puzzle.match"
 commands:
-  0x2a:
+  match:
+    id: 0x2a
+    desc: Defines a new match on the playfield, with position and rotation.
     params:
-    - type: int
-    - type: int
-    - type: float
+      xPos: short
+      yPos: short
+      angle: float

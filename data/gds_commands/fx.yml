@@ -25,13 +25,15 @@ commands:
     desc: Shows a fade out effect on the bottom screen.
   displayImgBottom:
     id: 0x0b
+    context: "puzzle.drawinput2"
     desc: Shows the specified image path on the bottom screen
     params:
       bgxName:
         type: string
         desc: The name of the image file, with bgx file ending (will look for a .arc file with that name under /bg)
       unk_2:
-        type: int
+        # TODO: datatype int[0,4]
+        type: byte
         desc: Seems to always be 2 (for now)
   displayImgTop:
     id: 0x0c
@@ -41,5 +43,6 @@ commands:
         type: string
         desc: The name of the image file, with bgx file ending (will look for a .arc file with that name under /bg)
       unk_2:
-        type: int
+        # TODO: datatype int[0,4]
+        type: byte
         desc: Seems to always be 3 (for now)

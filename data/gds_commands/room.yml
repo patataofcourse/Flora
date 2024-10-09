@@ -1,11 +1,13 @@
+context: "room"
 commands:
   isCurrent:
     id: 0x13
+    context: "all"
     condition: true
     desc: Returns true if the engine's current room is equal to the provided ID. Can be used anywhere.
     params:
       roomId:
-        type: int
+        type: ubyte
         desc: the room ID to be tested against
   
   setCurrent:
@@ -19,28 +21,24 @@ commands:
   
   exit:
     id: 0x22
-    desc: Defines an exit the user can click on to change rooms.
+    desc: >
+      Defines an exit the user can click on to change rooms, by its bounding box, target room, and
+      (TODO: very uncertain) the movement of the lil layton sprite on the top screen map???
     params:
       exitType:
         type: int
         desc: Value from 0-5. Not sure what zero does, but 5 is a door in the scene, and 1-4 stands for the screen edges starting left ccw.
-      xPos:
-        type: int
-        desc: x position of the sprite
-      yPos:
-        type: int
-        desc: y position of the sprite
-      unk_4:
-        type: int
-      unk_5:
-        type: int
+      xPos: int
+      yPos: int
+      width: int
+      height: int
       exitRoom:
-        type: int
-        desc: Value from 0-255. Sets the room the player will move to when they take this exit
+        type: ubyte
+        desc: Sets the room the player will move to when they take this exit
       unk_7:
-        type: int
+        type: short
       unk_8:
-        type: int
+        type: short
   exitSound:
     id: 0x5b
     desc: Defines which footsteps sound is used on room transition
@@ -80,7 +78,7 @@ commands:
     desc: Defines a Text Object, i.e. an area of the screen where clicking on it opens a brief flavor text box from one of the characters.
     params:
       speaker:
-        type: int
+        type: ubyte
         desc: >
           1 for Layton, 2 for Luke. Probably corresponds to the frames in ani/room_tobjp.spr,
           which also includes the hint coin, but doesn't include anything else; my assumption is
@@ -231,7 +229,7 @@ commands:
 
 
   0x2c:
-    desc: sets some kind of flag at the given index
+    desc: sets some kind of flag at the given index to true
     params:
     - type: int
   

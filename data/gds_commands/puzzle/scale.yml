@@ -1,11 +1,16 @@
+context: "puzzle.scale"
 commands:
-  0x2d:
+  count:
+    id: 0x2d
+    desc: Defines how many weights there should be, and creates the objects. The maximum is 12.
     params:
-    - type: int
-  0x2e:
-    params: []
-  0x2f:
-    params: []
-  0x30:
-    params: []
-  
+      count: int
+  light:
+    id: 0x2e
+    desc: Sets a random weight to be lighter than the others, and also the correct solution
+  heavy:
+    id: 0x2f
+    desc: Sets a random weight to be heavier than the others, and also the correct solution
+  random:
+    id: 0x30
+    desc: Sets a random weight to be randomly either lighter or heavier than the others, and also the correct solution

@@ -1,0 +1,46 @@
+prefix: null
+commands:
+  if:
+    id: 0x12
+    aliases:
+    - jumpUnless
+    desc: Executes a boolean expression consisting of instructions and logic flags, and jumps away if the condition is false (which is the default if no condition is provided).
+    complex: true
+  elif:
+    id: 0x16
+    aliases:
+    - jumpUnlessTargetAnd
+    desc: If reached through regular program flow, always jumps. If reached from a `jump` instruction, executes the logic of `jump`.
+    complex: true
+  else:
+    id: 0x17
+    aliases:
+    - jumpUnlessTarget
+    desc: If reached through regular program flow, always jumps. If reached from a `jump` instruction, simply continues.
+    complex: true
+  repeatN:
+    id: 0x14
+    desc: Takes an loop count (int) and a jump target (addr), and loops the instructions up to that target location that many times.
+    complex: true
+  while:
+    id: 0x15
+    desc: Takes a boolean expression like `if`, as well as a jump target (addr), and loops the instructions up to that target location until the condition evaluates to false or a break token is encountered.
+    complex: true
+  
+  "true":
+    id: 0x19
+    condition: true
+    desc: Always returns true
+  "false":
+    id: 0x1a
+    condition: false
+    desc: Always returns false
+  
+  return:
+    id: 0x4f
+    desc: Aborts the script by setting the instruction pointer past its end.
+
+  0x18:
+    condition: true
+    desc: Might have been a debug condition, because the logic to determine its value is just a function that returns false. Probably got compiled out.
+  

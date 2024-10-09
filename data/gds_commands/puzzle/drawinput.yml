@@ -1,0 +1,41 @@
+context: ["puzzle.drawinput", "puzzle.drawinput2"]
+
+commands:
+  setup:
+    id: 0xa8
+    desc: Sets up the type and amount of draw inputs there should be
+    params:
+      inputType: int
+      numInputs: int
+
+  0x24:
+    context: "puzzle.drawinput"
+    params:
+    - type: int
+    - type: int
+    - type: int
+  0xa7:
+    params:
+    - int
+    - string
+  0xa9:
+    params:
+    - int
+    - string
+  0xb9:
+    params:
+      inputId: int
+      unk_2:
+        type: int
+        desc: possibly the target value of the puzzle solution
+  0xf5:
+    desc: seems to reset the inputs?
+  0xfa:
+    desc: only in type2
+    params: [int, int, int, int]
+  0xfb:
+    desc: only in type2
+    params: [int, string]
+  0xfc:
+    desc: setInputBg? only in type2
+    params: [string]

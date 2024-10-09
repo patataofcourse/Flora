@@ -1,12 +1,12 @@
 import click
 
 import formats
-from version import v
+import version
 
 CONTEXT_SETTINGS = dict(help_option_names = ['--help', '-h', '-?'])
 
 @click.group(name="flora", context_settings=CONTEXT_SETTINGS)
-@click.version_option(v, '--version', '-v', prog_name="flora", message=f"Flora v{v} by patataofcourse")
+@click.version_option(version.__version__, '--version', '-v', prog_name="flora", message=f"Flora v{version.__version__} by patataofcourse")
 def cli():
     pass
 

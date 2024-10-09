@@ -1,0 +1,39 @@
+version: 0.1
+prefix: null
+context: all
+
+commands:
+    0x01:
+        name: test
+        desc: Test Command
+        condition: false
+        uncertain: false
+        params:
+        - int
+        - type: int
+          name: testparam
+          desc: some number
+          uncertain: false
+    test2:
+        id: 0x02
+        desc: Test Command 2
+        context: ["event", "puzzle"]
+        aliases:
+        - tc2
+        condition: true
+        uncertain: true
+        params:
+            unk_1: string
+            unk_2:
+                type: int
+                uncertain: true
+                optional: true
+                
+groups:
+    ouchie:
+        commands:
+            nice:
+                id: 0x69
+                desc: nice
+            0x74:
+            0x75:

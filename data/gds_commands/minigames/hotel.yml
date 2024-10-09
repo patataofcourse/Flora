@@ -1,0 +1,116 @@
+commands:
+
+  item:
+    id: 0xcf
+    desc: Defines an inn item's name
+    params:
+      itemId: int
+      name: string
+
+  itemLayton:
+    id: 0xbc
+    params:
+      itemId: int
+      xPos: int
+      yPos: int
+      zIndex:
+        type: int
+        uncertain: true
+        desc: Defines the z-order of the item when displayed in the room. Required since some configurations definitely overlap.
+      blockerId:
+        type: int
+        desc: >
+          The ID of another item in the room, which if present, implies that this item's preferred spot can't/shouldn't be used.
+          Instead the position is calculated relative to the blocker item.
+      blockerOffsetX: int
+      blockerOffsetY: int
+      blockerZ:
+        type: int
+        uncertain: true
+        desc: Definitely the same kind of value as zIndex, and if -1 will reuse the above. But if the blocker is present, this value is used instead.
+      overlayId:
+        type: int
+        desc: >
+          Some of the furniture items have a completely different sprite when their blocker is present, namely the flowers in the vase and the books on the shelf.
+          If that is the case, this value will be the ID of the sprite for that case. If the item doesn't have a blocker, this value is ignored; set it to -1
+          to mean there is no alternate sprite.
+  itemComment1Layton:
+    id: 0xc6
+    desc: >
+      The comment from Layton when placing the given item in his room. Must be called right after an
+      `0xbc itemLayton` command, and refers to that item.
+    params:
+      comment: string(82)
+  itemComment2Layton:
+    id: 0xc7
+    desc: >
+      The comment from Layton when placing the given item in his room, given that the specified item ID
+      is already in there. Used to point out duplications, as well as two things going together well.
+      Like `0xc6 itemComment1Layton`, has to follow after a `0xbc itemLayton` call.
+    params:
+      comment: string(82)
+      otherItem: int
+
+  itemLuke:
+    id: 0xbd
+    params:
+      itemId: int
+      xPos: int
+      yPos: int
+      zIndex:
+        type: int
+        uncertain: true
+        desc: Defines the z-order of the item when displayed in the room. Required since some configurations definitely overlap.
+      blockerId:
+        type: int
+        desc: >
+          The ID of another item in the room, which if present, implies that this item's preferred spot can't/shouldn't be used.
+          Instead the position is calculated relative to the blocker item.
+      blockerOffsetX: int
+      blockerOffsetY: int
+      blockerZ:
+        type: int
+        uncertain: true
+        desc: Definitely the same kind of value as zIndex, and if -1 will reuse the above. But if the blocker is present, this value is used instead.
+      overlayId:
+        type: int
+        desc: >
+          Some of the furniture items have a completely different sprite when their blocker is present, namely the flowers in the vase and the books on the shelf.
+          If that is the case, this value will be the ID of the sprite for that case. If the item doesn't have a blocker, this value is ignored; set it to -1
+          to mean there is no alternate sprite.
+  itemComment1Luke:
+    id: 0xc8
+    desc: >
+      The comment from Luke when placing the given item in his room. Must be called right after an
+      `0xbd itemLuke` command, and refers to that item.
+    params:
+      comment: string(82)
+  itemComment2Luke:
+    id: 0xc9
+    desc: >
+      The comment from Luke when placing the given item in his room, given that the specified item ID
+      is already in there. Used to point out duplications, as well as two things going together well.
+      Like `0xc8 itemComment1Like`, has to follow after a `0xbd itemLuke` call.
+    params:
+      comment: string(82)
+      otherItem: int
+
+  
+  roomCommentLayton:
+    id: 0xca
+    desc: The comment from Layton, expressing his overall satisfaction with the room layout.
+    params:
+      comment: string(75)
+      level: int
+      unused:
+        type: int
+        desc: always 0
+  roomCommentLuke:
+    id: 0xcb
+    desc: The comment from Luke, expressing his overall satisfaction with the room layout.
+    params:
+      comment: string(75)
+      level: int
+      unused:
+        type: int
+        desc: always 0

@@ -1,0 +1,292 @@
+# a prefix prepended to each command name with a dot.
+# ex: a command "hi" in a package with prefix "test" will be decompiled to "test.hi"
+# By default the prefix is generated from the directory structure and package file name,
+# we reset it explicitly here to get these functions into the common namespace.
+prefix: null
+# Commands that we know the meaning of, reasonably well at least.
+commands:
+  playSfx:
+    id: 0x10
+    desc: Only possible candidate instruction for playing the jingle on the level5 logo screen. Uses a lookup table internally,
+          the sound IDs are irregular and look nonsensical. Needs more research
+    # This probably won't be queried programmatically, but it's important to admit our limitations.
+    uncertain: true
+    # This can either be an unnamed (or empty) list of parameters, or an ordered dict with parameter names marked.
+    # If omitted or null, the command takes no arguments.
+    params:
+      soundId:
+        type: int
+        desc: the ID of the sfx to be played
+  playSfxAny:
+    id: 0xf3
+    uncertain: true
+    desc: Can play any sound from the list without indirection, I think.
+    params:
+      soundId: int
+  playSfx700:
+    id: 0x59
+    unused: true
+    desc: I'm not sure what's so special about SFX 700, and I can't even find it in the files! (also this command is unused.)
+  
+  setScriptType:
+    id: 0x51
+    desc: >
+      Sets the "current" script type to the specified name. The currently running script will
+      continue, but once it completes this value hints to the engine what should happen next.
+    params:
+      scriptType:
+        # TODO: enum types?
+        type: string
+        desc: |
+          One of the following:
+          `Question`: Puzzle
+          `Room`
+          `Event`
+          `Movie`
+          `Event Movie` (TODO: what's the difference?)
+          `Reset`: Possibly returns to the title screen?
+          `Taiken`: ???
+          `Challenge Mode`: Might have something to do with Layton's Challenges
+          `Staff Roll`
+  setReturnScriptType:
+    id: 0x52
+    desc: >
+      Some script types aren't actually "scripts" but technical events; they cannot decide how
+      flow should continue once they're done. That's why for these events (things like puzzles,
+      event movies etc) you can additionally set a script type that should be set after that
+      event is done.
+    params:
+      scriptType:
+        type: string
+        desc: |
+          Supports only the following values (see `0x51 setScriptType`):
+
+          `Question`
+          `Room`
+          `Event`
+          `Challenge Mode`
+  
+  spriteTop:
+    id: 0x7e
+    desc: Displays a sprite on the top screen; ordinarily all sprite/bg/ui operations apply to the touchscreen.
+    params:
+      xPos: int
+      yPos: int
+      spriteName: string
+      animName: string
+  setSpriteTopAnim:
+    id: 0x7f
+    params:
+      spriteId: int
+      animName: string
+  setSpriteTopPos:
+    id: 0x80
+    params:
+      spriteId: int
+      xPos: int
+      yPos: int
+  spriteTopReveal:
+    id: 0x81
+    params:
+      spriteId: int
+  spriteTopHide:
+    id: 0x82
+    params:
+      spriteId: int
+  
+  spriteTopMoveMode:
+    id: 0x94
+    uncertain: true
+    desc:
+    params:
+      actorId: int
+      moveMode:
+        type: string
+        desc: either "Normal" or "Move To Target"
+
+  # Commands that we don't understand well enough to name yet. Their format is similar to known commands, except the ID is the name.
+  0x09:
+    params: []
+  0x0a:
+    params: []
+  0x0d:
+    params:
+    - type: int
+  0x0e:
+    params: []
+  0x0f:
+    params: []
+  0x11:
+    params:
+      unk_1:
+        type: int
+  0x5f:
+    params: []
+  0x62:
+    desc: Sets some global variable.
+    params:
+      value:
+        type: short
+        desc: the value to set
+  0x63:
+    desc: Checks the global variable set by `0x62` (could this be global story progress?)
+    condition: true
+    params:
+      value:
+        type: short
+        desc: the value to check against
+  0x64:
+    unused: true
+    desc: sets some global flag to true
+  0x69:
+    params:
+    - type: int
+  0x6a:
+    params:
+    - type: int
+  0x6b:
+    params:
+    - type: int
+  0x7a:
+    desc: Seems to be a wait instruction, that perhaps advances by n frames
+    params: [int]
+  0x7b:
+    params:
+    - int
+    - int
+    - int
+    - int
+  0x7c:
+    params:
+    - int
+    - int
+    - int
+    - int
+  0x7d:
+    params: []
+  0x85:
+    desc: pushes a nonzero byte value to a (very short) list.
+    params: [int]
+  0x86:
+    desc: checks if the list from `0x85` contains the given byte value
+    condition: true
+    params: [int]
+  0x87:
+    params: [int]
+  0x88:
+    params: [int]
+  0x8d:
+    desc: checks if some global flag at the given location (out of 1024) is set
+    condition: true
+    params:
+      flagId: int
+  0x8e:
+    desc: sets some global flag at the given location (out of 1024)
+    condition: true
+    params:
+      flagId: int
+      value:
+        type: bool
+        desc: true if either a nonzero number or the string "true", otherwise false
+  0x93:
+    desc: sets some property on a top sprite
+    params:
+      spriteId: int
+      unk_2: int
+  0x95:
+    desc: sets some point on a top sprite
+    params:
+      spriteId: int
+      xPos: int
+      yPos: int
+  0x96:
+    desc: sets some property on a top sprite
+    params:
+      spriteId: int
+      unk_2: int
+  0x9e:
+    params: [int]
+  0xae:
+    params:
+    - string
+    - string
+    - int
+    - int
+    - int
+    - int
+  
+  storyscript:
+    id: 0xb6
+    desc: >
+      In the debug storyscript, registers a starting point from which (presumably) playtesters
+      could jump into the game without having to replay large earlier parts of it.
+    params:
+      desc: 
+        type: string
+        desc: The description of the starting point
+      scriptPath:
+        type: string
+        desc: The path to the script executed to setup the game state to the specified starting point
+
+  0xc0:
+    params: [int]
+  0xc1:
+    condition: true
+    params: []
+  0xce:
+    params: [int]
+  
+  0xdd:
+    desc: Selects a movie (of the emb%i pool) and sets script type to MOVIE2
+    params:
+      movieId: int
+
+  0xde:
+    params: []
+  0xdf:
+    desc: noop
+    params: []
+  0xe0:
+    desc: noop
+    params: []
+  0xe1:
+    desc: noop
+    params: []
+  0xe2:
+    desc: noop
+    params: []
+  0xe3:
+    desc: noop
+    params: []
+  0xe9:
+    desc: sets a global value
+    params: [int]
+  0xea:
+    desc: reads the global value set by `0xe9`, and if it's a valid event ID, set the curScriptType and curEvent appropriately (if it's -1, set to ROOM)
+    params: []
+  0xeb:
+    condition: true
+  # You have entered GStruct1 Zone
+  0xec:
+    params: [int, int]
+  0xed:
+    params: [int, int]
+  0xee:
+    params: [int]
+  #
+  0xef:
+    params: [int, int, int, int]
+  0xf0:
+    params: [int, int, int]
+  0xf1:
+    params: [int, int]
+  0xf4:
+    params: [int]
+  0xf6:
+    params: []
+  0xf7:
+    params: []
+  0xf8:
+    params: []
+  0xf9:
+    params: []

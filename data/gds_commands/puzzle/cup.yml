@@ -1,0 +1,23 @@
+context: "puzzle.cup"
+commands:
+  cup:
+    id: 0x3a
+    desc: Adds a new cup object. The position is is relative to the bottom-center of the sprite, as well as the top left of the litre count display.
+    params:
+      spriteset: string
+      xPos: short
+      yPos: short
+      spriteId: int
+      capacity:
+        type: int
+        desc: Note this is x10
+      target:
+        type: int
+        desc: The amount that should be in the cup for the puzzle to solve. Note this is x10
+  color:
+    id: 0xbf
+    desc: Sets the color of the liquid
+    params:
+      r: int
+      g: int
+      b: int

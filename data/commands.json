@@ -1,10 +1,245 @@
 {
-    "engine": 27,
-    "img_win": 31,
-    "puzzle_title": 186,
-    "puzzle_picarats": 195,
-    "circle_answer": 212,
-    "puzzle_info": 220,
-    "input_answer": 251,
-    "input_bg": 252
+    "engine": {
+        "id": 27,
+        "desc": "Called at the start of a puzzle script. Determines which puzzle engine to use.",
+        "params": [
+            { "type": "string", "desc": "Engine name (from a predefined list)" }
+        ]
+    },
+    "img_win": {
+        "id": 31,
+        "desc": "Seemingly denotes when a special top-screen image should be shown on the puzzle completion screen.",
+        "params": [{ "type": "int" }, { "type": "int" }]
+    },
+    "puzzle_title": {
+        "id": 186,
+        "desc": "Defines the title of a puzzle. Called centrally as a list in `puzzletitle/qtitle.gds`.",
+        "params": [
+            { "type": "int", "desc": "Puzzle ID" },
+            { "type": "string", "desc": "Puzzle Title" }
+        ]
+    },
+    "puzzle_picarats": {
+        "id": 195,
+        "desc": "Defines how much picarat a puzzle awards. Called centrally in `puzzletitle/pscript.gds`.",
+        "params": [
+            { "type": "int", "desc": "Puzzle ID" },
+            { "type": "int", "desc": "Value on first attempt" },
+            { "type": "int", "desc": "Value on second attempt" },
+            { "type": "int", "desc": "Value on all further attempts" }
+        ]
+    },
+    "puzzle_info": {
+        "id": 220,
+        "desc": "Defines additional information about the puzzle displayed in the puzzle index. Some puzzle IDs ",
+        "params": [
+            { "type": "int", "desc": "Puzzle ID" },
+            {
+                "type": "string",
+                "desc": "Puzzle type (e.g. \"Write Answer\" or \"Draw Line\", but can be anything)"
+            },
+            {
+                "type": "string",
+                "desc": "Puzzle original location (should be a recognizable map name, but can technically be anything, such as \"Layton's Challenges\")"
+            }
+        ]
+    },
+    "circle_answer": { "id": 212 },
+    "input_answer": { "id": 251 },
+    "input_bg": { "id": 252 },
+    "dog_unknown": {
+        "id": 194,
+        "desc": "Used in the Gizmo minigame, presumably to manage the placement of the dog parts",
+        "params": [
+            { "type": "int", "desc": "Between 1-20, probably the part index?" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int", "desc": "Always the same as param 1" },
+            { "type": "int" },
+            { "type": "int" }
+        ]
+    },
+    "inn_hint_layton": {
+        "id": 202,
+        "desc": "Used in the Inn minigame to display the Professor's assessment of the room layout.",
+        "params": [
+            {
+                "type": "string",
+                "desc": "The text to be displayed"
+            },
+            {
+                "type": "int",
+                "desc": "Increments with the quality of the room (unsure about effect)"
+            },
+            {
+                "type": "int",
+                "desc": "Always 0"
+            }
+        ]
+    },
+    "inn_hint_luke": {
+        "id": 203,
+        "desc": "Used in the Inn minigame to display Luke's assessment of the room layout.",
+        "params": [
+            {
+                "type": "string",
+                "desc": "The text to be displayed"
+            },
+            {
+                "type": "int",
+                "desc": "Increments with the quality of the room (unsure about effect)"
+            },
+            {
+                "type": "int",
+                "desc": "Always 0"
+            }
+        ]
+    },
+    "inn_item": {
+        "id": 207,
+        "desc": "Used in the hotelscript to define the available Inn items. All used at the end for some reason.",
+        "params": [
+            { "type": "int", "desc": "item ID" },
+            { "type": "string", "desc": "Name of the item" }
+        ]
+    },
+    "inn_item_layton": {
+        "id": 188,
+        "desc": "Used in the hotelscript, always followed by `inn_item_layton_comment` and `inn_item_layton_comment2`, likely to define Inn item placements in Layton's room.",
+        "params": [
+            { "type": "int", "desc": "item ID" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" }
+        ]
+    },
+    "inn_item_layton_comment": {
+        "id": 198,
+        "desc": "Used in the hotelscript after `inn_item_layton`. Defines the Professor's comment about an Inn minigame item.",
+        "params": [{ "type": "string", "desc": "The Professor's comment" }]
+    },
+    "inn_item_layton_comment2": {
+        "id": 199,
+        "desc": "Used in the hotelscript after `inn_item_layton`. Defines the comment made by the professor if a second item of the same type is being added, along with the ID of the item that is the 'same type'.",
+        "params": [
+            { "type": "string", "desc": "The Professor's comment" },
+            {
+                "type": "int",
+                "desc": "The ID of the item that's considered a duplicate of this one's type, or -1 if there is no such item. (not sure which of the two comments is used in that case)"
+            }
+        ]
+    },
+    "inn_item_luke": {
+        "id": 189,
+        "desc": "Used in the hotelscript, always followed by `inn_item_luke_comment` and `inn_item_luke_comment2`, likely to define Inn item placements in Luke's room."
+    },
+    "inn_item_luke_comment": {
+        "id": 200,
+        "desc": "Used in the hotelscript with `inn_item_luke`. Defines Luke's comment about an Inn minigame item.",
+        "params": [{ "type": "string", "desc": "Luke's comment" }]
+    },
+    "inn_item_luke_comment2": {
+        "id": 201,
+        "desc": "Used in the hotelscript with `inn_item_luke`. Defines the comment made by Luke if a second item of the same type is being added, along with the ID of the item that is the 'same type'.",
+        "params": [
+            { "type": "string", "desc": "Luke's comment" },
+            {
+                "type": "int",
+                "desc": "The ID of the item that's considered a duplicate of this one's type, or -1 if there is no such item. (not sure which of the two comments is used in that case)"
+            }
+        ]
+    },
+    "nazobaba": {
+        "id": 229,
+        "desc": "Used in the Granny Riddleton script. One of these commands is used for every puzzle, possibly to define after which story progression point a puzzle gets sent to the cottage. All but one of the three unknown params are always -1, and sometimes all are (presumably for puzzles that never get sent to the cottage). Which value is present may determine the bottle color, and the value may determine after which progression point the puzzle shows up.",
+        "params": [
+            { "type": "int", "desc": "Puzzle ID" },
+            { "type": "int" },
+            { "type": "int" },
+            { "type": "int" }
+        ]
+    },
+    
+    "slide2_grid_dimensions": {
+        "id": 164,
+        "desc": "Defines the grid dimensions in a 'Slide Puzzle 2'.",
+        "params": [
+            { "type": "int", "desc": "grid width" },
+            { "type": "int", "desc": "grid height" }
+        ]
+    },
+    "slide2_grid_offset": {
+        "id": 163,
+        "desc": "Determines the offset of the grid's visual placement relative to the touch screen's top left corner (0,0). Used to align the puzzle itself with the background.",
+        "params": [
+            { "type": "int", "desc": "x offset in px" },
+            { "type": "int", "desc": "y offset in px" }
+        ]
+    },
+    "slide2_grid_cellsize": {
+        "id": 165,
+        "desc": "Defines the visual scale of the grid by the width and height of the cells. This puzzle engine only allows square cells.",
+        "params": [
+            {
+                "type": "int",
+                "desc": "width & height of the square grid cells in px"
+            }
+        ]
+    },
+    "slide2_item": {
+        "id": 166,
+        "desc": "Place an item in the grid of a 'Slide Puzzle 2'",
+        "params": [
+            { "type": "int", "desc": "x coordinate" },
+            { "type": "int", "desc": "y coordinate" },
+            {
+                "type": "int",
+                "desc": "unknown, but likely to do with properties such as draggability & obstacle behavior"
+            },
+            {
+                "type": "string",
+                "desc": "Item sprite name, from `ani/slidepuzzle2.arc`. 'x' in particular has no image associated, and will show the background through (used for walls)."
+            }
+        ]
+    },
+    "slide2_goalid": {
+        "id": 177,
+        "desc": "Defines a grid cell as the goal for a specific item type index. These indices seem to be attached to objects adhoc, but an object with each goal's specified index must be placed on all goal cells defined like this in order for the puzzle to solve.",
+        "params": [
+            { "type": "int", "desc": "x coordinate" },
+            { "type": "int", "desc": "y coordinate" },
+            { "type": "int", "desc": "Item type index" }
+        ]
+    },
+    "slide2_item_goalid": {
+        "id": 178,
+        "desc": "Following a `slide2_item` definition, attaches the given item type index to that object. Used to determine if the puzzle has been solved.",
+        "params": [
+            {
+                "type": "int",
+                "desc": "Item type index (can seemingly be chosen adhoc to be anything)"
+            }
+        ]
+    },
+    "slide2_item_goalcell": {
+        "id": 56,
+        "desc": "Following a `slide2_item` definition, sets a target location at which the cell needs to be placed for the puzzle to be solved."
+    },
+
+    "placetarget": {
+        "id": 94,
+        "desc": "Main definition of a 'Place Target' puzzle",
+        "params": [
+            {"type": "int", "desc": "Target x position"},
+            {"type": "int", "desc": "Target y position"},
+            {"type": "string", "desc": "Sprite to be displayed at the touched location"},
+            {"type": "unknown-2"},
+            {"type": "int"}
+        ]
+    }
 }

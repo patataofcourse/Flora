@@ -1,0 +1,41 @@
+context: "puzzle.cut"
+commands:
+  gridFillType:
+    id: 0x9f
+    params:
+      xPos: int
+      yPos: int
+      width: int
+      height: int
+      value: int
+  gridSetType3:
+    id: 0xa0
+    desc: Sets the type of the given cell in the grid to 3 (whatever that means). In the CutPuzzle this
+          means a source/target for cut lines.
+    params:
+      xPos: int
+      yPos: int
+  solutionCut:
+    id: 0xa1
+    desc: Adds a cut between two grid(!) points to the solution.
+    params:
+      xPos1: int
+      yPos1: int
+      xPos2: int
+      yPos2: int
+
+  0xa2:
+  0xac:
+    desc: sets the color of the cut line once it's done
+    uncertain: true
+    params:
+    - int
+    - int 
+    - int
+  0xad:
+    desc: sets the color of the cut line while it's still being drawn
+    uncertain: true
+    params:
+    - int
+    - int 
+    - int

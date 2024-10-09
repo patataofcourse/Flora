@@ -1,0 +1,4 @@
+context: "puzzle.drag"
+commands:
+  0xf2:
+    params: [float]

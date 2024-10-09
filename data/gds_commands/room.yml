@@ -1,0 +1,247 @@
+context: "room"
+commands:
+  isCurrent:
+    id: 0x13
+    context: "all"
+    condition: true
+    desc: Returns true if the engine's current room is equal to the provided ID. Can be used anywhere.
+    params:
+      roomId:
+        type: ubyte
+        desc: the room ID to be tested against
+  
+  setCurrent:
+    id: 0x53
+    context: "all"
+    desc: >
+      Sets the engine's current room ID to the specified value. This takes effect after the script
+      completes, the next time the script type is set to 'Event'.
+    params:
+      roomId:
+        type: int
+  
+  exit:
+    id: 0x22
+    desc: >
+      Defines an exit the user can click on to change rooms, by its bounding box, target room, and
+      (TODO: very uncertain) the movement of the lil layton sprite on the top screen map???
+    params:
+      exitType:
+        type: int
+        desc: Value from 0-5. Not sure what zero does, but 5 is a door in the scene, and 1-4 stands for the screen edges starting left ccw.
+      xPos: int
+      yPos: int
+      width: int
+      height: int
+      exitRoom:
+        type: ubyte
+        desc: Sets the room the player will move to when they take this exit
+      unk_7:
+        type: short
+      unk_8:
+        type: short
+  exitSound:
+    id: 0x5b
+    desc: Defines which footsteps sound is used on room transition
+    params:
+      exitId:
+        type: byte
+        desc: the ID of the exit (in declaration order)
+      soundId:
+        type: byte
+        desc: Can be any number, but only 1 (echoy footsteps) and 2 (creaky door) have special handling
+
+  sprite:
+    id: 0x23
+    desc: >
+      Defines a tiny sprite used in the room, from the "room_%i_%i.arc" files. Never actually used,
+      but the sprites look like sweet cut content.
+    uncertain: true
+    params:
+      xPos:
+        type: int
+      yPos:
+        type: int
+  bgsprite:
+    id: 0x5c
+    desc: Adds a non-interactive background sprite to the room, for animated room background effects.
+    params:
+      xPos: byte
+      yPos: byte
+      spriteName:
+        type: string
+        desc: path to the sprite to be used.
+
+  textObj:
+    id: 0x43
+    desc: Defines a Text Object, i.e. an area of the screen where clicking on it opens a brief flavor text box from one of the characters.
+    params:
+      speaker:
+        type: ubyte
+        desc: >
+          1 for Layton, 2 for Luke. Probably corresponds to the frames in ani/room_tobjp.spr,
+          which also includes the hint coin, but doesn't include anything else; my assumption is
+          that using a number outside of these two (and maybe 3) will break something. It's worth
+          testing how adding frames to the sprite file will affect things...
+      # TODO: something really cool here would be compound datatypes
+      # ex:
+      # params:
+      #   ...
+      #   bbox:
+      #     type: BBox(int xPos, int yPos, int width, int height)
+      # 
+      # And in a GDA script this could be written as `BBox(1,2,3,4)` to be more readable.
+      xPos:
+        type: int
+      yPos:
+        type: int
+      width:
+        type: int
+      height:
+        type: int
+      textId:
+        type: int
+        desc: The id of the text to be displayed. They are sourced from room/tobj/?/tobj.pcm//t_%i.txt
+      unk_7:
+        type: int
+        desc: Appears unused in code, and seems to always be 1
+
+  eventObject:
+    id: 0x50
+    desc: >
+      Adds an interactable object to the room. This is used for all NPCs, and some other
+      items such as the crumpled notes and newspapers.
+    params:
+      xPos: short
+      yPos: short
+      width: int
+      height: int
+      spriteId:
+        type: int
+        desc: The sprite that will be placed at the given location. It only becomes interactable within the defined bounding box. Sourced from ani/obj_%i.spr with default animation.
+      eventId:
+        type: int
+        desc: The event that will be triggered when the player taps on the object
+  
+  eventTrigger:
+    id: 0x21
+    desc: >
+      Unused command that does something similar to `0x87 npcObject`, but without registering a sprite.
+      Internally this method is called by that one, because it is responsible for determining the popup
+      icon on tap (though this is hardcoded now to always be the exclamation point).
+    params:
+      xPos:
+        type: int
+      yPos:
+        type: int
+      width:
+        type: int
+      height:
+        type: int
+      spriteName:
+        type: string
+        desc: the name of the sprite container holding the sprite that should popup when the trigger is tapped
+      animName:
+        type: string
+        desc: Within the sprite container, the name of the animation to be displayed.
+      eventId:
+        type: int
+        desc: The event that will be started when the trigger is tapped
+  
+  hintcoin:
+    id: 0x68
+    desc: Adds a hint coin to the room.
+    params:
+      coinId:
+        type: int
+        desc: Every hint coin has a unique ID, presumably to allow saving which ones you've collected.
+      xPos: short
+      yPos: short
+      width: short
+      height: short
+      unk_6:
+        type: int
+        desc: appears to be unused.
+
+
+  mapInfo:
+    id: 0x5a
+    context: ["room", "event"]
+    desc: >
+      Sets the current room ID and the map ID, which determines the name of the location.
+      Also sets the coordinates for the little Layton sprite map marker on the top screen.
+      Can be used in events to enqueue a room change as well.
+    params:
+      roomId:
+        type: int
+        desc: the current room. Mostly useful when called from event scripts.
+      mapId:
+        type: int
+        desc: the ID of the top screen map image to be used
+      xPos: short
+      yPos: short
+      markerSpriteId:
+        type: int
+        desc: It seems there were multiple possible map marker icons at some point, but only ID 1 has survived.
+
+
+  nazobabaBottle:
+    id: 0xe4
+    desc: Only used in the Nazobaba (Granny Riddleton) house. Almost certainly registers the bottles that puzzles may appear in.
+    params:
+      xPos: int
+      yPos: int
+      width: int
+      height: int
+      unused: int
+  nazobabaAwards:
+    id: 0xe5
+    desc: >
+      Registers a puzzle in the puzzle index, and awards a puzzle's assigned item, when solved from Nazobaba house
+      (since there is no story event to give you that item normally). Value -1 means no item given in that category. All
+      these commands are placed in script/nazobaba/babascript.gds in a list, but only the command corresponding to the
+      current puzzle ID will actually execute. (Runs in Event context only)
+    uncertain: true
+    params:
+      puzzleId: int
+      hotelId: int
+      gizmoId: int
+      paintingId: int
+  nazobabaGiveAward:
+    id: 0xe6
+    desc: Responsible for calling babascript.gds (see `0xe5 nazobabaAwards`)
+  nazobabaSend:
+    id: 0xe7
+    uncertain: true
+    desc: |
+      Sends the specified puzzle to the Nazobaba house, if it wasn't already solved. Also writes all those puzzle names somewhere, but not their IDs.
+      It seems these are called in bulk in certain otherwise empty scripts, which in turn are probably called in spots where puzzles would vanish.
+    params:
+      puzzleId: int
+
+
+  0x2c:
+    desc: sets some kind of flag at the given index to true
+    params:
+    - type: int
+  
+  0xab:
+    params:
+    - int
+  
+  0xd1:
+    params:
+    - int
+    - int
+    - int
+    - bool
+    - int
+    - int
+  0xd2:
+    params:
+    - int
+    - int
+    - int
+    - bool
+    - int
+    - int

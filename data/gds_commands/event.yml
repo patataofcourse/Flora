@@ -1,0 +1,383 @@
+context: "event"
+commands:
+  setCurrent:
+    id: 0x60
+    context: "all"
+    desc: >
+      Sets the current event in global state. Once the current script is completed,
+      and the script type is set to "Event", that script will be executed.
+    params:
+      eventId:
+        type: int
+
+
+  textbox:
+    id: 0x98
+    desc: >
+      Displays a textbox for the specified on-screen actor, pointing in the
+      direction indicated by that actor's sprite location.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+      actorId:
+        type: int
+        desc: the id (in initialization order) of the actor sprite saying the text.
+  textboxRight:
+    id: 0x9c
+    desc: >
+      Displays a textbox for the specified on-screen actor, pointing right.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+      actorId:
+        type: int
+        desc: the id (in initialization order) of the actor sprite saying the text.
+  textboxLeft:
+    id: 0x9d
+    desc: >
+      Displays a textbox for the specified on-screen actor, pointing left.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+      actorId:
+        type: int
+        desc: the id (in initialization order) of the actor sprite saying the text.
+  textboxMiddle:
+    id: 0xcd
+    desc: Displays a text box for the specified on-screen actor, with no arrow pointing.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+      actorId:
+        type: int
+        desc: the id (in initialization order) of the actor sprite saying the text.
+  
+  textboxNoSpeaker:
+    id: 0x9b
+    desc: Displays a textbox without a speaker on screen.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+  textboxNoSpeaker2:
+    id: 0x44
+    desc: Displays a textbox without a speaker on screen. (I'm not sure what the difference between these two functions is)
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+  textboxNoSpeakerRight:
+    id: 0x99
+    desc: Displays a textbox pointing right, but without a speaker on screen.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+  textboxNoSpeakerLeft:
+    id: 0x9a
+    desc: Displays a textbox pointing left, but without a speaker on screen.
+    comment: |
+      /data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt:
+
+      $(/data/etext/${lang}/e${eventid:r100<=200:03}{pcm}/e${eventid}_t${1}.txt)
+    params:
+      textId:
+        type: int
+        desc: >
+          the text to display, in textbox format. This is sourced from
+            etext/?/e???/e<eventId>_t<textId>.txt.
+  
+  textboxBgRight:
+    id: 0x45
+    desc: Displays the background of a textbox pointing right, but doesn't print anything.
+  textboxBgLeft:
+    id: 0x46
+    desc: Displays the background of a textbox pointing left, but doesn't print anything.
+  textboxBgNoSpeaker:
+    id: 0x65
+    desc: Displays the background of a textbox pointing in no direction.
+
+  setFlag2:
+    id: 0x55
+    context: "all"
+    unused: true
+    desc: > 
+      Every event has a byte's worth of story flags to access, and this instruction sets byte 2 of
+      that to true. Maybe it's a simple unified way to tell if an event has already been seen
+      by the player.
+  
+  pickupItem:
+    id: 0x56
+    desc: Shows an item pickup display for the given item ID, and adds it to the inventory.
+    params:
+      itemId:
+        type: int
+        desc: >
+          The item ID. It's likely the only valid ones are 1 ("some fish bones") and 3 ("a wristwatch"),
+          but more can *potentially* be added by providing stext/?/stext.pcm//p_%i.txt and a sprite
+          frame in ani/prize.spr
+  pickupGizmo:
+    id: 0xc4
+    desc: Shows a pickup display for the given Gizmo ID
+    params:
+      gizmoId: int
+  pickupPainting:
+    id: 0xc5
+    desc: Shows a pickup display for the given painting scrap ID
+    params:
+      scrapId: int
+  pickupHotel:
+    id: 0xcc
+    desc: Shows a pickup display for the given hotel item ID
+    params:
+      itemId: int
+  
+
+  puzzleIndexPopup:
+    id: 0x57
+    desc: Shows the notification that "<the current puzzle ID> has been added to the puzzle index".
+
+  mysteryPopup:
+    id: 0xe8
+    desc: Shows the notification that "<the mystery of the given ID> has been added to your mysteries".
+    params:
+      mysteryId:
+        type: int
+        desc: this is actually bounds-checked to be between 1-10. The names are source from storytext.pcm//it_%i.txt
+  
+  promptSave:
+    id: 0x61
+    desc: Shows a popup allowing the player to save.
+
+  actorSprite:
+    id: 0x6c
+    desc: >
+      Initializes an actor sprite in the current engine. I'm not sure what exactly makes them special,
+      but they're used mostly in events to display the speakers (and their name tags); however they
+      also appear in the Drag Puzzle type.
+    params:
+      # For parameters that you seriously don't have anything else to say about, this is a nice shortcut
+      xPos: int
+      yPos: int
+      spriteName:
+        type: string
+      unk_4:
+        type: string
+  
+  actorSpriteHead:
+    id: 0x6d  
+    desc: >
+      Many of the actors have their facial expression separated from their body, probably to save on
+      space since otherwise all permutations would have to be baked in separately.
+    params:
+      xPos: int
+      yPos: int
+      spriteName: string
+      animName: string
+      actorId:
+        type: int
+        desc: The ID (in declaration order) of the actor that this head belongs to.
+  
+  setActorAnim:
+    id: 0x6e
+    desc: Sets the specified actor's (body) animation to the specified name
+    params:
+      actorId: int
+      animName: string
+  setActorAnimHead:
+    id: 0x6f
+    desc: Sets the specified actor's head animation to the specified name
+    params:
+      actorId: int
+      animName: string
+  
+  setActorPos:
+    id: 0x70
+    desc: Sets the specified actor's (body) position to the specified point
+    params:
+      # TODO: could the compiler be smart here and emit warnings depending on logic?
+      actorId: int
+      xPos: int
+      yPos: int
+  
+  revealActor:
+    id: 0x71
+    uncertain: true
+    desc: Sets the specified actor to be visible(?)
+    params:
+      actorId: int
+  hideActor:
+    id: 0x72
+    uncertain: true
+    desc: Sets the specified actor to be visible(?)
+    params:
+      actorId: int
+  
+  actorMoveMode:
+    id: 0x90
+    uncertain: true
+    desc:
+    params:
+      actorId: int
+      moveMode:
+        type: string
+        desc: either "Normal" or "Move To Target"
+  
+
+  currentMovie:
+    id: 0xd3
+    desc: Sets the current movie ID. Once the current script completes, if the current script state is set to "Movie", that movie will play.
+    params:
+      movieId: int
+
+  
+  choice3:
+    id: 0xd5
+    desc: Displays a three-option choice, like the Chelmey/DonPaolo deduction minigame.
+  choice2:
+    id: 0xdb
+    desc: Displays a two-option choice, like the endgame continue prompt. Might actually have logic specific to that.
+  choiceQuestion:
+    id: 0xd9
+    desc: The question to be displayed for this choice
+    params:
+      question:
+        type: string(64)
+        desc: Unlike most strings in this game, this one is hardcoded in the script, and therefore NOT localized!
+  choiceAnswer1:
+    id: 0xd6
+    desc: Answer 1 of this choice
+    params:
+      answer:
+        type: string(64)
+        desc: Just like the question, not localizable.
+      unk_2: int
+  choiceAnswer2:
+    id: 0xd7
+    desc: Answer 2 of this choice
+    params:
+      answer:
+        type: string(64)
+        desc: Just like the question, not localizable.
+      unk_2: int
+  choiceAnswer3:
+    id: 0xd8
+    desc: Answer 3 of this choice
+    params:
+      answer:
+        type: string(64)
+        desc: Just like the question, not localizable.
+      unk_2: int
+  choiceAnswerIs:
+    id: 0xda
+    condition: true
+    desc: Checks if the given answer ID (from 1-3) was chosen by the user
+    params:
+      answer: int
+  
+
+  movieSub:
+    id: 0xfd
+    desc: Adds a subtitle to the upcoming movie sequence
+    params:
+      textId: int
+      startTime: float
+      duration: float
+  moviePlay:
+    id: 0xfe
+    desc: Plays the specified movie clip
+    params:
+      movieId: int
+
+  0x47:
+    params:
+    - type: int
+  0x78:
+    desc: sets some float value for the specified actor and its head (rotation??)
+    params:
+      actorId: int
+      unk_2: float
+  0x79:
+    desc: sets some float value for the specified actor and its head (rotation??)
+    params:
+      actorId: int
+      unk_2: float
+  0x8f:
+    params:
+      actorId: int
+      unk_2: int
+  
+  0x91:
+    params:
+      actorId: int
+      unk_2: int
+  0x92:
+    params:
+      actorId: int
+      unk_2: int
+  0x97:
+    params:
+      actorId: int
+      unk_2: int
+    
+  0xaf:
+    params: [int]
+  0xb0:
+    params: [int]
+  0xb3:
+    params: [int]
+  0xb4:
+    params:
+      actorId: int
+      unk_2: bool
+  
+  0xb8:
+    desc: sets the eventFlag with the given ID to 1
+    params:
+      eventFlagId: int

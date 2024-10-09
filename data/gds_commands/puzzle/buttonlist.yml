@@ -1,0 +1,14 @@
+context: "puzzle.buttonlist"
+commands:
+  count:
+    id: 0x1d
+    desc: Defines how many buttons there should be in the list. Note that the engine entirely controls button placement.
+    params:
+      count: int
+  correct:
+    id: 0x1e
+    desc: Defines which of the buttons is the correct one.
+    params:
+      btnId:
+        type: int
+        desc: The index of the button that should be the correct answer.

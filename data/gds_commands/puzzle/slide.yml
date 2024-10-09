@@ -1,0 +1,22 @@
+context: "puzzle.slide"
+commands:
+  item:
+    id: 0xa6
+    desc: Adds a slidable item into the grid
+    params:
+      xPos: int
+      yPos: int
+      unk_3: int
+      imgName:
+        type: string
+        desc: The "animation" name representing this item's image. Sourced from either ani/slidepuzzle.spr or ani/slidepuzzle2.spr
+  tileGroup:
+    id: 0xb1
+    params:
+      xPos: int
+      yPos: int
+      group: int
+  itemGroup:
+    id: 0xb2
+    params:
+      group: int

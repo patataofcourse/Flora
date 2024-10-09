@@ -1,0 +1,271 @@
+prefix: "puzzle."
+context: "puzzle"
+commands:  
+  setCurrent:
+    id: 0x48
+    context: "all"
+    desc: |
+      Sets the current puzzle ID in the global game state. If at the end of script execution the
+      global "current script type" is set to "question", the puzzle with this ID will be started.
+    params:
+      puzzleId: int
+  isCurrentNotSolved:
+    id: 0x4c
+    context: "all"
+    condition: true
+    desc: Checks if the currently relevant puzzle has NOT been solved
+  
+  isCurrentDiscovered:
+    id: 0x49
+    context: "all"
+    condition: true
+    desc: Checks if the currently relevant puzzle has been discovered/attempted before.
+  isDiscovered:
+    id: 0x58
+    context: "all"
+    condition: true
+    desc: checks if the specified puzzle has been discovered.
+    params:
+      puzzleId: bool
+
+  isCurrentSolved:
+    id: 0x4d
+    context: "all"
+    condition: true
+    desc: Checks if the currently relevant puzzle has been solved
+  isSolved:
+    id: 0x54
+    context: "all"
+    condition: true
+    desc: Checks if the specified puzzle ID has been solved (puzzle flag 2)
+    params: 
+      puzzleId: int
+  
+  isSolvedInStory:
+    id: 0x4e
+    context: "all"
+    condition: true
+    desc: Checks if the currently relevant puzzle has been solved in its correct location, i.e. the event surrounding it has completed.
+
+  countEnoughSolved:
+    id: 0x77
+    condition: true
+    desc: >
+      Counts how many puzzles the player has solved, and returns true if that number is greater
+      than or equal to the given threshold.
+    params:
+      threshold: int
+
+  eventAfterPuzzle:
+    id: 0x4b
+    context: "all"
+    condition: true
+    desc: Checks a special flag set if the event script is run right after a puzzle was ended (solved or given up).
+  eventNotAfterPuzzle:
+    id: 0x4a
+    context: "all"
+    condition: true
+    desc: Checks a special flag set if the event script is run right after a puzzle was ended, and returns true if that is not the case.
+
+  solverLayton:
+    id: 0x66
+    context: "all"
+    desc: Sets the next puzzle to be "solved by" Layton (i.e. one of his sequences will play during grading)
+  solverLuke:
+    id: 0x77
+    context: "all"
+    desc: Sets the next puzzle to be "solved by" Luke (i.e. one of his sequences will play during grading)
+
+
+  engine:
+    id: 0x1b
+    # TECHNICALLY. But nobody would use this outside of puzzle scripts, because the grading and everything would be missing.
+    context: "all"
+    desc: Loads a puzzle engine with the specified name, and continues the script in that context.
+    params:
+      engineName:
+        type: string
+        desc: the name of the engine to load
+  imgWin:
+    id: 0x1f
+    context: "all"
+    desc: Selects the image to be displayed when the puzzle is done, probably.
+    uncertain: true
+    params:
+      id:
+        type: int
+        desc: seems to always be the current puzzle ID
+      unk_2:
+        type: int
+        desc: seems to always be 0
+  slideItemGoalTile:
+    id: 0x38
+    context: ["puzzle.shape", "puzzle.slide", "puzzle.drag"]
+    desc: For puzzles that involve sliding objects into correct locations (slide, drag, shape (unused)) define the location that would be an object's goal.
+    params:
+      xPos: int
+      yPos: int
+  drawLineColor:
+    id: 0x42
+    context: "all"
+    desc: |
+      Many puzzle types give the user the ability to draw lines freehand or between points; this command sets the RGB color of those lines (with 5bit channel precision).
+
+      A full list of the puzzle types that use this: [trace, traceButton, drawInput2, cut, drag]
+      However, the function is available independent of engine.
+    params:
+      r:
+        type: int
+      g:
+        type: int
+      b:
+        type: int
+  
+  button:
+    id: 0x5d
+    context: ["puzzle.onoff", "puzzle.freebutton"]
+    desc: Adds a button with the specified sprite texture at the given location.
+    params:
+      xPos: short
+      yPos: short
+      spriteName:
+        type: string
+        desc: The sprite used for the button. As with all button sprites, it should define a depressed state in the animation "shadow".
+      correct:
+        type: bool|int
+        desc: Whether this button should be (de)pressed in order for the puzzle to solve.
+      unk_5:
+        type: int
+  
+  placeTarget:
+    id: 0x5e
+    context: "puzzle.placetarget"
+    desc: >
+      The sole defining command for the PlaceTarget puzzle type. It seems there can be multiple targets defined this way,
+      all of which need to be hit in order for the puzzle to solve; but this is never used
+      (maybe it felt too cumbersome during playtesting, because you can't reset?)
+    params:
+      xPos: int
+      yPos: int
+      spriteName: string
+      radius: float
+      unk_5:
+        type: int
+  
+  gridOffset:
+    id: 0xa3
+    desc: For grid-based puzzles, determines the offset in pixels that grid should have on the screen.
+    params:
+      xPos: int
+      yPos: int
+  gridDimensions:
+    id: 0xa4
+    desc: For grid-based puzzles, determines the dimensions of the grid in tiles. This also initializes the grid.
+    params:
+      width: int
+      height: int
+  gridTileSize:
+    id: 0xa5
+    desc: For grid-based puzzles, determines the size in pixels that each grid cell should have.
+    params:
+      sizePx: int
+  
+
+  title:
+    id: 0xba
+    desc: >
+      Used in the technical script/puzzletitle/?/qtitle.gds, to determine the localized name
+      of all puzzles at once. This script is read, for example, by the Puzzle Index and Wifi Puzzle list.
+    params:
+      puzzleId:
+        type: int
+        desc: the ID of the puzzle to set the name for
+      name: string
+  picarat:
+    id: 0xc3
+    desc: Defines how many picarat are awarded for each attempt. Stored in script/pcarot/pscript.gds
+    params:
+      puzzleId: int
+      first:
+        type: int
+        desc: The amount awarded solving on first try
+      second:
+        type: int
+        desc: The amount awarded after one error
+      other:
+        type: int
+        desc: The amount awarded after the second failed attempt, on all subsequent tries
+  indexInfo:
+    id: 0xdc
+    desc: Loads information for the puzzle index
+    params:
+      puzzleId: int
+      type:
+        type: string
+        desc: There is no fixed list of options, but the length may not exceed 64 characters.
+      location:
+        type: string
+        desc: There is no fixed list of options, but the length may not exceed 64 characters.
+
+  0x1c:
+    desc: >
+      Effectively calls 0x20 <parameter> times with parameter 0, though this value is hardcoded to 3 in the release.
+      Therefore, fills that 3-element list with 0 (all puzzles in the game do this at the start)
+    params:
+    - type: int
+      desc: gets overwritten by 3, so unused
+  0x20:
+    desc: Pushes the specified byte to a list with at most 3 elements.
+    unused: true
+    params:
+    - type: byte
+
+  moveLimit:
+    id: 0x27
+    context: ["puzzle.coin", "puzzle.match", "puzzle.scale", "puzzle.cut"]
+    desc: Sets the move limit for this puzzle. Note that the max for match and coin puzzles is 255.
+    params:
+      # TODO: types dependent on conditions? Maybe allow defining the same command multiple times for different contexts???
+      limit: int
+
+  targetPosRot:
+    id: 0x2b
+    context: ["puzzle.match", "puzzle.tilerotate"]
+    desc: Defines a target position for movable and rotatable objects.
+    params:
+      xPos: int
+      yPos: int
+      angle: float
+      posTolerance:
+        type: float
+        optional: true
+        uncertain: true
+        desc: (Probably) the radius of pixels that the player may be off for a match to still be counted
+      angleTolerance:
+        type: float
+        optional: true
+        uncertain: true
+        desc: (Probably) the angle in degrees that the player may be off for a match to still be counted
+
+
+  targetAngle:
+    id: 0x39
+    context: ["puzzle.tile", "puzzle.tilerotate", "puzzle.shape"]
+    desc: Sets the target angle of the previously specified object. The object must be rotated to that exact angle for the puzzle to solve.
+    params:
+      angle:
+        type: float
+  0xb7:
+    desc: sets all the flags for the given puzzle ID to true (1, 4, and 2 ie "solved")
+    params:
+      puzzleId: int
+
+  0xaa:
+    desc: used by all the tile-based puzzles
+    params: [int]
+  
+
+  0x00:
+    desc: DO NOT USE! The function pointer slot for this command is never populated, trying to call it will probably crash!
+  0xff:
+    desc: DO NOT USE! The function pointer slot for this command is never populated, trying to call it will probably crash!

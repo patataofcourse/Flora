@@ -1,0 +1,37 @@
+context: "puzzle.queen"
+commands:
+  board:
+    id: 0x3b
+    desc: Defines base parameters for the overall board of the Queen puzzle.
+    params:
+      screenX:
+        type: int
+        desc: The pixel offset of the top left corner of the grid from the left edge of the screen
+      screenY:
+        type: int
+        desc: The pixel offset of the top left corner of the grid from the top edge of the screen
+      boardSize:
+        type: int
+        desc: The size of the board in cells
+  queenCount:
+    id: 0x3c
+    desc: Sets the number of queens the player needs to place
+    params:
+      count:
+        type: int
+  fixed:
+    id: 0x3d
+    desc: Places an immovable (golden) queen on the board in the specified tile location
+    params:
+      tileX:
+        type: int
+      tileY:
+        type: int
+  partial:
+    id: 0x3e
+    desc: "Determines the \"partial mode\" setting, which is used in 'Too Many Queens 3': there are less queens than tile width, but they still need to block the entire grid."
+    params:
+      enable:
+        # bool is one special datatype that must be converted into another type before saving, and is just separate for convenience in GDA scripts.
+        type: bool|int
+        desc: Set to true in order to make a puzzle with the ruleset of 'Too Many Queens 3'

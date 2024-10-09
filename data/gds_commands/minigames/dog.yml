@@ -1,0 +1,15 @@
+commands:
+  partdef:
+    id: 0xc2
+    desc: |
+      Defines a gizmo/dog part for use in the minigame. This definition consists of the display position of the part
+      sprite once placed, and a separate "slide target" point where the gizmo sprite will linearly slide toward when
+      clicked, before vanishing and being replaced with the realized part. Note that the sprite ID for the gizmo in the
+      tray is not assumed to be the same ID as the part itself, though in practice it turned out that way.
+    params:
+      partId: int
+      xPos: int
+      yPos: int
+      gizmoSpriteId: int
+      slideTargetX: int
+      slideTargetY: int

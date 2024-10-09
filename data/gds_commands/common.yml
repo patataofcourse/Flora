@@ -25,6 +25,7 @@ commands:
       soundId: int
   playSfx700:
     id: 0x59
+    unused: true
     desc: I'm not sure what's so special about SFX 700, and I can't even find it in the files! (also this command is unused.)
   
   setScriptType:
@@ -47,7 +48,7 @@ commands:
           `Taiken`: ???
           `Challenge Mode`: Might have something to do with Layton's Challenges
           `Staff Roll`
-  setResumeScriptType:
+  setReturnScriptType:
     id: 0x52
     desc: >
       Some script types aren't actually "scripts" but technical events; they cannot decide how
@@ -119,32 +120,23 @@ commands:
     params:
       unk_1:
         type: int
-  0x4a:
-    condition: true
-    desc: checks if some global flag is false
-  0x4b:
-    condition: true
-    desc: checks if some global flag (same as 0x4a) is true
   0x5f:
     params: []
   0x62:
     desc: Sets some global variable.
     params:
       value:
-        type: int
+        type: short
         desc: the value to set
   0x63:
     desc: Checks the global variable set by `0x62` (could this be global story progress?)
     condition: true
     params:
       value:
-        type: int
+        type: short
         desc: the value to check against
   0x64:
-    desc: sets some global flag to true
-  0x66:
-    desc: sets some global flag to false
-  0x67:
+    unused: true
     desc: sets some global flag to true
   0x69:
     params:

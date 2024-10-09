@@ -2,6 +2,7 @@ context: "event"
 commands:
   setCurrent:
     id: 0x60
+    context: "all"
     desc: >
       Sets the current event in global state. Once the current script is completed,
       and the script type is set to "Event", that script will be executed.
@@ -144,6 +145,8 @@ commands:
 
   setFlag2:
     id: 0x55
+    context: "all"
+    unused: true
     desc: > 
       Every event has a byte's worth of story flags to access, and this instruction sets byte 2 of
       that to true. Maybe it's a simple unified way to tell if an event has already been seen

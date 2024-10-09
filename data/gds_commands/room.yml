@@ -12,6 +12,7 @@ commands:
   
   setCurrent:
     id: 0x53
+    context: "all"
     desc: >
       Sets the engine's current room ID to the specified value. This takes effect after the script
       completes, the next time the script type is set to 'Event'.
@@ -44,10 +45,10 @@ commands:
     desc: Defines which footsteps sound is used on room transition
     params:
       exitId:
-        type: int
+        type: byte
         desc: the ID of the exit (in declaration order)
       soundId:
-        type: int
+        type: byte
         desc: Can be any number, but only 1 (echoy footsteps) and 2 (creaky door) have special handling
 
   sprite:
@@ -65,10 +66,8 @@ commands:
     id: 0x5c
     desc: Adds a non-interactive background sprite to the room, for animated room background effects.
     params:
-      xPos:
-        type: int
-      yPos:
-        type: int
+      xPos: byte
+      yPos: byte
       spriteName:
         type: string
         desc: path to the sprite to be used.
@@ -107,20 +106,16 @@ commands:
         type: int
         desc: Appears unused in code, and seems to always be 1
 
-  npcObject:
+  eventObject:
     id: 0x50
     desc: >
       Adds an interactable object to the room. This is used for all NPCs, and some other
       items such as the crumpled notes and newspapers.
     params:
-      xPos:
-        type: int
-      yPos:
-        type: int
-      width:
-        type: int
-      height:
-        type: int
+      xPos: short
+      yPos: short
+      width: int
+      height: int
       spriteId:
         type: int
         desc: The sprite that will be placed at the given location. It only becomes interactable within the defined bounding box. Sourced from ani/obj_%i.spr with default animation.
@@ -160,14 +155,10 @@ commands:
       coinId:
         type: int
         desc: Every hint coin has a unique ID, presumably to allow saving which ones you've collected.
-      xPos:
-        type: int
-      yPos:
-        type: int
-      width:
-        type: int
-      height:
-        type: int
+      xPos: short
+      yPos: short
+      width: short
+      height: short
       unk_6:
         type: int
         desc: appears to be unused.
@@ -175,9 +166,11 @@ commands:
 
   mapInfo:
     id: 0x5a
+    context: ["room", "event"]
     desc: >
-      As far as I can tell, this is used to setup info on the top screen (& probably for the save
-      process). Can also be used from events to briefly change scenes.
+      Sets the current room ID and the map ID, which determines the name of the location.
+      Also sets the coordinates for the little Layton sprite map marker on the top screen.
+      Can be used in events to enqueue a room change as well.
     params:
       roomId:
         type: int
@@ -185,12 +178,11 @@ commands:
       mapId:
         type: int
         desc: the ID of the top screen map image to be used
-      unk_3:
+      xPos: short
+      yPos: short
+      markerSpriteId:
         type: int
-      unk_4:
-        type: int
-      unk_5:
-        type: int
+        desc: It seems there were multiple possible map marker icons at some point, but only ID 1 has survived.
 
 
   nazobabaBottle:

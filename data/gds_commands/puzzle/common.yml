@@ -3,6 +3,7 @@ context: "puzzle"
 commands:  
   setCurrent:
     id: 0x48
+    context: "all"
     desc: |
       Sets the current puzzle ID in the global game state. If at the end of script execution the
       global "current script type" is set to "question", the puzzle with this ID will be started.
@@ -10,19 +11,42 @@ commands:
       puzzleId: int
   isCurrentNotSolved:
     id: 0x4c
+    context: "all"
     condition: true
-    desc: Checks if the most recently (perhaps currently) attempted puzzle has NOT been solved
+    desc: Checks if the currently relevant puzzle has NOT been solved
+  
+  isCurrentDiscovered:
+    id: 0x49
+    context: "all"
+    condition: true
+    desc: Checks if the currently relevant puzzle has been discovered/attempted before.
+  isDiscovered:
+    id: 0x58
+    context: "all"
+    condition: true
+    desc: checks if the specified puzzle has been discovered.
+    params:
+      puzzleId: bool
+
   isCurrentSolved:
     id: 0x4d
+    context: "all"
     condition: true
-    desc: Checks if the most recently (perhaps currently) attempted puzzle has been solved
-  
+    desc: Checks if the currently relevant puzzle has been solved
   isSolved:
     id: 0x54
+    context: "all"
     condition: true
     desc: Checks if the specified puzzle ID has been solved (puzzle flag 2)
     params: 
       puzzleId: int
+  
+  isSolvedInStory:
+    id: 0x4e
+    context: "all"
+    condition: true
+    desc: Checks if the currently relevant puzzle has been solved in its correct location, i.e. the event surrounding it has completed.
+
   countEnoughSolved:
     id: 0x77
     condition: true
@@ -31,6 +55,27 @@ commands:
       than or equal to the given threshold.
     params:
       threshold: int
+
+  eventAfterPuzzle:
+    id: 0x4b
+    context: "all"
+    condition: true
+    desc: Checks a special flag set if the event script is run right after a puzzle was ended (solved or given up).
+  eventNotAfterPuzzle:
+    id: 0x4a
+    context: "all"
+    condition: true
+    desc: Checks a special flag set if the event script is run right after a puzzle was ended, and returns true if that is not the case.
+
+  solverLayton:
+    id: 0x66
+    context: "all"
+    desc: Sets the next puzzle to be "solved by" Layton (i.e. one of his sequences will play during grading)
+  solverLuke:
+    id: 0x77
+    context: "all"
+    desc: Sets the next puzzle to be "solved by" Luke (i.e. one of his sequences will play during grading)
+
 
   engine:
     id: 0x1b
@@ -78,12 +123,11 @@ commands:
   
   button:
     id: 0x5d
-    desc: For the puzzle types OnOff and FreeButton, this adds a button with the specified sprite texture at the given location.
+    context: ["puzzle.onoff", "puzzle.freebutton"]
+    desc: Adds a button with the specified sprite texture at the given location.
     params:
-      xPos:
-        type: int
-      yPos: 
-        type: int
+      xPos: short
+      yPos: short
       spriteName:
         type: string
         desc: The sprite used for the button. As with all button sprites, it should define a depressed state in the animation "shadow".
@@ -95,16 +139,16 @@ commands:
   
   placeTarget:
     id: 0x5e
-    desc: The sole defining command for the PlaceTarget puzzle type.
+    context: "puzzle.placetarget"
+    desc: >
+      The sole defining command for the PlaceTarget puzzle type. It seems there can be multiple targets defined this way,
+      all of which need to be hit in order for the puzzle to solve; but this is never used
+      (maybe it felt too cumbersome during playtesting, because you can't reset?)
     params:
-      unk_1:
-        type: int
-      unk_2:
-        type: int
-      unk_3:
-        type: string
-      unk_4:
-        type: float
+      xPos: int
+      yPos: int
+      spriteName: string
+      radius: float
       unk_5:
         type: int
   
@@ -211,18 +255,6 @@ commands:
     params:
       angle:
         type: float
-  
-  0x49:
-    condition: true
-    desc: checks some kind of flag for the current puzzle (puzzle flags mask 1)
-  0x58:
-    condition: true
-    desc: checks some kind of flag for the given puzzle (puzzle flags mask 1); for regular puzzles at least.
-    params:
-    - int
-  0x4e:
-    condition: true
-    desc: checks some kind of flag for the current puzzle (puzzle flags mask 4)
   0xb7:
     desc: sets all the flags for the given puzzle ID to true (1, 4, and 2 ie "solved")
     params:

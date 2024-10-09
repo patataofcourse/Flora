@@ -51,12 +51,12 @@ If a file is not present, this region is filled with 0xff instead.
         # -----1--: ? (seems to always be set together with solved, at least for story puzzles)
         # --111---: least to most significant: hints 1-3 unlocked
         # 11------: number of previous failed attempts
-0x10c   w: ?
+0x10c   w: is the current script executed right after a puzzle ended? (nonsense in a savefile)
 0x110   w: current event
-0x114   b[480]: event flags
+0x114   b[480]: event flags (8bit[])
 0x2f4   hw: ?
-0x2f6   b[64]: ?
-0x336   b[64]: ?
+0x2f6   b[64]: engine played before? (bool[])
+0x336   b[64]: hint coins collected (bitfield)
 0x376   hw: hint coint count
 0x378   dw: playtime (in seconds)
 0x380   b[8]: inventory
@@ -65,26 +65,26 @@ If a file is not present, this region is filled with 0xff instead.
         # puzzleid+800: puzzle sent to nazobaba
 0x408   b: current objective
 0x409   b[32]: dog collected (but not placed) part list
-0x429   b[4]: dog part placed flags
+0x429   b[4]: dog part placed? (bitfield)
 0x42d   w: ?
 0x431   b[20]: puzzle pieces obtained? (list of bool)
 0x445   b[20]: puzzle pieces placed slot???
-0x459   b[32]: hotelroom layton
-0x479   b[32]: hotelroom luke
-0x499   b[32]: ?
-0x4b9   b[32]: ?
-?????????
+0x459   b[20]: puzzle pieces ???
+0x46d   b[32]: hotelroom layton
+0x48d   b[32]: hotelroom luke
+0x4ad   b[32]: ?
+0x4cd   b[32]: ?
 0x4ed   b: journal has news?
 0x4ee   b: dog has news?
 0x4ef   b: hotelroom has news?
 0x4f0   b: painting has news?
 0x4f1   b: mysteries has news?
-0x4f2   b[32]: ?
+0x4f2   b[32]: puzzle favorites (bitfield)
 0x512   b[8]: journal entry unread flags
 0x51a   b[2]: bitfield 2 ???
-0x51c   w: ?
+0x51c   w: recap event ID
 0x520   b[20]: dogname
-0x534   w: ?
+0x534   w: clues given by dog
 0x538   w: hash of all previous data
 
 # ~0x53c to ~0x7d0: padding 0
@@ -97,7 +97,17 @@ If a file is not present, this region is filled with 0xff instead.
 
 ```
 0x1b58  w: hash of the following data
-0x1b5c  ????
+0x1b5c  w: number of downloadable puzzles
+0x1b60  w: number of downloadable puzzles (again???)
+        # I believe one of these values stores how many puzzle have been downloaded,
+        # while the other stores how many WILL ever be downloadable. We can't really
+        # test the distinction now, because the game service is down... maybe the
+        # program that simulates it knows what these mean.
+0x1b64  struct[27]: Wifi puzzles
+  ~0x0  b: puzzle ID (yes all the downloadable puzzles are already in the files, and unlocked by ID)
+  ~0x1  b: date of release: day
+  ~0x2  b: date of release: month
+  ~0x3  b: date of release: year (relative to 2000)
 ```
 
 **Padding:** 0x1bd0 to 0x2000, filled with 0xff
